@@ -13,6 +13,8 @@ struct Test {
     pass_condition: String,
     #[allow(dead_code)]
     instructions: Vec<String>, // Parsed but not exported
+    #[allow(dead_code)]
+    test_authors_and_contact_persons: Vec<String>, // Parsed but not exported
 }
 
 #[derive(Debug, Deserialize)]
@@ -51,7 +53,7 @@ fn export_to_csv<P: AsRef<Path>>(tests: &[Test], path: P) -> Result<(), Box<dyn 
 
 fn main() -> Result<(), Box<dyn Error>> {
     // Load TOML file
-    let toml_str = fs::read_to_string("tests.toml")?;
+    let toml_str = fs::read_to_string("tests_list.toml")?;
 
     // Parse TOML into structs
     let test_list: TestList = toml::from_str(&toml_str)?;

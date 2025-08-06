@@ -23,3 +23,6 @@ instructions = [
   "set point_enable=1, drive_big_mirror=1",
   "## Observe display for 2 minutes ##"
 ]
+test_authors_and_contact_persons = [
+  "Rishi Bahadoor",
+]
