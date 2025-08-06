@@ -29,3 +29,13 @@ example:
 
 example:
 - cargo run -r -- --priority MEDIUM
+
+### Specify the test list
+
+example:
+- cargo run -r -- --input C:\Users\rishi\Downloads\validation_gen\validation_tests_generator\tests_list.toml
+
+### Specify the output file name
+
+example:
+- cargo run -r -- --output test.csv
