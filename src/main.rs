@@ -3,6 +3,8 @@ use csv::Writer;
 use serde::Deserialize;
 use std::error::Error;
 use std::fs;
+use std::fs::File;
+use std::io::{BufWriter, Write};
 use std::path::Path;
 
 /// CLI arguments
@@ -46,8 +48,29 @@ struct TestList {
 }
 
 fn export_to_csv<P: AsRef<Path>>(tests: &[Test], path: P) -> Result<(), Box<dyn Error>> {
-    let mut wtr = Writer::from_path(path)?;
+    let file = File::create(path)?;
+    let mut buf = BufWriter::new(file);
 
+    // Write metadata rows manually
+    let metadata = vec![
+        "Technician Name:,",
+        "Firmware Type:,",
+        "Firmware Version:,",
+        "Sensor Serial Number:,",
+        "CCC Tool Version:,",
+    ];
+
+    for line in metadata {
+        writeln!(buf, "{}", line)?;
+    }
+
+    // Blank line for spacing
+    writeln!(buf)?;
+
+    // Wrap BufWriter in csv::Writer for structured test records
+    let mut wtr = Writer::from_writer(buf);
+
+    // Write header
     wtr.write_record(&[
         "Test ID",
         "Test Group",
@@ -58,6 +81,7 @@ fn export_to_csv<P: AsRef<Path>>(tests: &[Test], path: P) -> Result<(), Box<dyn 
         "Notes",
     ])?;
 
+    // Write test records
     for test in tests {
         wtr.write_record(&[
             &test.test_id,
