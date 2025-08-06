@@ -21,6 +21,10 @@ struct Args {
     /// List of test IDs to include in the report
     #[arg(short, long, value_delimiter = ',')]
     ids: Vec<String>,
+
+    /// Filter by priority: LOW, MEDIUM, or HIGH
+    #[arg(short, long)]
+    priority: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -72,18 +76,24 @@ fn export_to_csv<P: AsRef<Path>>(tests: &[Test], path: P) -> Result<(), Box<dyn 
 
 fn main() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
-
     let toml_str = fs::read_to_string(&args.input)?;
     let test_list: TestList = toml::from_str(&toml_str)?;
 
     let filtered: Vec<Test> = test_list
         .test
         .into_iter()
-        .filter(|t| args.ids.contains(&t.test_id))
+        .filter(|t| {
+            let id_match = args.ids.is_empty() || args.ids.contains(&t.test_id);
+            let priority_match = match &args.priority {
+                Some(p) => t.test_priority.eq_ignore_ascii_case(p),
+                None => true,
+            };
+            id_match && priority_match
+        })
         .collect();
 
     if filtered.is_empty() {
-        println!("⚠️ No matching tests found for IDs: {:?}", args.ids);
+        println!("⚠️ No matching tests found for filters.");
     } else {
         export_to_csv(&filtered, &args.output)?;
         println!("✅ CSV report generated: {}", args.output);
