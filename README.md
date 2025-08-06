@@ -6,16 +6,6 @@
 - Generate a technician-friendly CSV report
 - Includes metadata rows for technician and firmware details
 
-### Installation
-- Ensure you have Rust installed. Then clone and build:
-```bash
-git clone https://github.com/your-repo/validation_tests_generator.git
-
-cd validation_tests_generator
-
-cargo build --release
-```
-
 ### Using the tool
 You can run the tool directly using cargo run -r -- during development.
 
