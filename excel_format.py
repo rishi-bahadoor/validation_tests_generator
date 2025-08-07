@@ -3,6 +3,14 @@ from openpyxl import load_workbook
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Alignment
+from openpyxl.styles import Font
+
+def bold_cell(ws, header_name, max_search_rows=10):
+    column_letter = find_column_letter(ws, header_name, max_search_rows)
+    row_number = find_row(ws, header_name, max_search_rows)
+    cell = ws[f"{column_letter}{row_number}"]
+    cell.font = Font(bold=True)
+
 
 def wrap_all_cells(ws):
     wrap_alignment = Alignment(wrap_text=True)
@@ -47,13 +55,21 @@ def format_excel_sheet(path):
     wb = load_workbook(path)
     ws = wb.active
 
-    set_drop_down(ws, "Status", "Not Started,In Progress,Completed,Blocked")
+    set_drop_down(ws, "Status", "Pass,Fail,Pending,Blocked")
     set_column_width(ws, "Test ID", 22)
     set_column_width(ws, "Test Group", 18)
     set_column_width(ws, "Priority", 10)
-    set_column_width(ws, "Description", 100)
+    set_column_width(ws, "Description", 90)
     set_column_width(ws, "Pass Condition", 30)
     set_column_width(ws, "Notes", 50)
+
+    bold_cell(ws, "Test ID")
+    bold_cell(ws, "Test Group")
+    bold_cell(ws, "Priority")
+    bold_cell(ws, "Description")
+    bold_cell(ws, "Pass Condition")
+    bold_cell(ws, "Status")
+    bold_cell(ws, "Notes")
 
     wrap_all_cells(ws)
 
