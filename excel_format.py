@@ -63,13 +63,6 @@ def add_sheet(wb, sheet_name):
         return wb[sheet_name]
     return wb.create_sheet(title=sheet_name)
 
-def populate_single_cell(ws, title_text):
-    ws["A1"] = title_text
-    ws["A1"].font = Font(bold=True)
-    ws["A1"].alignment = Alignment(wrap_text=True)
-    ws.column_dimensions["A"].width = 120
-    wrap_all_cells(ws)
-
 ## Dependent helper functions ##
 ## ===========================================================================
 def apply_conditional_formatting(ws, header_name, rules, max_search_rows=10):
@@ -98,6 +91,13 @@ def set_drop_down(ws, header_name, options, max_search_rows=10):
     row_end = row_start + 94
     add_drop_down(ws, column_letter, options, row_start, row_end)
 
+def populate_single_cell(ws, title_text):
+    ws["A1"] = title_text
+    ws["A1"].font = Font(bold=True)
+    ws["A1"].alignment = Alignment(wrap_text=True)
+    ws.column_dimensions["A"].width = 120
+    wrap_all_cells(ws)
+
 ## Modules ##
 ## ===========================================================================
 def format_excel_sheet(path):
@@ -118,7 +118,6 @@ def format_excel_sheet(path):
 
     github_ws = add_sheet(wb, "Github_Issues")
     populate_single_cell(github_ws, "Github Issues")
-
 
     wb.save(path)
     print(f"✅ Excel formatting applied to: {path}")
