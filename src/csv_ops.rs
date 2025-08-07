@@ -2,17 +2,17 @@ use csv::Writer;
 use std::error::Error;
 use std::fs::File;
 use std::io::{BufWriter, Write};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use crate::test_file_ops::Test;
 
-pub fn export_to_csv<P: AsRef<Path>>(tests: &[Test], path: P) -> Result<(), Box<dyn Error>> {
+pub fn export_to_csv<P: AsRef<Path>>(tests: &[Test], path: P) -> Result<PathBuf, Box<dyn Error>> {
     if tests.is_empty() {
         println!("⚠️ No matching tests found for filters.");
-        return Ok(());
+        return Ok(path.as_ref().to_path_buf());
     }
 
-    let file = File::create(&path)?; // Borrow to avoid move
+    let file = File::create(&path)?;
     let mut buf = BufWriter::new(file);
 
     let metadata = vec![
@@ -55,5 +55,5 @@ pub fn export_to_csv<P: AsRef<Path>>(tests: &[Test], path: P) -> Result<(), Box<
 
     wtr.flush()?;
     println!("✅ CSV report generated: {}", path.as_ref().display());
-    Ok(())
+    Ok(path.as_ref().to_path_buf())
 }

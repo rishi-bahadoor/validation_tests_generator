@@ -1,8 +1,10 @@
 use clap::Parser;
 mod csv_ops;
+mod excel_ops;
 mod test_file_ops;
 
 use csv_ops::export_to_csv;
+use excel_ops::convert_csv_to_excel;
 use test_file_ops::test_file_filter;
 
 /// CLI arguments
@@ -26,6 +28,7 @@ pub struct Args {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
     let filtered_list = test_file_filter(&args.input, &args.ids, &args.priority)?;
-    export_to_csv(&filtered_list, &args.output)?;
+    let csv_path = export_to_csv(&filtered_list, &args.output)?;
+    convert_csv_to_excel(&csv_path)?;
     Ok(())
 }
