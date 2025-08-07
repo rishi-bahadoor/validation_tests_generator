@@ -9,18 +9,18 @@ use test_file_ops::test_file_filter;
 #[derive(Parser, Debug)]
 #[command(name = "Validation Test Generator")]
 #[command(about = "Generates filtered CSV reports from TOML test definitions")]
-struct Args {
-    #[arg(short, long, default_value = "tests_list.toml")]
-    input: String,
+pub struct Args {
+    #[arg(short = 'i', long = "input", default_value = "tests_list.toml")]
+    pub input: String,
 
-    #[arg(short, long, default_value = "test_report.csv")]
-    output: String,
+    #[arg(short = 'o', long = "output", default_value = "test_report.csv")]
+    pub output: String,
 
-    #[arg(short, long, value_delimiter = ',')]
-    ids: Vec<String>,
+    #[arg(short = 'd', long = "ids")] // ✅ Changed from -i to -d
+    pub ids: Vec<String>,
 
-    #[arg(short, long)]
-    priority: Option<String>,
+    #[arg(short = 'p', long = "priority")]
+    pub priority: Option<String>,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
