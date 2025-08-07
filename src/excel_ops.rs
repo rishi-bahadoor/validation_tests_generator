@@ -2,9 +2,10 @@ use rust_xlsxwriter::{Format, Workbook};
 use std::error::Error;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use std::path::Path;
+use std::path::{Path, PathBuf};
+use std::process::Command;
 
-pub fn convert_csv_to_excel<P: AsRef<Path>>(csv_path: P) -> Result<(), Box<dyn Error>> {
+pub fn convert_csv_to_excel<P: AsRef<Path>>(csv_path: P) -> Result<PathBuf, Box<dyn Error>> {
     println!(
         "🔄 Converting CSV to Excel: {}",
         csv_path.as_ref().display()
@@ -34,9 +35,27 @@ pub fn convert_csv_to_excel<P: AsRef<Path>>(csv_path: P) -> Result<(), Box<dyn E
         }
     }
 
-    // Save the workbook
     workbook.close()?;
     println!("✅ Excel file created: {}", xlsx_path.display());
 
+    Ok(xlsx_path)
+}
+
+pub fn format_excel_sheet<P: AsRef<Path>>(xlsx_path: P) -> Result<(), Box<dyn Error>> {
+    println!(
+        "🎨 Formatting Excel sheet: {}",
+        xlsx_path.as_ref().display()
+    );
+
+    let status = Command::new("python")
+        .arg("excel_format.py") // Your Python script filename
+        .arg(xlsx_path.as_ref())
+        .status()?;
+
+    if !status.success() {
+        return Err("Python script failed to format Excel sheet".into());
+    }
+
+    println!("✅ Excel formatting complete.");
     Ok(())
 }
