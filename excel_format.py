@@ -50,13 +50,25 @@ def find_row(ws, header_name, max_search_rows):
                 return row
     raise ValueError(f"Header '{header_name}' not found in first {max_search_rows} rows")
 
-
-def add_drop_down(ws, column_letter,options, row_start, row_end):
+def add_drop_down(ws, column_letter, options, row_start, row_end):
     dv = DataValidation(type="list", formula1=f'"{options}"', allow_blank=True)
     ws.add_data_validation(dv)
 
     for row in range(row_start, row_end + 1):
         dv.add(ws[f"{column_letter}{row}"])
+
+def add_sheet(wb, sheet_name):
+    if sheet_name in wb.sheetnames:
+        print(f"⚠️ Sheet '{sheet_name}' already exists. Skipping creation.")
+        return wb[sheet_name]
+    return wb.create_sheet(title=sheet_name)
+
+def populate_single_cell(ws, title_text):
+    ws["A1"] = title_text
+    ws["A1"].font = Font(bold=True)
+    ws["A1"].alignment = Alignment(wrap_text=True)
+    ws.column_dimensions["A"].width = 120
+    wrap_all_cells(ws)
 
 ## Dependent helper functions ##
 ## ===========================================================================
@@ -100,6 +112,13 @@ def format_excel_sheet(path):
         bold_cell(ws, header)
 
     wrap_all_cells(ws)
+
+    tech_ws = add_sheet(wb, "Technician_Issues")
+    populate_single_cell(tech_ws, "Technician Issues")
+
+    github_ws = add_sheet(wb, "Github_Issues")
+    populate_single_cell(github_ws, "Github Issues")
+
 
     wb.save(path)
     print(f"✅ Excel formatting applied to: {path}")
