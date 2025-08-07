@@ -1,9 +1,27 @@
 import sys
 from openpyxl import load_workbook
-from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.utils import get_column_letter
-from openpyxl.styles import Alignment
-from openpyxl.styles import Font
+from openpyxl.worksheet.datavalidation import DataValidation
+from openpyxl.styles import Alignment, Font, PatternFill
+from openpyxl.formatting.rule import FormulaRule
+
+def apply_conditional_formatting(ws, header_name, max_search_rows=10):
+    column_letter = find_column_letter(ws, header_name, max_search_rows)
+    row_start = find_row(ws, header_name, max_search_rows) + 1
+    row_end = row_start + 94
+
+    rules = {
+        "Pass": "00C851",     # Green
+        "Fail": "ff4444",     # Red
+        "Pending": "ffbb33",  # Orange
+        "Blocked": "33b5e5"   # Blue
+    }
+
+    for value, hex_color in rules.items():
+        fill = PatternFill(start_color=hex_color, end_color=hex_color, fill_type="solid")
+        formula = f'${column_letter}{row_start}<>"{value}"'  # Dummy formula to avoid Excel bug
+        rule = FormulaRule(formula=[f'${column_letter}{row_start}="{value}"'], fill=fill)
+        ws.conditional_formatting.add(f"{column_letter}{row_start}:{column_letter}{row_end}", rule)
 
 def bold_cell(ws, header_name, max_search_rows=10):
     column_letter = find_column_letter(ws, header_name, max_search_rows)
@@ -56,6 +74,8 @@ def format_excel_sheet(path):
     ws = wb.active
 
     set_drop_down(ws, "Status", "Pass,Fail,Pending,Blocked")
+    apply_conditional_formatting(ws, "Status")
+
     set_column_width(ws, "Test ID", 22)
     set_column_width(ws, "Test Group", 18)
     set_column_width(ws, "Priority", 10)
