@@ -5,6 +5,8 @@ from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.formatting.rule import FormulaRule
 
+## Constants ##
+## ===========================================================================
 HEADERS = [
     ("Test ID", 22),
     ("Test Group", 18),
@@ -24,6 +26,40 @@ STATUS_COLORS = {
     "Blocked": "33b5e5"   # Blue
 }
 
+## Non-dependent helper functions ##
+## ===========================================================================
+def find_column_letter(ws, header_name, max_search_rows):
+    for row in range(1, max_search_rows + 1):
+        for col in range(1, ws.max_column + 1):
+            cell_value = ws.cell(row=row, column=col).value
+            if cell_value and cell_value.strip().lower() == header_name.strip().lower():
+                return get_column_letter(col)
+    raise ValueError(f"Header '{header_name}' not found in first {max_search_rows} rows")
+
+def wrap_all_cells(ws):
+    wrap_alignment = Alignment(wrap_text=True)
+    for row in ws.iter_rows():
+        for cell in row:
+            cell.alignment = wrap_alignment
+
+def find_row(ws, header_name, max_search_rows):
+    for row in range(1, max_search_rows + 1):
+        for col in range(1, ws.max_column + 1):
+            cell_value = ws.cell(row=row, column=col).value
+            if cell_value and cell_value.strip().lower() == header_name.strip().lower():
+                return row
+    raise ValueError(f"Header '{header_name}' not found in first {max_search_rows} rows")
+
+
+def add_drop_down(ws, column_letter,options, row_start, row_end):
+    dv = DataValidation(type="list", formula1=f'"{options}"', allow_blank=True)
+    ws.add_data_validation(dv)
+
+    for row in range(row_start, row_end + 1):
+        dv.add(ws[f"{column_letter}{row}"])
+
+## Dependent helper functions ##
+## ===========================================================================
 def apply_conditional_formatting(ws, header_name, rules, max_search_rows=10):
     column_letter = find_column_letter(ws, header_name, max_search_rows)
     row_start = find_row(ws, header_name, max_search_rows) + 1
@@ -40,36 +76,6 @@ def bold_cell(ws, header_name, max_search_rows=10):
     cell = ws[f"{column_letter}{row_number}"]
     cell.font = Font(bold=True)
 
-
-def wrap_all_cells(ws):
-    wrap_alignment = Alignment(wrap_text=True)
-    for row in ws.iter_rows():
-        for cell in row:
-            cell.alignment = wrap_alignment
-
-def find_column_letter(ws, header_name, max_search_rows):
-    for row in range(1, max_search_rows + 1):
-        for col in range(1, ws.max_column + 1):
-            cell_value = ws.cell(row=row, column=col).value
-            if cell_value and cell_value.strip().lower() == header_name.strip().lower():
-                return get_column_letter(col)
-    raise ValueError(f"Header '{header_name}' not found in first {max_search_rows} rows")
-
-def find_row(ws, header_name, max_search_rows):
-    for row in range(1, max_search_rows + 1):
-        for col in range(1, ws.max_column + 1):
-            cell_value = ws.cell(row=row, column=col).value
-            if cell_value and cell_value.strip().lower() == header_name.strip().lower():
-                return row
-    raise ValueError(f"Header '{header_name}' not found in first {max_search_rows} rows")
-
-def add_drop_down(ws, column_letter,options, row_start, row_end):
-    dv = DataValidation(type="list", formula1=f'"{options}"', allow_blank=True)
-    ws.add_data_validation(dv)
-
-    for row in range(row_start, row_end + 1):
-        dv.add(ws[f"{column_letter}{row}"])
-
 def set_column_width(ws, header_name, width, max_search_rows=10):
     column_letter = find_column_letter(ws, header_name, max_search_rows)
     ws.column_dimensions[column_letter].width = width
@@ -80,6 +86,8 @@ def set_drop_down(ws, header_name, options, max_search_rows=10):
     row_end = row_start + 94
     add_drop_down(ws, column_letter, options, row_start, row_end)
 
+## Modules ##
+## ===========================================================================
 def format_excel_sheet(path):
     wb = load_workbook(path)
     ws = wb.active
@@ -96,6 +104,8 @@ def format_excel_sheet(path):
     wb.save(path)
     print(f"✅ Excel formatting applied to: {path}")
 
+## Main ##
+## ===========================================================================
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: python format_excel.py <path_to_excel_file>")
