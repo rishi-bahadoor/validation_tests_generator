@@ -3,20 +3,9 @@ test_id = "1.1"
 test_group = "1:POINT_CLOUD"
 test_priority = "MEDIUM"
 test_description = "Check that point cloud is being displayed correctly for 2 minutes (Both indoor/outdoor setting) using STDV format (pixel_format=0)"
-pass_condition = "Point cloud is being displayed on Cepton Viewer"
+pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
   "## Ensure the sensor has default configuration ##",
-  "set point_enable=0, drive_big_mirror=0",
-  "set imx4_x9_devsts_active=0",
-  """set nr_slot=960,horiz_fov_left=-1092270,horiz_fov_right=1092270,
-        horiz_firing_period=4555,spad_sw_trigger_period=350000,
-        spad_trg_enc_dir_invert=0,ambient_data_pkts_enabled=0,
-        dynamic_hv_kp=16,dynamic_hv_kc=2100,mst_drive_period=6250,
-        mst_half_period=10000000,mst_cycle_duration=200000,mst_phase_offset=0,
-        horiz_fov_left_roi=-349525,horiz_fov_right_roi=349525,
-        horiz_firing_period_roi=2958,roi_enable=0""",
-  "set imx4_x9_devsts_active=1",
-  "## Power cycle the sensor (for now to avoid knocking) ##",
   "## Set pixel format to STDV (0) ##",
   " set pixel_format=0",
   "## Turn on point enable and MST ##",
@@ -32,22 +21,47 @@ test_id = "1.2"
 test_group = "1:POINT_CLOUD"
 test_priority = "MEDIUM"
 test_description = "Check that point cloud is being displayed correctly for 2 minutes (Both indoor/outdoor setting) using HRAD format (pixel_format=2)"
-pass_condition = "Point cloud is being displayed on Cepton Viewer"
+pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
   "## Ensure the sensor has default configuration ##",
-  "set point_enable=0, drive_big_mirror=0",
-  "set imx4_x9_devsts_active=0",
-  """set nr_slot=960,horiz_fov_left=-1092270,horiz_fov_right=1092270,
-        horiz_firing_period=4555,spad_sw_trigger_period=350000,
-        spad_trg_enc_dir_invert=0,ambient_data_pkts_enabled=0,
-        dynamic_hv_kp=16,dynamic_hv_kc=2100,mst_drive_period=6250,
-        mst_half_period=10000000,mst_cycle_duration=200000,mst_phase_offset=0,
-        horiz_fov_left_roi=-349525,horiz_fov_right_roi=349525,
-        horiz_firing_period_roi=2958,roi_enable=0""",
-  "set imx4_x9_devsts_active=1",
-  "## Power cycle the sensor (for now to avoid knocking) ##",
-  "## Set pixel format to STDV (0) ##",
+  "## Set pixel format to HRAD (2) ##",
   " set pixel_format=2",
+  "## Turn on point enable and MST ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Observe display for 2 minutes ##"
+]
+test_authors_and_contact_persons = [
+  "Rishi Bahadoor",
+]
+
+[[test]]
+test_id = "1.3"
+test_group = "1:POINT_CLOUD"
+test_priority = "MEDIUM"
+test_description = "Check that point cloud is being displayed correctly for 2 minutes (Both indoor/outdoor setting) using HLZ4 format (pixel_format=3)"
+pass_condition = "Accurate image representation of what the sensor is viewing"
+instructions = [
+  "## Ensure the sensor has default configuration ##",
+  "## Set pixel format to HLZ4 (3) ##",
+  " set pixel_format=3",
+  "## Turn on point enable and MST ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Observe display for 2 minutes ##"
+]
+test_authors_and_contact_persons = [
+  "Rishi Bahadoor",
+]
+
+[[test]]
+test_id = "1.4"
+test_group = "1:POINT_CLOUD"
+test_priority = "HIGH"
+test_description = "Check per point stability that is points do not flicker"
+pass_condition = "No flickering on the display of the point cloud"
+instructions = [
+  "## Ensure the sensor has default configuration ##",
+  "## Set pixel format to each pixel format per observation##",
+  " set pixel_format=(specific_pixel_format)",
   "## Turn on point enable and MST ##",
   "set point_enable=1, drive_big_mirror=1",
   "## Observe display for 2 minutes ##"
