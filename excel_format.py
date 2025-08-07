@@ -5,6 +5,16 @@ from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.formatting.rule import FormulaRule
 
+HEADERS = [
+    ("Test ID", 22),
+    ("Test Group", 18),
+    ("Priority", 10),
+    ("Description", 90),
+    ("Pass Condition", 30),
+    ("Status", 10),
+    ("Notes", 50)
+]
+
 STATUS_OPTIONS = ["Pass", "Fail", "Pending", "Blocked"]
 
 STATUS_COLORS = {
@@ -77,20 +87,9 @@ def format_excel_sheet(path):
     set_drop_down(ws, "Status", ",".join(STATUS_OPTIONS))
     apply_conditional_formatting(ws, "Status", STATUS_COLORS)
 
-    set_column_width(ws, "Test ID", 22)
-    set_column_width(ws, "Test Group", 18)
-    set_column_width(ws, "Priority", 10)
-    set_column_width(ws, "Description", 90)
-    set_column_width(ws, "Pass Condition", 30)
-    set_column_width(ws, "Notes", 50)
-
-    bold_cell(ws, "Test ID")
-    bold_cell(ws, "Test Group")
-    bold_cell(ws, "Priority")
-    bold_cell(ws, "Description")
-    bold_cell(ws, "Pass Condition")
-    bold_cell(ws, "Status")
-    bold_cell(ws, "Notes")
+    for header, width in HEADERS:
+        set_column_width(ws, header, width)
+        bold_cell(ws, header)
 
     wrap_all_cells(ws)
 
