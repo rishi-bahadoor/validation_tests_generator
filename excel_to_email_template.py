@@ -21,6 +21,11 @@ EMAIL_CC        = ""    # comma-separated; empty = no CC
 
 EMAIL_SUBJECT   = "Validation Report"
 
+OPENING_LINES = [
+    "Hello team,",
+    "Please find the latest validation report below. Let me know if you have any questions."
+]
+
 # Your exact data headers (used to detect the main table)
 HEADERS = [
     "Test ID",
@@ -98,72 +103,92 @@ def column_widths(ws, n_cols):
 
 def render_data_sheet(ws):
     """
-    Render sheets that contain your main table headers.
-    Returns a single HTML snippet for that sheet.
+    Render sheets that contain one or more “header blocks”:
+      GROUP_LABEL  ← one cell above
+      header row   ← matches HEADERS
+      data rows    ← until a blank row
+    Returns a single HTML snippet for that sheet, or None.
     """
-    hdr = find_header_row(ws)
-    if hdr is None:
-        return None
+    snippets = []
+    max_row = ws.max_row
+    n_cols  = len(HEADERS)  # assume real data cols >= your HEADERS count
 
-    # Collect metadata rows (above the header), skipping blank rows
-    meta = []
-    for r in range(1, hdr):
-        row = list(ws[r])
-        if not row_is_blank(row):
-            meta.append(row)
+    r = 1
+    while r <= max_row:
+        # 1) find next header row at or after r
+        hdr = None
+        for rr in range(r, min(max_row, r + 100)):  # lookahead window
+            vals = [normalize(ws.cell(rr, c).value)
+                    for c in range(1, ws.max_column + 1)]
+            if all(normalize(h) in vals for h in HEADERS):
+                hdr = rr
+                break
+        if hdr is None:
+            break
 
-    # Collect data rows (header + below), skipping blank rows
-    data = []
-    for r in range(hdr, ws.max_row + 1):
-        row = list(ws[r])
-        if not row_is_blank(row):
-            data.append(row)
+        # 2) grab the group label above
+        group_label = ws.cell(row=hdr - 1, column=1).value or ""
 
-    if not data:
-        return None
+        # 3) collect data rows (header + below) until a blank row
+        block = []
+        for rr in range(hdr, max_row + 1):
+            row = list(ws[rr])
+            if row_is_blank(row):
+                break
+            block.append(row)
 
-    n_cols = len(data[0])
-    widths = column_widths(ws, n_cols)
+        if not block:
+            r = rr + 1
+            continue
 
-    html = []
+        # 4) build HTML for this block
+        widths = column_widths(ws, len(block[0]))
+        html = []
+        html.append('<table border="1" cellpadding="4" cellspacing="0">')
+        html.append("<colgroup>")
+        for w in widths:
+            html.append(f'<col style="width:{w}px;"/>')
+        html.append("</colgroup>")
 
-    # Metadata block
-    if meta:
-        html.append('<table border="0" cellpadding="4" cellspacing="0">')
-        for row in meta:
+        # the GROUP label as a full-width bold row
+        if group_label:
+            html.append("<thead>")
+            html.append(
+                f'<tr>'
+                f'<th colspan="{len(block[0])}" '
+                f'style="font-weight:bold; text-align:left;">'
+                f'{group_label}'
+                f'</th>'
+                f'</tr>'
+            )
+        else:
+            html.append("<thead>")
+
+        # the actual header row
+        html.append("<tr>")
+        for cell in block[0]:
+            text = cell.value or ""
+            html.append(f'<th{style_attrs(cell)}>{text}</th>')
+        html.append("</tr>")
+        html.append("</thead>")
+
+        # body rows
+        html.append("<tbody>")
+        for row in block[1:]:
             html.append("<tr>")
-            # assume label/value pairs are in cols A+B
-            for cell in row[:2]:
+            for cell in row:
                 text = cell.value or ""
                 html.append(f'<td{style_attrs(cell)}>{text}</td>')
             html.append("</tr>")
+        html.append("</tbody>")
         html.append("</table><br/>")
 
-    # Data table with column widths
-    html.append('<table border="1" cellpadding="4" cellspacing="0">')
-    html.append("<colgroup>")
-    for w in widths:
-        html.append(f'<col style="width:{w}px;"/>')
-    html.append("</colgroup>")
+        snippets.append("".join(html))
 
-    # Header row
-    html.append("<thead><tr>")
-    for cell in data[0]:
-        text = cell.value or ""
-        html.append(f'<th{style_attrs(cell)}>{text}</th>')
-    html.append("</tr></thead>")
+        # 5) advance r past this block
+        r = rr + 1
 
-    # Body rows
-    html.append("<tbody>")
-    for row in data[1:]:
-        html.append("<tr>")
-        for cell in row:
-            text = cell.value or ""
-            html.append(f'<td{style_attrs(cell)}>{text}</td>')
-        html.append("</tr>")
-    html.append("</tbody></table><br/>")
-
-    return "".join(html)
+    return "".join(snippets) if snippets else None
 
 def render_generic_sheet(ws):
     """
@@ -211,6 +236,13 @@ def extract_tables(path):
 
 def build_body(tables):
     html = ["<html><body>"]
+
+    # === your opening statement ===
+    for line in OPENING_LINES:
+        html.append(f"<p>{line}</p>")
+    html.append("<br/>")
+    # ===============================
+
     html.extend(tables)
     html.append("</body></html>")
     return "".join(html)
