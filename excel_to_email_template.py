@@ -104,20 +104,47 @@ def column_widths(ws, n_cols):
 def render_data_sheet(ws):
     """
     Render sheets that contain one or more “header blocks”:
-      GROUP_LABEL  ← one cell above
-      header row   ← matches HEADERS
-      data rows    ← until a blank row
-    Returns a single HTML snippet for that sheet, or None.
+      GROUP_LABEL   ← one cell above each header
+      header row    ← matches HEADERS
+      data rows     ← until a blank row
+    Pull in any metadata rows above the very first group label/header,
+    but exclude that first group label itself.
+    Returns a single HTML snippet or None if no header blocks found.
     """
+    # 1) find the very first header row
+    first_hdr = find_header_row(ws)
+    if first_hdr is None:
+        return None
+
+    # 2) collect metadata rows
+    #    only rows 1 through first_hdr-2 (so row first_hdr-1, the first group label, is skipped)
+    meta = []
+    for r in range(1, first_hdr - 1):
+        row = list(ws[r])
+        if not row_is_blank(row):
+            meta.append(row)
+
+    # 3) render that metadata as a small table
+    html_meta = []
+    if meta:
+        html_meta.append('<table border="0" cellpadding="4" cellspacing="0">')
+        for row in meta:
+            html_meta.append('<tr>')
+            # only the first two columns as key/value
+            for cell in row[:2]:
+                text = cell.value or ""
+                html_meta.append(f'<td{style_attrs(cell)}>{text}</td>')
+            html_meta.append('</tr>')
+        html_meta.append('</table><br/>')
+
+    # 4) now loop through ALL your GROUP/HEADER blocks
     snippets = []
     max_row = ws.max_row
-    n_cols  = len(HEADERS)  # assume real data cols >= your HEADERS count
-
     r = 1
     while r <= max_row:
-        # 1) find next header row at or after r
+        # a) find next header row at or after r
         hdr = None
-        for rr in range(r, min(max_row, r + 100)):  # lookahead window
+        for rr in range(r, min(max_row, r + 100)):
             vals = [normalize(ws.cell(rr, c).value)
                     for c in range(1, ws.max_column + 1)]
             if all(normalize(h) in vals for h in HEADERS):
@@ -126,69 +153,63 @@ def render_data_sheet(ws):
         if hdr is None:
             break
 
-        # 2) grab the group label above
+        # b) grab the group label above that header
         group_label = ws.cell(row=hdr - 1, column=1).value or ""
 
-        # 3) collect data rows (header + below) until a blank row
+        # c) collect contiguous data rows (header + below) until a blank line
         block = []
         for rr in range(hdr, max_row + 1):
             row = list(ws[rr])
             if row_is_blank(row):
                 break
             block.append(row)
-
         if not block:
             r = rr + 1
             continue
 
-        # 4) build HTML for this block
+        # d) build the HTML table for this block
         widths = column_widths(ws, len(block[0]))
-        html = []
-        html.append('<table border="1" cellpadding="4" cellspacing="0">')
-        html.append("<colgroup>")
+        html = ['<table border="1" cellpadding="4" cellspacing="0">']
+        html.append('<colgroup>')
         for w in widths:
             html.append(f'<col style="width:{w}px;"/>')
-        html.append("</colgroup>")
+        html.append('</colgroup>')
 
-        # the GROUP label as a full-width bold row
+        # group label row
+        html.append('<thead>')
         if group_label:
-            html.append("<thead>")
             html.append(
-                f'<tr>'
-                f'<th colspan="{len(block[0])}" '
+                f'<tr><th colspan="{len(block[0])}" '
                 f'style="font-weight:bold; text-align:left;">'
-                f'{group_label}'
-                f'</th>'
-                f'</tr>'
+                f'{group_label}</th></tr>'
             )
-        else:
-            html.append("<thead>")
-
-        # the actual header row
-        html.append("<tr>")
+        # actual header row
+        html.append('<tr>')
         for cell in block[0]:
             text = cell.value or ""
             html.append(f'<th{style_attrs(cell)}>{text}</th>')
-        html.append("</tr>")
-        html.append("</thead>")
+        html.append('</tr></thead>')
 
-        # body rows
-        html.append("<tbody>")
+        # data rows
+        html.append('<tbody>')
         for row in block[1:]:
-            html.append("<tr>")
+            html.append('<tr>')
             for cell in row:
                 text = cell.value or ""
                 html.append(f'<td{style_attrs(cell)}>{text}</td>')
-            html.append("</tr>")
-        html.append("</tbody>")
-        html.append("</table><br/>")
+            html.append('</tr>')
+        html.append('</tbody></table><br/>')
 
         snippets.append("".join(html))
 
-        # 5) advance r past this block
+        # e) advance past this block
         r = rr + 1
 
-    return "".join(snippets) if snippets else None
+    # 5) final return: metadata first, then all block‐tables
+    if not snippets:
+        return None
+
+    return "".join(html_meta + snippets)
 
 def render_generic_sheet(ws):
     """
