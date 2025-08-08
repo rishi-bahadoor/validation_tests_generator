@@ -57,3 +57,16 @@ test_authors_and_contact_persons = [
   "The writer(s) of a specific test item, ex: John Doe, Mary Sue",
 ]
 ```
+
+### Generating the email template
+
+To generate the email template, ensure that a report named `test_report.xlsx` already exists in the source directory. This file is used as input to create a technician-ready HTML email preview.
+
+The email includes:
+- Metadata rows (e.g., technician name, firmware version)
+- A formatted test result table with conditional coloring
+- Additional sheets like `Technician_Issues` or `Github_Issues` rendered as simple tables
+
+Once ready, run:
+
+- cargo run -r -- --gen-email

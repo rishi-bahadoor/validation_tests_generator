@@ -1,5 +1,12 @@
 // src/email_ops.rs
 
+use std::error::Error;
+use std::process::Command;
+
+/*
+// Deprecated: This functionality is now implemented in Python
+// and called from Rust for better formatting and email generation.
+
 use calamine::{DataType, Range, Reader, Xlsx};
 use lettre::{Message, message::header::ContentType};
 use std::{fs, fs::File, path::Path};
@@ -102,6 +109,8 @@ fn build_email_body(tables: Vec<String>) -> String {
     body
 }
 
+
+
 //------------------------------------------------------------------------------
 // Main "generate_email" function
 //------------------------------------------------------------------------------
@@ -141,5 +150,22 @@ pub fn generate_email() -> Result<(), Box<dyn std::error::Error>> {
     fs::write("test_report_email.eml", raw)?;
     println!("✅ Generated `test_report_email.eml`. You can open it in Outlook.");
 
+    Ok(())
+}
+
+*/
+
+pub fn generate_email_using_python() -> Result<(), Box<dyn Error>> {
+    println!("✅ Generating email template");
+
+    let status = Command::new("python")
+        .arg("excel_to_email_template.py")
+        .status()?;
+
+    if !status.success() {
+        return Err("Python script failed to generate email".into());
+    }
+
+    println!("✅ Email `.eml` generated.");
     Ok(())
 }
