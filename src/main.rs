@@ -1,9 +1,12 @@
 use clap::Parser;
+
 mod csv_ops;
+mod email_ops;
 mod excel_ops;
 mod test_file_ops;
 
 use csv_ops::export_to_csv;
+use email_ops::generate_email;
 use excel_ops::{convert_csv_to_excel, format_excel_sheet};
 use test_file_ops::test_file_filter;
 
@@ -22,10 +25,20 @@ pub struct Args {
 
     #[arg(short = 'p', long = "priority")]
     pub priority: Option<String>,
+
+    /// Generate an email instead of running the full report pipeline
+    #[arg(long)]
+    pub gen_email: bool,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
+
+    if args.gen_email {
+        let _ = generate_email();
+        return Ok(());
+    }
+
     let filtered_list = test_file_filter(&args.input, &args.ids, &args.priority)?;
     let csv_path = export_to_csv(&filtered_list, &args.output)?;
     let xlsx_path = convert_csv_to_excel(&csv_path)?;
