@@ -15,9 +15,10 @@ from email import policy
 DEFAULT_XLSX    = "test_report.xlsx"
 EML_OUTPUT      = "test_report_email.eml"
 
-EMAIL_FROM      = "rishi.bahadoor@cepton.com"
-EMAIL_TO        = "ian.sooknanan@cepton.com"
+EMAIL_FROM_DEFAULT     = "noreply@example.com"
+EMAIL_TO_DEFAULT       = "qa-team@example.com"
 EMAIL_CC        = ""    # comma-separated; empty = no CC
+
 EMAIL_SUBJECT   = "Validation Report"
 
 # Your exact data headers (used to detect the main table)
@@ -209,16 +210,16 @@ def extract_tables(path):
 #==============================================================================
 
 def build_body(tables):
-    parts = ["<html><body>"]
-    parts.extend(tables)
-    parts.append("</body></html>")
-    return "".join(parts)
+    html = ["<html><body>"]
+    html.extend(tables)
+    html.append("</body></html>")
+    return "".join(html)
 
-def make_email(html):
+def make_email(html, from_addr, to_addr):
     msg = EmailMessage(policy=policy.SMTP)
     msg["Subject"] = EMAIL_SUBJECT
-    msg["From"]    = EMAIL_FROM
-    msg["To"]      = EMAIL_TO
+    msg["From"]    = from_addr
+    msg["To"]      = to_addr
     if EMAIL_CC.strip():
         msg["Cc"] = EMAIL_CC
 
@@ -235,16 +236,27 @@ def save_eml(msg, path):
 #==============================================================================
 
 def main():
-    xlsx = sys.argv[1] if len(sys.argv) == 2 else DEFAULT_XLSX
-    if not os.path.exists(xlsx):
-        print(f"Error: `{xlsx}` not found.")
+    # if two args passed → override defaults
+    if len(sys.argv) == 3:
+        from_addr = sys.argv[1]
+        to_addr   = sys.argv[2]
+    elif len(sys.argv) == 1:
+        from_addr = EMAIL_FROM_DEFAULT
+        to_addr   = EMAIL_TO_DEFAULT
+    else:
+        print(f"Usage: {sys.argv[0]} [sender_email recipient_email]")
         sys.exit(1)
 
-    tables = extract_tables(xlsx)
+    if not os.path.exists(DEFAULT_XLSX):
+        print(f"Error: `{DEFAULT_XLSX}` not found.")
+        sys.exit(1)
+
+    tables = extract_tables(DEFAULT_XLSX)
     body   = build_body(tables)
-    msg    = make_email(body)
+    msg    = make_email(body, from_addr, to_addr)
     save_eml(msg, EML_OUTPUT)
     print(f"✅ Generated `{EML_OUTPUT}`. Verify in Outlook.")
+
 
 if __name__ == "__main__":
     main()

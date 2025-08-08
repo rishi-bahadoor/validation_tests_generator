@@ -155,11 +155,13 @@ pub fn generate_email() -> Result<(), Box<dyn std::error::Error>> {
 
 */
 
-pub fn generate_email_using_python() -> Result<(), Box<dyn Error>> {
+pub fn generate_email_using_python(sender: &str, recipient: &str) -> Result<(), Box<dyn Error>> {
     println!("✅ Generating email template");
 
     let status = Command::new("python")
         .arg("excel_to_email_template.py")
+        .arg(sender)
+        .arg(recipient)
         .status()?;
 
     if !status.success() {

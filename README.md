@@ -69,4 +69,4 @@ The email includes:
 
 Once ready, run:
 
-- cargo run -r -- --gen-email
+- cargo run -r -- --gen-email example.sender@example.com example.recipient@example.com

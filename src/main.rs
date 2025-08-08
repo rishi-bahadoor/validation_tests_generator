@@ -29,13 +29,23 @@ pub struct Args {
     /// Generate an email instead of running the full report pipeline
     #[arg(long)]
     pub gen_email: bool,
+
+    /// Sender email address (only with --gen-email)
+    #[arg(index = 1, required_if_eq("gen_email", "true"))]
+    pub sender_email: Option<String>,
+
+    /// Recipient email address (only with --gen-email)
+    #[arg(index = 2, required_if_eq("gen_email", "true"))]
+    pub recipient_email: Option<String>,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
 
     if args.gen_email {
-        let _ = generate_email_using_python();
+        let sender = args.sender_email.as_deref().unwrap();
+        let recipient = args.recipient_email.as_deref().unwrap();
+        let _ = generate_email_using_python(sender, recipient)?;
         return Ok(());
     }
 
