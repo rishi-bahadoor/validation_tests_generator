@@ -5,7 +5,7 @@ mod email_ops;
 mod excel_ops;
 mod test_file_ops;
 
-use csv_ops::export_to_csv;
+use csv_ops::export_grouped_csv;
 use email_ops::generate_email_using_python;
 use excel_ops::{convert_csv_to_excel, format_excel_sheet};
 use test_file_ops::test_file_filter;
@@ -14,19 +14,19 @@ use test_file_ops::test_file_filter;
 #[command(name = "Validation Test Generator")]
 #[command(about = "Generates filtered CSV reports from TOML test definitions")]
 pub struct Args {
-    #[arg(short = 'i', long = "input", default_value = "tests_list.toml")]
+    /// Input TOML of tests
+    #[arg(short, long, default_value = "tests_list.toml")]
     pub input: String,
 
-    #[arg(short = 'o', long = "output", default_value = "test_report.csv")]
+    /// Output CSV path
+    #[arg(short, long, default_value = "test_report.csv")]
     pub output: String,
 
-    #[arg(short = 'd', long = "ids")]
-    pub ids: Vec<String>,
-
-    #[arg(short = 'p', long = "priority")]
+    /// Optional priority filter
+    #[arg(short, long)]
     pub priority: Option<String>,
 
-    /// Generate an email instead of running the full report pipeline
+    /// Generate an email instead of full pipeline
     #[arg(long)]
     pub gen_email: bool,
 
@@ -37,6 +37,15 @@ pub struct Args {
     /// Recipient email address (only with --gen-email)
     #[arg(index = 2, required_if_eq("gen_email", "true"))]
     pub recipient_email: Option<String>,
+
+    /// One or more labeled ID groups like label:1.1,1.2,1.3
+    #[arg(
+      long = "group",
+      value_name = "LABEL:IDS",
+      help = "Define a group, e.g. --group heat:1.1,1.2",
+      num_args = 1..,
+    )]
+    pub groups: Vec<String>,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -49,8 +58,34 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         return Ok(());
     }
 
-    let filtered_list = test_file_filter(&args.input, &args.ids, &args.priority)?;
-    let csv_path = export_to_csv(&filtered_list, &args.output)?;
+    // Parse each "label:comma,ids" into (label, Vec<String>)
+    let mut label_groups: Vec<(String, Vec<String>)> = Vec::new();
+    for raw in &args.groups {
+        let mut parts = raw.splitn(2, ':');
+        let label = parts
+            .next()
+            .expect("every group must have a label")
+            .to_string();
+        let id_list = parts
+            .next()
+            .unwrap_or("") // in case someone writes "foo:" with no IDs
+            .split(',')
+            .filter(|s| !s.is_empty())
+            .map(str::to_string)
+            .collect::<Vec<_>>();
+        label_groups.push((label, id_list));
+    }
+
+    let mut grouped_tests: Vec<(String, Vec<_>)> = Vec::new();
+    for (label, ids) in &label_groups {
+        let filtered = test_file_filter(&args.input, ids, &args.priority)?;
+        grouped_tests.push((label.clone(), filtered));
+    }
+
+    let csv_path = export_grouped_csv(&grouped_tests, &args.output)?;
+    let xlsx_path = convert_csv_to_excel(&csv_path)?;
+    format_excel_sheet(&xlsx_path)?;
+
     let xlsx_path = convert_csv_to_excel(&csv_path)?;
     format_excel_sheet(&xlsx_path)?;
     Ok(())
