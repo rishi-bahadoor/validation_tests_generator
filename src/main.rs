@@ -74,20 +74,29 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Parse each "label:comma,ids" into (label, Vec<String>)
     let mut label_groups: Vec<(String, Vec<String>)> = Vec::new();
-    for raw in &args.groups {
-        let mut parts = raw.splitn(2, ':');
-        let label = parts
-            .next()
-            .expect("every group must have a label")
-            .to_string();
-        let id_list = parts
-            .next()
-            .unwrap_or("") // in case someone writes "foo:" with no IDs
-            .split(',')
-            .filter(|s| !s.is_empty())
-            .map(str::to_string)
-            .collect::<Vec<_>>();
-        label_groups.push((label, id_list));
+
+    if !args.groups.is_empty() {
+        for raw in &args.groups {
+            let mut parts = raw.splitn(2, ':');
+            let label = parts
+                .next()
+                .expect("every group must have a label")
+                .to_string();
+            let id_list = parts
+                .next()
+                .unwrap_or("") // in case someone writes "foo:" with no IDs
+                .split(',')
+                .filter(|s| !s.is_empty())
+                .map(str::to_string)
+                .collect::<Vec<_>>();
+            label_groups.push((label, id_list));
+        }
+    } else if let Some(ref prio) = args.priority {
+        // use the actual priority string as the group label
+        label_groups.push((
+            prio.clone(),
+            Vec::new(), // empty IDs means "all IDs", filtered by that priority
+        ));
     }
 
     let mut grouped_tests: Vec<(String, Vec<_>)> = Vec::new();
