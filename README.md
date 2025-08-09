@@ -7,28 +7,31 @@
 - Includes metadata rows for technician and firmware details
 
 ### Using the tool
-You can run the tool directly using cargo run -r -- during development.
+You can run the tool directly using .\vtg.exe.
 
 ### Filter by test ID
 
 example:
-- cargo run -r -- --ids 1.1
-- cargo run -r -- --ids 1.1,2.1
+- .\vtg.exe --group GROUP_ONE:1.1,1.2 --group GROUP_TWO:1.3,1.4
+
+or
+
+- .\vtg.exe -g GROUP_ONE:1.1,1.2 -g GROUP_TWO:1.3,1.4
 
 ### Filter by priority
 
 example:
-- cargo run -r -- --priority MEDIUM
+- .\vtg.exe --priority MEDIUM
 
 ### Specify the test list
 
 example:
-- cargo run -r -- --input C:\Users\name\Downloads\validation_gen\validation_tests_generator\tests_list.toml
+- .\vtg.exe --input C:\Users\name\Downloads\validation_gen\validation_tests_generator\tests_list.toml
 
 ### Specify the output file name
 
 example:
-- cargo run -r -- --output test.csv
+- .\vtg.exe --output test.csv
 
 
 ### Updating the test_list.toml
@@ -69,4 +72,4 @@ The email includes:
 
 Once ready, run:
 
-- cargo run -r -- --gen-email example.sender@example.com example.recipient@example.com
+- .\vtg.exe --gen-email example.sender@example.com example.recipient@example.com
