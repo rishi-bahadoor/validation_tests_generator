@@ -5,6 +5,8 @@ use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
+use crate::scripts_find::script_path;
+
 pub fn convert_csv_to_excel<P: AsRef<Path>>(csv_path: P) -> Result<PathBuf, Box<dyn Error>> {
     println!(
         "✅ Converting CSV to Excel: {}",
@@ -47,8 +49,11 @@ pub fn format_excel_sheet<P: AsRef<Path>>(xlsx_path: P) -> Result<(), Box<dyn Er
         xlsx_path.as_ref().display()
     );
 
+    // resolve the .py location
+    let script = script_path("excel_format.py")?;
+
     let status = Command::new("python")
-        .arg("excel_format.py") // Your Python script filename
+        .arg(script)
         .arg(xlsx_path.as_ref())
         .status()?;
 

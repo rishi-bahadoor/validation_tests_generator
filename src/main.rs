@@ -3,6 +3,7 @@ use clap::Parser;
 mod csv_ops;
 mod email_ops;
 mod excel_ops;
+mod scripts_find;
 mod test_file_ops;
 
 use csv_ops::export_grouped_csv;

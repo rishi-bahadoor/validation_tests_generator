@@ -3,6 +3,8 @@
 use std::error::Error;
 use std::process::Command;
 
+use crate::scripts_find::script_path;
+
 /*
 // Deprecated: This functionality is now implemented in Python
 // and called from Rust for better formatting and email generation.
@@ -158,8 +160,11 @@ pub fn generate_email() -> Result<(), Box<dyn std::error::Error>> {
 pub fn generate_email_using_python(sender: &str, recipient: &str) -> Result<(), Box<dyn Error>> {
     println!("✅ Generating email template");
 
+    // resolve the .py location
+    let script = script_path("excel_to_email_template.py")?;
+
     let status = Command::new("python")
-        .arg("excel_to_email_template.py")
+        .arg(script)
         .arg(sender)
         .arg(recipient)
         .status()?;
