@@ -72,4 +72,4 @@ The email includes:
 
 Once ready, run:
 
-- .\vtg.exe --gen-email example.sender@example.com example.recipient@example.com
+- .\vtg.exe --email-gen example.sender@example.com example.recipient@example.com
