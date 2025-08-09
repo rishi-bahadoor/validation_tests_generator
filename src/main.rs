@@ -13,8 +13,8 @@ use excel_ops::{convert_csv_to_excel, format_excel_sheet};
 use test_file_ops::test_file_filter;
 
 #[derive(Parser, Debug)]
-#[command(name = "Validation Test Generator")]
-#[command(about = "Generates filtered CSV reports from TOML test definitions")]
+#[command(name = "vtg.exe", version = "1.0")]
+#[command(about = "Generates filtered validation test reports")]
 pub struct Args {
     /// Input TOML of tests
     #[arg(short, long, default_value = "tests_list.toml")]
@@ -54,6 +54,8 @@ pub struct Args {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     if std::env::args().len() == 1 {
         let mut cmd = Args::command();
+        let version = cmd.get_version().unwrap_or("unknown");
+        println!("\nvtg version: {}", version);
         cmd.print_help()?;
         println!(); // newline
         print!("Press Enter to continue…");
