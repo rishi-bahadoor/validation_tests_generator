@@ -1,4 +1,4 @@
-use clap::Parser;
+use clap::{CommandFactory, Parser};
 
 mod csv_ops;
 mod email_ops;
@@ -28,19 +28,20 @@ pub struct Args {
     pub priority: Option<String>,
 
     /// Generate an email instead of full pipeline
-    #[arg(long)]
-    pub gen_email: bool,
+    #[arg(short = 'e', long)]
+    pub email_gen: bool,
 
     /// Sender email address (only with --gen-email)
-    #[arg(index = 1, required_if_eq("gen_email", "true"))]
+    #[arg(index = 1, required_if_eq("email_gen", "true"))]
     pub sender_email: Option<String>,
 
     /// Recipient email address (only with --gen-email)
-    #[arg(index = 2, required_if_eq("gen_email", "true"))]
+    #[arg(index = 2, required_if_eq("email_gen", "true"))]
     pub recipient_email: Option<String>,
 
     /// One or more labeled ID groups like label:1.1,1.2,1.3
     #[arg(
+      short = 'g',
       long = "group",
       value_name = "LABEL:IDS",
       help = "Define a group, e.g. --group heat:1.1,1.2",
@@ -50,9 +51,16 @@ pub struct Args {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    if std::env::args().len() == 1 {
+        let mut cmd = Args::command();
+        cmd.print_help()?;
+        println!(); // newline
+        return Ok(());
+    }
+
     let args = Args::parse();
 
-    if args.gen_email {
+    if args.email_gen {
         let sender = args.sender_email.as_deref().unwrap();
         let recipient = args.recipient_email.as_deref().unwrap();
         let _ = generate_email_using_python(sender, recipient)?;
