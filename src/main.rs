@@ -1,4 +1,5 @@
 use clap::{CommandFactory, Parser};
+use std::io::{self, Write};
 
 mod csv_ops;
 mod email_ops;
@@ -55,6 +56,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let mut cmd = Args::command();
         cmd.print_help()?;
         println!(); // newline
+        print!("Press Enter to continue…");
+        io::stdout().flush()?; // ensure prompt shows
+        let mut buf = String::new();
+        io::stdin().read_line(&mut buf)?; // wait for Enter
         return Ok(());
     }
 
