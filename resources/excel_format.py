@@ -63,14 +63,6 @@ def add_sheet(wb, name):
         return wb[name]
     return wb.create_sheet(title=name)
 
-def find_firmware_version(ws):
-    for row in ws.iter_rows():
-        for cell in row:
-            if str(cell.value).strip().lower() == "firmware version:":
-                right_cell = ws.cell(row=cell.row, column=cell.column + 1)
-                return right_cell.value
-    raise RuntimeError("Firmware Version metadata not found.")
-
 ## Main formatting ##
 def format_excel_sheet(path):
     wb = load_workbook(path)
@@ -121,30 +113,6 @@ def format_excel_sheet(path):
             cell_range = f"{status_col}{start_row}:{status_col}{end_row}"
             rule = FormulaRule(formula=formula, fill=fill)
             ws.conditional_formatting.add(cell_range, rule)
-
-            # 3d) Populate "FW version last passed" column with metadata value
-            # 3d) Set formula in "FW version last passed" column if Status == "Pass"
-            fw_cell_value = find_firmware_version(ws)
-            fw_cell_ref   = None
-
-            # Locate the metadata cell reference (e.g., B1)
-            for row in ws.iter_rows():
-                for cell in row:
-                    if str(cell.value).strip().lower() == "firmware version:":
-                        fw_cell_ref = ws.cell(row=cell.row, column=cell.column + 1).coordinate
-                        break
-                if fw_cell_ref:
-                    break
-
-            if not fw_cell_ref:
-                raise RuntimeError("Firmware Version metadata cell not found.")
-
-            fw_col = find_column_letter_at_row(ws, "FW version last passed", header_row)
-            status_col = find_column_letter_at_row(ws, "Status", header_row)
-
-            for r in range(start_row, end_row + 1):
-                formula = f'=IF({status_col}{r}="Pass", ${fw_cell_ref}, "")'
-                ws[f"{fw_col}{r}"].value = formula
 
     # 4) Wrap all cells, add your extra sheets
     wrap_all_cells(ws)
