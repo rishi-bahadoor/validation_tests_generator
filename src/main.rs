@@ -10,7 +10,7 @@ mod test_file_ops;
 use csv_ops::export_grouped_csv;
 use email_ops::generate_email_using_python;
 use excel_ops::{convert_csv_to_excel, format_excel_sheet};
-use test_file_ops::test_file_filter;
+use test_file_ops::{export_grouped_toml, test_file_filter};
 
 #[derive(Parser, Debug)]
 #[command(name = "vtg.exe", version = "1.0")]
@@ -52,21 +52,23 @@ pub struct Args {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Show help if no args
     if std::env::args().len() == 1 {
         let mut cmd = Args::command();
         let version = cmd.get_version().unwrap_or("unknown");
         println!("\nvtg version: {}", version);
         cmd.print_help()?;
-        println!(); // newline
+        println!();
         print!("Press Enter to continue…");
-        io::stdout().flush()?; // ensure prompt shows
+        io::stdout().flush()?;
         let mut buf = String::new();
-        io::stdin().read_line(&mut buf)?; // wait for Enter
+        io::stdin().read_line(&mut buf)?;
         return Ok(());
     }
 
     let args = Args::parse();
 
+    // Email‐only mode
     if args.email_gen {
         let sender = args.sender_email.as_deref().unwrap();
         let recipient = args.recipient_email.as_deref().unwrap();
@@ -74,44 +76,40 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         return Ok(());
     }
 
-    // Parse each "label:comma,ids" into (label, Vec<String>)
-    let mut label_groups: Vec<(String, Vec<String>)> = Vec::new();
-
+    // Parse groups: Vec<(label, Vec<test_id>)>
+    let mut label_groups = Vec::new();
     if !args.groups.is_empty() {
         for raw in &args.groups {
             let mut parts = raw.splitn(2, ':');
-            let label = parts
+            let label = parts.next().unwrap().to_string();
+            let ids = parts
                 .next()
-                .expect("every group must have a label")
-                .to_string();
-            let id_list = parts
-                .next()
-                .unwrap_or("") // in case someone writes "foo:" with no IDs
+                .unwrap_or("")
                 .split(',')
                 .filter(|s| !s.is_empty())
-                .map(str::to_string)
-                .collect::<Vec<_>>();
-            label_groups.push((label, id_list));
+                .map(String::from)
+                .collect();
+            label_groups.push((label, ids));
         }
-    } else if let Some(ref prio) = args.priority {
-        // use the actual priority string as the group label
-        label_groups.push((
-            prio.clone(),
-            Vec::new(), // empty IDs means "all IDs", filtered by that priority
-        ));
+    } else if let Some(prio) = &args.priority {
+        label_groups.push((prio.clone(), Vec::new()));
     }
 
-    let mut grouped_tests: Vec<(String, Vec<_>)> = Vec::new();
+    // Apply filter
+    let mut grouped_tests = Vec::new();
     for (label, ids) in &label_groups {
         let filtered = test_file_filter(&args.input, ids, &args.priority)?;
         grouped_tests.push((label.clone(), filtered));
     }
 
+    // CSV → Excel pipeline
     let csv_path = export_grouped_csv(&grouped_tests, &args.output)?;
     let xlsx_path = convert_csv_to_excel(&csv_path)?;
     format_excel_sheet(&xlsx_path)?;
 
-    let xlsx_path = convert_csv_to_excel(&csv_path)?;
-    format_excel_sheet(&xlsx_path)?;
+    // Export a grouped TOML summary
+    let toml_out = "grouped_tests.toml";
+    export_grouped_toml(&grouped_tests, toml_out)?;
+
     Ok(())
 }
