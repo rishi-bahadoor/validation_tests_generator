@@ -234,7 +234,7 @@ def render_generic_sheet(ws):
     return "".join(html)
 
 def extract_tables(path):
-    wb = load_workbook(path, data_only=False)
+    wb = load_workbook(path, data_only=True)
     result = []
 
     for ws in wb.worksheets:
