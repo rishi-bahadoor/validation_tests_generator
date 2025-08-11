@@ -34,6 +34,7 @@ HEADERS = [
     "Description",
     "Pass Condition",
     "Status",
+    "FW version last passed",
     "Notes"
 ]
 
