@@ -13,7 +13,7 @@ use excel_ops::{convert_csv_to_excel, format_excel_sheet};
 use test_file_ops::{export_grouped_toml, test_file_filter};
 
 #[derive(Parser, Debug)]
-#[command(name = "vtg.exe", version = "1.0")]
+#[command(name = "vtg.exe", version = "1.1")]
 #[command(about = "Generates filtered validation test reports")]
 pub struct Args {
     /// Input TOML of tests
