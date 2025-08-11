@@ -108,7 +108,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     format_excel_sheet(&xlsx_path)?;
 
     // Export a grouped TOML summary
-    let toml_out = "grouped_tests.toml";
+    let toml_out = "test_instructions.toml";
     export_grouped_toml(&grouped_tests, toml_out)?;
 
     Ok(())
