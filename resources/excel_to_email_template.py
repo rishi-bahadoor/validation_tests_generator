@@ -2,6 +2,7 @@
 
 import sys
 import os
+import mimetypes
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import PatternFill
@@ -14,6 +15,10 @@ from email import policy
 
 DEFAULT_XLSX    = "test_report.xlsx"
 EML_OUTPUT      = "test_report_email.eml"
+
+IMAGE_DIR                   = "images_misc"
+IMAGE_EXTS                  = (".png", ".jpg", ".jpeg", ".gif")  
+
 
 EMAIL_FROM_DEFAULT     = "noreply@example.com"
 EMAIL_TO_DEFAULT       = "qa-team@example.com"
@@ -46,7 +51,7 @@ STATUS_COLORS = {
 }
 
 # Sheets that don’t have the above headers and should be rendered generically
-GENERIC_SHEETS = {"Technician_Issues", "Github_Issues"}
+GENERIC_SHEETS = {"Technician_Issues"}
 
 #==============================================================================
 # Helpers
@@ -308,6 +313,33 @@ def make_email(html, from_addr, to_addr):
     msg.add_alternative(html, subtype="html")
     return msg
 
+
+def attach_images(msg, directory: str) -> None:
+    """Attach all files in `directory` matching IMAGE_EXTS to the EmailMessage."""
+    if not os.path.isdir(directory):
+        print(f"⚠️ Image folder {directory!r} not found, skipping attachments.")
+        return
+
+    for fname in sorted(os.listdir(directory)):
+        if not fname.lower().endswith(IMAGE_EXTS):
+            continue
+        path = os.path.join(directory, fname)
+        ctype, _ = mimetypes.guess_type(path)
+        if ctype is None:
+            print(f"⚠️ Couldn’t guess MIME type for {fname}, skipping.")
+            continue
+        maintype, subtype = ctype.split("/", 1)
+        with open(path, "rb") as f:
+            data = f.read()
+        # EmailMessage API: add_attachment
+        msg.add_attachment(
+            data,
+            maintype=maintype,
+            subtype=subtype,
+            filename=fname
+        )
+        print(f"✅ Attached {fname} as {maintype}/{subtype}")
+
 def save_eml(msg, path):
     with open(path, "wb") as f:
         f.write(msg.as_bytes())
@@ -335,6 +367,9 @@ def main():
     tables = extract_tables(DEFAULT_XLSX)
     body   = build_body(tables)
     msg    = make_email(body, from_addr, to_addr)
+
+    attach_images(msg, IMAGE_DIR)
+
     save_eml(msg, EML_OUTPUT)
     print(f"✅ Generated `{EML_OUTPUT}`. Verify in Outlook.")
 

@@ -1,2 +1,9 @@
 /target
-*.png
+/images_misc
+/images_github_issues
+
+/test_inst.toml
+
+/*.eml
+/*.xlsx
+/*.csv
