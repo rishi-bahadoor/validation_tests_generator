@@ -32,7 +32,6 @@ HEADERS = [
     "Test Group",
     "Priority",
     "Description",
-    "Pass Condition",
     "Status",
     "FW version last passed",
     "Notes",
