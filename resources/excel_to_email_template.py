@@ -33,7 +33,6 @@ HEADERS = [
     "Priority",
     "Description",
     "Status",
-    "FW version last passed",
     "Notes",
     "Frequency",
 ]
@@ -235,20 +234,48 @@ def render_generic_sheet(ws):
 
 def extract_tables(path):
     wb = load_workbook(path, data_only=True)
-    result = []
+
+    # placeholders
+    metadata_html = None
+    data_html     = None
+    generic      = {}
 
     for ws in wb.worksheets:
-        # 1) Main data sheets
-        snippet = render_data_sheet(ws)
-        if snippet:
-            result.append(snippet)
+        # try to render your "data sheet"
+        full = render_data_sheet(ws)
+        if full:
+            # split the metadata block from the data block
+            # metadata always ends with "</table><br/>"
+            split_token = "</table><br/>"
+            idx = full.find(split_token)
+            if idx != -1:
+                metadata_html = full[: idx + len(split_token)]
+                data_html     = full[idx + len(split_token) :]
+            else:
+                # if for some reason there's no metadata, treat it all as data
+                data_html = full
             continue
 
-        # 2) Generic sheets
+        # stash generic sheets by title
         if ws.title in GENERIC_SHEETS:
             snippet = render_generic_sheet(ws)
             if snippet:
-                result.append(snippet)
+                generic[ws.title] = snippet
+
+    # now build your final list in the exact order you want:
+    result = []
+
+    # 1) metadata at the top, if any
+    if metadata_html:
+        result.append(metadata_html)
+
+    # 3) the main data-sheet table (without metadata)
+    if data_html:
+        result.append(data_html)
+
+    # 4) technician issues
+    if "Technician_Issues" in generic:
+        result.append(generic["Technician_Issues"])
 
     return result
 

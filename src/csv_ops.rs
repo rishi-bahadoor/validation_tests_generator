@@ -100,7 +100,6 @@ pub fn export_grouped_csv<P: AsRef<Path>>(
             "Priority",
             "Description",
             "Status",
-            "FW version last passed",
             "Notes",
             "Frequency",
         ])?;
@@ -112,7 +111,6 @@ pub fn export_grouped_csv<P: AsRef<Path>>(
                 &t.test_group,
                 &t.test_priority,
                 &t.test_description,
-                "",
                 "",
                 "",
                 "",

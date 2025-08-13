@@ -12,7 +12,6 @@ HEADERS = [
     ("Priority",      10),
     ("Description",   90),
     ("Status",        10),
-    ("FW version last passed", 15),
     ("Notes",         50),
     ("Frequency", 20),
 ]
@@ -119,8 +118,6 @@ def format_excel_sheet(path):
 
     tech_ws   = add_sheet(wb, "Technician_Issues")
     populate_single_cell(tech_ws, "Technician Issues")
-    github_ws = add_sheet(wb, "Github_Issues")
-    populate_single_cell(github_ws, "Github Issues")
 
     wb.save(path)
     print(f"✅ Excel formatting applied to: {path}")
