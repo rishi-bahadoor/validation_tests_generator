@@ -11,7 +11,6 @@ HEADERS = [
     ("Test Group",    18),
     ("Priority",      10),
     ("Description",   90),
-    ("Pass Condition",30),
     ("Status",        10),
     ("FW version last passed", 15),
     ("Notes",         50),
