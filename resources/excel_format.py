@@ -15,6 +15,7 @@ HEADERS = [
     ("Status",        10),
     ("FW version last passed", 15),
     ("Notes",         50),
+    ("Frequency", 20),
 ]
 
 STATUS_OPTIONS = ["Pass", "Fail", "Pending", "Blocked"]

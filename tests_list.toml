@@ -7,14 +7,12 @@ pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
   "## Ensure the sensor has default configuration ##",
   "## Set pixel format to STDV (0) ##",
-  " set pixel_format=0",
+  "set pixel_format=0",
   "## Turn on point enable and MST ##",
   "set point_enable=1, drive_big_mirror=1",
   "## Observe display for 2 minutes ##"
 ]
-test_authors_and_contact_persons = [
-  "Rishi Bahadoor",
-]
+test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
 test_id = "1.2"
@@ -25,14 +23,12 @@ pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
   "## Ensure the sensor has default configuration ##",
   "## Set pixel format to HRAD (2) ##",
-  " set pixel_format=2",
+  "set pixel_format=2",
   "## Turn on point enable and MST ##",
   "set point_enable=1, drive_big_mirror=1",
   "## Observe display for 2 minutes ##"
 ]
-test_authors_and_contact_persons = [
-  "Rishi Bahadoor",
-]
+test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
 test_id = "1.3"
@@ -43,29 +39,349 @@ pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
   "## Ensure the sensor has default configuration ##",
   "## Set pixel format to HLZ4 (3) ##",
-  " set pixel_format=3",
+  "set pixel_format=3",
   "## Turn on point enable and MST ##",
   "set point_enable=1, drive_big_mirror=1",
   "## Observe display for 2 minutes ##"
 ]
-test_authors_and_contact_persons = [
-  "Rishi Bahadoor",
-]
+test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
 test_id = "1.4"
 test_group = "1:POINT_CLOUD"
 test_priority = "HIGH"
-test_description = "Check per point stability that is points do not flicker"
+test_description = "Check per point stability that points do not flicker"
 pass_condition = "No flickering on the display of the point cloud"
 instructions = [
   "## Ensure the sensor has default configuration ##",
-  "## Set pixel format to each pixel format per observation##",
-  " set pixel_format=(specific_pixel_format)",
+  "## Set pixel format to each pixel format per observation ##",
+  "set pixel_format=(specific_pixel_format)",
   "## Turn on point enable and MST ##",
   "set point_enable=1, drive_big_mirror=1",
   "## Observe display for 2 minutes ##"
 ]
-test_authors_and_contact_persons = [
-  "Rishi Bahadoor",
-]
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "1.5.1"
+test_group = "1:POINT_CLOUD"
+test_priority = "HIGH"
+test_description = "Testing with STDV. Left scan and right scan encoder range valid."
+pass_condition = ""
+instructions = ["horiz_fov_left=-2185698,horiz_fov_right=2185698,horiz_firing_period=5916,horiz_fov_left_roi=-699050,horiz_fov_right_roi=699050,horiz_firing_period_roi=2548,nr_slot=2103,roi_enable=1,mst_cycle_duration=200000,pixel_format=0"]
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "1.5.2"
+test_group = "1:POINT_CLOUD"
+test_priority = "HIGH"
+test_description = "Testing with HLZ4. Left scan and right scan encoder range valid."
+pass_condition = ""
+instructions = ["horiz_fov_left=-2185698,horiz_fov_right=2185698,horiz_firing_period=5916,horiz_fov_left_roi=-699050,horiz_fov_right_roi=699050,horiz_firing_period_roi=2548,nr_slot=2103,roi_enable=1,mst_cycle_duration=200000,pixel_format=3"]
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "1.6.1"
+test_group = "1:POINT_CLOUD"
+test_priority = "HIGH"
+test_description = "Check point cloud (STDV format) is being displayed correctly after running for 15 mins (outdoor setting)"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "1.6.2"
+test_group = "1:POINT_CLOUD"
+test_priority = "HIGH"
+test_description = "Check point cloud (HRAD format) is being displayed correctly after running for 15 mins (outdoor setting)"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "1.6.3"
+test_group = "1:POINT_CLOUD"
+test_priority = "HIGH"
+test_description = "Check point cloud (HLZ4 format) is being displayed correctly after running for 15 mins (outdoor setting)"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "2.1"
+test_group = "2:MAGNOSTEER"
+test_priority = "HIGH"
+test_description = "Check MST frequency at 10Hz"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "2.2"
+test_group = "2:MAGNOSTEER"
+test_priority = "HIGH"
+test_description = "Check MST frequency at 20Hz"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "2.3"
+test_group = "2:MAGNOSTEER"
+test_priority = "LOW"
+test_description = "Check MST frequency does not go above 21Hz"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "2.4"
+test_group = "2:MAGNOSTEER"
+test_priority = "LOW"
+test_description = "Check MST frequency change: gradual adjustments (10Hz to 11Hz etc.)"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "2.5"
+test_group = "2:MAGNOSTEER"
+test_priority = "LOW"
+test_description = "Check MST frequency change: large adjustments (10HZ to 20Hz etc.)"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "2.6"
+test_group = "2:MAGNOSTEER"
+test_priority = "MEDIUM"
+test_description = "Check MST stability (shake sensor rotate etc.)"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "2.7"
+test_group = "2:MAGNOSTEER"
+test_priority = "LOW"
+test_description = "Check MST ROI with defaults"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "2.8"
+test_group = "2:MAGNOSTEER"
+test_priority = "LOW"
+test_description = "Check MST ROI widening/shortening"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "2.9"
+test_group = "2:MAGNOSTEER"
+test_priority = "LOW"
+test_description = "Check MST ROI with position (left center right)"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "3.1.1"
+test_group = "3:BLOOM_MITIGATION"
+test_priority = "HIGH"
+test_description = "Check bloom mitigation works at 10 meters (STDV format)"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "3.1.2"
+test_group = "3:BLOOM_MITIGATION"
+test_priority = "HIGH"
+test_description = "Check bloom mitigation works at 10 meters (HRAD format)"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "3.1.3"
+test_group = "3:BLOOM_MITIGATION"
+test_priority = "HIGH"
+test_description = "Check bloom mitigation works at 10 meters (HLZ4 format)"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "3.2.1"
+test_group = "3:BLOOM_MITIGATION"
+test_priority = "HIGH"
+test_description = "Check bloom mitigation works at 50 meters (STDV format)"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "3.2.2"
+test_group = "3:BLOOM_MITIGATION"
+test_priority = "HIGH"
+test_description = "Check bloom mitigation works at 50 meters (HRAD format)"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "3.2.3"
+test_group = "3:BLOOM_MITIGATION"
+test_priority = "HIGH"
+test_description = "Check bloom mitigation works at 50 meters (HLZ4 format)"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "4.1"
+test_group = "4:FW_LOADING"
+test_priority = "LOW"
+test_description = "Validate firmware upload capability via CCC App"
+pass_condition = ""
+instructions = ["ccc update-firmware"]
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "4.2"
+test_group = "4:FW_LOADING"
+test_priority = "LOW"
+test_description = "Validate firmware upload capability via CCC App"
+pass_condition = ""
+instructions = ["ccc boot-server"]
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "4.3"
+test_group = "4:FW_LOADING"
+test_priority = "LOW"
+test_description = "Validate firmware rescue mode via CCC App"
+pass_condition = ""
+instructions = ["ccc update-firmware --rescue-mode"]
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "5.1"
+test_group = "5:STARTUP"
+test_priority = "LOW"
+test_description = "Measure the time between the sensor power on and connection to CeptonViewer (Spec < 8 seconds)"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "6.1.1"
+test_group = "6:NETWORKING"
+test_priority = "LOW"
+test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data on) using STDV format"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "6.1.2"
+test_group = "6:NETWORKING"
+test_priority = "LOW"
+test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data off) using STDV format"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "6.2.1"
+test_group = "6:NETWORKING"
+test_priority = "LOW"
+test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data on) using HRAD format"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "6.2.2"
+test_group = "6:NETWORKING"
+test_priority = "LOW"
+test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data off) using HRAD format"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "6.3.1"
+test_group = "6:NETWORKING"
+test_priority = "LOW"
+test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data on) using HLZ4 format"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "6.3.2"
+test_group = "6:NETWORKING"
+test_priority = "LOW"
+test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data off) using HLZ4 format"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "6.4"
+test_group = "6:NETWORKING"
+test_priority = "LOW"
+test_description = "Check AutoIP functionality"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "6.5"
+test_group = "6:NETWORKING"
+test_priority = "LOW"
+test_description = "Check DHCP functionality"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "7.1"
+test_group = "7:CONFIGURATION"
+test_priority = "LOW"
+test_description = "Check user exposed configurations (do not rely on \"-d ultra_config.toml\")"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "8.2"
+test_group = "8:MISC"
+test_priority = "LOW"
+test_description = "Check sensor connectivity after 1 hour"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "8.3"
+test_group = "8:MISC"
+test_priority = "LOW"
+test_description = "Using ccc diag --fix to restore settings"
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]
+
+[[test]]
+test_id = "8.4"
+test_group = "8:MISC"
+test_priority = "LOW"
+test_description = "Ambient mode test. Toggle TOF Intensity in viewer to see. Use HRAD."
+pass_condition = ""
+instructions = []
+test_authors_and_contact_persons = ["TBD"]

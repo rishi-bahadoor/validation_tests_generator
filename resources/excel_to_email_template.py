@@ -35,7 +35,8 @@ HEADERS = [
     "Pass Condition",
     "Status",
     "FW version last passed",
-    "Notes"
+    "Notes",
+    "Frequency",
 ]
 
 # Re-use your Excel conditional-formatting colours
