@@ -72,12 +72,11 @@ pub fn sanity_check() -> Result<(), String> {
         let actual_hash = compute_fnv1a_32(check.path)?;
         if actual_hash != check.expected_hash {
             println!("!! DEVELOPER WARNING !!");
-            println!("Script files have changed.");
-            println!(
-                "Update the version number in the script header for {}.",
-                check.path
-            );
-            println!("Then update the new VERSION and HASH value in sanity.rs.");
+            println!("Script files have been tampered with {}.", check.path);
+            /*
+              Update the version number in the script header to indicate new script changes.
+              Then update the new VERSION and HASH value in sanity.rs to pass the sanity check.
+            */
             return Err(format!(
                 "Hash mismatch in '{}': expected 0x{:08X}, found 0x{:08X}",
                 check.path, check.expected_hash, actual_hash

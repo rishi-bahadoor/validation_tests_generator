@@ -59,7 +59,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         eprintln!("Sanity check failed: {}", e);
         process::exit(1); // Exit with non-zero status
     }
-    println!("✅ Sanity check passed.");
 
     // Show help if no args
     if std::env::args().len() == 1 {
