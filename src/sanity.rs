@@ -18,7 +18,7 @@ const SCRIPT_CHECKS: &[ScriptCheck] = &[
     ScriptCheck {
         path: "resources/excel_to_email_template.py",
         expected_version: "1.1.1",
-        expected_hash: 0xD327BF4A, // Replace with actual hash
+        expected_hash: 0x57BF7F6A, // Replace with actual hash
     },
 ];
 

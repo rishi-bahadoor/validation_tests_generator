@@ -7,6 +7,7 @@ from openpyxl import load_workbook
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
+from datetime import date
 
 # =============================================================================
 # Configuration Defaults
@@ -23,6 +24,8 @@ STATUS_COLORS = {
     "Pending": "#ffeb9c",
     "Blocked": "#add8e6",
 }
+
+EMAIL_SUBJECT   = f"UFB Ultra Release Status Track - {date.today().strftime('%d-%m-%Y')}"
 
 # =============================================================================
 # Small Helpers
@@ -261,7 +264,7 @@ def build_email_message(xlsx_path, from_addr, recipients):
         sub["rows"] = apply_color_to_cells(sub["rows"], "Status", STATUS_COLORS)
 
     builder = EmailBodyBuilder(
-        subject="Automated Report",
+        subject=EMAIL_SUBJECT,
         sender=from_addr,
         recipients=recipients
     )
