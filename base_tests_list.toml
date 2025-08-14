@@ -613,7 +613,16 @@ test_group = "6:NETWORKING"
 test_priority = "LOW"
 test_description = "Check AutoIP functionality"
 pass_condition = ""
-instructions = []
+instructions = [
+  "## This is best tested using a router or dedicated DHCP server ##",
+  "## Connect the sensor ethernet port to the router ##",
+  "## Disable the DHCP server on the router (power cycle of the router may be needed to release the IP lease) ##",
+  "## Set sensor ip to 0.0.0.0 ##",
+  "set src_ip=0.0.0.0",
+  "## On Auto IP negotiation, the sensor src ip should be set to a 169.x.x.x IP ##",
+  "## Remove static ip assignments from your pc network adapter to also get a 169.x.x.x IP ##",
+  "## Verify the ip change in wireshark and also test connectivity from ccc tool ##",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -622,7 +631,16 @@ test_group = "6:NETWORKING"
 test_priority = "LOW"
 test_description = "Check DHCP functionality"
 pass_condition = ""
-instructions = []
+instructions = [
+  "## This is best tested using a router or dedicated DHCP server ##",
+  "## Connect the sensor ethernet port to the router ##",
+  "## Enable the DHCP server on the router (power cycle of the router may be needed to release the IP lease) ##",
+  "## Set sensor ip to 0.0.0.0 ##",
+  "set src_ip=0.0.0.0",
+  "## On DHCP IP assignment, the sensor src ip should be set to the DHCP IP range configured on the router IP ##",
+  "## Remove static ip assignments from your pc network adapter to also get a DHCP assigned IP in the same subnet as the sensor ##",
+  "## Verify the ip change in wireshark and also test connectivity from ccc tool ##",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -630,8 +648,15 @@ test_id = "7.1"
 test_group = "7:CONFIGURATION"
 test_priority = "LOW"
 test_description = "Check user exposed configurations (do not rely on \"-d ultra_config.toml\")"
-pass_condition = ""
-instructions = []
+pass_condition = "User exposed configuration fields are accessible without using -d file.toml option"
+instructions = [
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the sensor is pwered on and connected to the PC ##",
+  "## Ensure the PC is on the Cepton network ##",
+  "## Do a get all command using the ccc tool with no -d option ##",
+  "get-all",
+  "## Observe that the configurations are displayed with no errors ##",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -639,8 +664,15 @@ test_id = "8.2"
 test_group = "8:MISC"
 test_priority = "LOW"
 test_description = "Check sensor connectivity after 1 hour"
-pass_condition = ""
-instructions = []
+pass_condition = "Sensor communication is still functional after one hour"
+instructions = [
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the sensor is powered on ##",
+  "## Ensure the mst and points are enabled ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Observe the sensor activity and connectivity for 1 hour using viewer and doing list sensors commands ##",
+  "list-sensors",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -648,8 +680,14 @@ test_id = "8.3"
 test_group = "8:MISC"
 test_priority = "LOW"
 test_description = "Using ccc diag --fix to restore settings"
-pass_condition = ""
-instructions = []
+pass_condition = "Sensor configurations correctly set with no side effects such as mirror knocking"
+instructions = [
+  "## Ensure the sensor is powered on ##",
+  "## Ensure the sensor has uninitialized configurations or incorrect but safe values ##",
+  "## Noteworthy configurations: ROI's, SPAD's, MST's ##",
+  "## Run the diag fix command ##",
+  "diag --fix",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
