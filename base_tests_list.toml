@@ -5,7 +5,7 @@ test_priority = "MEDIUM"
 test_description = "Check that point cloud is being displayed correctly for 2 minutes (Both indoor/outdoor setting) using STDV format (pixel_format=0)"
 pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
-  "## Ensure the sensor has default configuration ##",
+  "## Ensure the sensor has default configurations ##",
   "## Set pixel format to STDV (0) ##",
   "set pixel_format=0",
   "## Turn on point enable and MST ##",
@@ -21,7 +21,7 @@ test_priority = "MEDIUM"
 test_description = "Check that point cloud is being displayed correctly for 2 minutes (Both indoor/outdoor setting) using HRAD format (pixel_format=2)"
 pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
-  "## Ensure the sensor has default configuration ##",
+  "## Ensure the sensor has default configurations ##",
   "## Set pixel format to HRAD (2) ##",
   "set pixel_format=2",
   "## Turn on point enable and MST ##",
@@ -37,7 +37,7 @@ test_priority = "MEDIUM"
 test_description = "Check that point cloud is being displayed correctly for 2 minutes (Both indoor/outdoor setting) using HLZ4 format (pixel_format=3)"
 pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
-  "## Ensure the sensor has default configuration ##",
+  "## Ensure the sensor has default configurations ##",
   "## Set pixel format to HLZ4 (3) ##",
   "set pixel_format=3",
   "## Turn on point enable and MST ##",
@@ -54,11 +54,23 @@ test_description = "Check per point stability that points do not flicker"
 pass_condition = "No flickering on the display of the point cloud"
 instructions = [
   "## Ensure the sensor has default configuration ##",
-  "## Set pixel format to each pixel format per observation ##",
-  "set pixel_format=(specific_pixel_format)",
+  "## Set pixel format to STDV (0) ##",
+  "set pixel_format=0",
   "## Turn on point enable and MST ##",
   "set point_enable=1, drive_big_mirror=1",
-  "## Observe display for 2 minutes ##"
+  "## Observe display for 2 minutes ##",
+  "## Ensure the sensor has default configuration ##",
+  "## Set pixel format to HRAD (2) ##",
+  "set pixel_format=2",
+  "## Turn on point enable and MST ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Observe display for 2 minutes ##",
+  "## Ensure the sensor has default configuration ##",
+  "## Set pixel format to HLZ4 (3) ##",
+  "set pixel_format=3",
+  "## Turn on point enable and MST ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Observe display for 2 minutes ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -67,8 +79,17 @@ test_id = "1.5.1"
 test_group = "1:POINT_CLOUD"
 test_priority = "HIGH"
 test_description = "Testing with STDV. Left scan and right scan encoder range valid."
-pass_condition = ""
-instructions = ["horiz_fov_left=-2185698,horiz_fov_right=2185698,horiz_firing_period=5916,horiz_fov_left_roi=-699050,horiz_fov_right_roi=699050,horiz_firing_period_roi=2548,nr_slot=2103,roi_enable=1,mst_cycle_duration=200000,pixel_format=0"]
+pass_condition = "Ensure that the missing or bad left and right vertical image scan lines are less than 10"
+instructions = [
+  "## Set these specific fields below ##",
+  "horiz_fov_left=-2185698,horiz_fov_right=2185698,horiz_firing_period=5916,horiz_fov_left_roi=-699050,horiz_fov_right_roi=699050,horiz_firing_period_roi=2548,nr_slot=2103,roi_enable=1,mst_cycle_duration=200000,pixel_format=0",
+  "## Turn on point enable and MST ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Observe the image display ##",
+  "## Restore the sensor setting to defaults ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "diag --fix",
+  ]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -77,7 +98,16 @@ test_group = "1:POINT_CLOUD"
 test_priority = "HIGH"
 test_description = "Testing with HLZ4. Left scan and right scan encoder range valid."
 pass_condition = ""
-instructions = ["horiz_fov_left=-2185698,horiz_fov_right=2185698,horiz_firing_period=5916,horiz_fov_left_roi=-699050,horiz_fov_right_roi=699050,horiz_firing_period_roi=2548,nr_slot=2103,roi_enable=1,mst_cycle_duration=200000,pixel_format=3"]
+instructions = [
+  "## Set these specific fields below ##",
+  "horiz_fov_left=-2185698,horiz_fov_right=2185698,horiz_firing_period=5916,horiz_fov_left_roi=-699050,horiz_fov_right_roi=699050,horiz_firing_period_roi=2548,nr_slot=2103,roi_enable=1,mst_cycle_duration=200000,pixel_format=3",
+  "## Turn on point enable and MST ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Observe the image display ##",
+  "## Restore the sensor setting to defaults ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "diag --fix",
+  ]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -85,8 +115,15 @@ test_id = "1.6.1"
 test_group = "1:POINT_CLOUD"
 test_priority = "HIGH"
 test_description = "Check point cloud (STDV format) is being displayed correctly after running for 15 mins (outdoor setting)"
-pass_condition = ""
-instructions = []
+pass_condition = "Accurate image representation of what the sensor is viewing"
+instructions = [
+  "## Ensure the sensor has default configurations ##",
+  "## Set pixel format to STDV (0) ##",
+  "set pixel_format=0",
+  "## Turn on point enable and MST ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Observe display for 15 minutes ##"
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -95,7 +132,14 @@ test_group = "1:POINT_CLOUD"
 test_priority = "HIGH"
 test_description = "Check point cloud (HRAD format) is being displayed correctly after running for 15 mins (outdoor setting)"
 pass_condition = ""
-instructions = []
+instructions = [
+  "## Ensure the sensor has default configurations ##",
+  "## Set pixel format to HRAD (2) ##",
+  "set pixel_format=2",
+  "## Turn on point enable and MST ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Observe display for 15 minutes ##"
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -104,7 +148,14 @@ test_group = "1:POINT_CLOUD"
 test_priority = "HIGH"
 test_description = "Check point cloud (HLZ4 format) is being displayed correctly after running for 15 mins (outdoor setting)"
 pass_condition = ""
-instructions = []
+instructions = [
+  "## Ensure the sensor has default configurations ##",
+  "## Set pixel format to HLZ4 (3) ##",
+  "set pixel_format=3",
+  "## Turn on point enable and MST ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Observe display for 15 minutes ##"
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -112,8 +163,16 @@ test_id = "2.1"
 test_group = "2:MAGNOSTEER"
 test_priority = "HIGH"
 test_description = "Check MST frequency at 10Hz"
-pass_condition = ""
-instructions = []
+pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS is 10Hz within +/- 0.005Hz"
+instructions = [
+  "## Set the pixel format to STDV (0) ##",
+  "set pixel_format=0",
+  "## Turn on mst and point enable ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Set the mst frequency to 10Hz ##",
+  "set mst_cycle_duration=200000",
+  "## Observe the mst gui Real Time FPS monitor ##",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -121,8 +180,16 @@ test_id = "2.2"
 test_group = "2:MAGNOSTEER"
 test_priority = "HIGH"
 test_description = "Check MST frequency at 20Hz"
-pass_condition = ""
-instructions = []
+pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS is 20Hz within +/- 0.005Hz"
+instructions = [
+  "## Set the pixel format to STDV (0) ##",
+  "set pixel_format=0",
+  "## Turn on mst and point enable ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Set the mst frequency to 20Hz ##",
+  "set mst_cycle_duration=100000",
+  "## Observe the mst gui Real Time FPS monitor ##",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -130,8 +197,16 @@ test_id = "2.3"
 test_group = "2:MAGNOSTEER"
 test_priority = "LOW"
 test_description = "Check MST frequency does not go above 21Hz"
-pass_condition = ""
-instructions = []
+pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS is not exceeding 21Hz within +/- 0.005Hz with FPS entries greater than 21Hz"
+instructions = [
+  "## Set the pixel format to STDV (0) ##",
+  "set pixel_format=0",
+  "## Turn on mst and point enable ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Set the mst frequency to 40Hz ##",
+  "set mst_cycle_duration=50000",
+  "## Observe the mst gui Real Time FPS monitor ##",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -139,8 +214,22 @@ test_id = "2.4"
 test_group = "2:MAGNOSTEER"
 test_priority = "LOW"
 test_description = "Check MST frequency change: gradual adjustments (10Hz to 11Hz etc.)"
-pass_condition = ""
-instructions = []
+pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS matches the incrementing FPS within +/- 0.005Hz"
+instructions = [
+  "## Set the pixel format to STDV (0) ##",
+  "set pixel_format=0",
+  "## Turn on mst and point enable ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Set the mst frequency to 10Hz ##",
+  "set mst_cycle_duration=200000",
+  "## Observe the mst gui Real Time FPS monitor ##",
+  "## Set the mst frequency to 11Hz ##",
+  "set mst_cycle_duration=181818",
+  "## Observe the mst gui Real Time FPS monitor ##",
+  "## Set the mst frequency to 12Hz ##",
+  "set mst_cycle_duration=166666",
+  "## Observe the mst gui Real Time FPS monitor ##",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -148,8 +237,19 @@ test_id = "2.5"
 test_group = "2:MAGNOSTEER"
 test_priority = "LOW"
 test_description = "Check MST frequency change: large adjustments (10HZ to 20Hz etc.)"
-pass_condition = ""
-instructions = []
+pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS matches the incrementing FPS within +/- 0.005Hz"
+instructions = [
+  "## Set the pixel format to STDV (0) ##",
+  "set pixel_format=0",
+  "## Turn on mst and point enable ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Set the mst frequency to 10Hz ##",
+  "set mst_cycle_duration=200000",
+  "## Observe the mst gui Real Time FPS monitor ##",
+  "## Set the mst frequency to 20Hz ##",
+  "set mst_cycle_duration=100000",
+  "## Observe the mst gui Real Time FPS monitor ##",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -157,8 +257,16 @@ test_id = "2.6"
 test_group = "2:MAGNOSTEER"
 test_priority = "MEDIUM"
 test_description = "Check MST stability (shake sensor rotate etc.)"
-pass_condition = ""
-instructions = []
+pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS matches the set FPS within +/- 0.005Hz while shaking"
+instructions = [
+  "## Set the pixel format to STDV (0) ##",
+  "set pixel_format=0",
+  "## Turn on mst and point enable ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Set the mst frequency to 10Hz ##",
+  "set mst_cycle_duration=200000",
+  "## Shake the sensor and observe the mst gui Real Time FPS monitor ##",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -193,8 +301,20 @@ test_id = "3.1.1"
 test_group = "3:BLOOM_MITIGATION"
 test_priority = "HIGH"
 test_description = "Check bloom mitigation works at 10 meters (STDV format)"
-pass_condition = ""
-instructions = []
+pass_condition = "The blooming effect around the retro target in view of the sensor is mitigated within specification when the feature is turned on"
+instructions = [
+  "## Place the retro target at 10m from the sensor at a height of 6 feet ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Set the pixel format to STDV (0) ##",
+  "set pixel_format=0",
+  "## Turn on the MST and the points enable ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Turn on the retro target blooming mitigation option (feed-forward) ##",
+  "set probing_ffwd_enabled=1",
+  "## Observe the points image on the display ##",
+  "## Turn off the retro target blooming mitigation option (feed-forward) ##",
+  "set probing_ffwd_enabled=0",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -202,8 +322,20 @@ test_id = "3.1.2"
 test_group = "3:BLOOM_MITIGATION"
 test_priority = "HIGH"
 test_description = "Check bloom mitigation works at 10 meters (HRAD format)"
-pass_condition = ""
-instructions = []
+pass_condition = "The blooming effect around the retro target in view of the sensor is mitigated within specification when the feature is turned on"
+instructions = [
+  "## Place the retro target at 10m from the sensor at a height of 6 feet ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Set the pixel format to HRAD (2) ##",
+  "set pixel_format=2",
+  "## Turn on the MST and the points enable ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Turn on the retro target blooming mitigation option (feed-forward) ##",
+  "set probing_ffwd_enabled=1",
+  "## Observe the points image on the display ##",
+  "## Turn off the retro target blooming mitigation option (feed-forward) ##",
+  "set probing_ffwd_enabled=0",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -211,8 +343,20 @@ test_id = "3.1.3"
 test_group = "3:BLOOM_MITIGATION"
 test_priority = "HIGH"
 test_description = "Check bloom mitigation works at 10 meters (HLZ4 format)"
-pass_condition = ""
-instructions = []
+pass_condition = "The blooming effect around the retro target in view of the sensor is mitigated within specification when the feature is turned on"
+instructions = [
+  "## Place the retro target at 10m from the sensor at a height of 6 feet ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Set the pixel format to HLZ4 (3) ##",
+  "set pixel_format=3",
+  "## Turn on the MST and the points enable ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Turn on the retro target blooming mitigation option (feed-forward) ##",
+  "set probing_ffwd_enabled=1",
+  "## Observe the points image on the display ##",
+  "## Turn off the retro target blooming mitigation option (feed-forward) ##",
+  "set probing_ffwd_enabled=0",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -220,8 +364,20 @@ test_id = "3.2.1"
 test_group = "3:BLOOM_MITIGATION"
 test_priority = "HIGH"
 test_description = "Check bloom mitigation works at 50 meters (STDV format)"
-pass_condition = ""
-instructions = []
+pass_condition = "The blooming effect around the retro target in view of the sensor is mitigated within specification when the feature is turned on"
+instructions = [
+  "## Place the retro target at 50m from the sensor at a height of 6 feet ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Set the pixel format to STDV (0) ##",
+  "set pixel_format=0",
+  "## Turn on the MST and the points enable ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Turn on the retro target blooming mitigation option (feed-forward) ##",
+  "set probing_ffwd_enabled=1",
+  "## Observe the points image on the display ##",
+  "## Turn off the retro target blooming mitigation option (feed-forward) ##",
+  "set probing_ffwd_enabled=0",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -229,8 +385,20 @@ test_id = "3.2.2"
 test_group = "3:BLOOM_MITIGATION"
 test_priority = "HIGH"
 test_description = "Check bloom mitigation works at 50 meters (HRAD format)"
-pass_condition = ""
-instructions = []
+pass_condition = "The blooming effect around the retro target in view of the sensor is mitigated within specification when the feature is turned on"
+instructions = [
+  "## Place the retro target at 50m from the sensor at a height of 6 feet ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Set the pixel format to HRAD (2) ##",
+  "set pixel_format=2",
+  "## Turn on the MST and the points enable ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Turn on the retro target blooming mitigation option (feed-forward) ##",
+  "set probing_ffwd_enabled=1",
+  "## Observe the points image on the display ##",
+  "## Turn off the retro target blooming mitigation option (feed-forward) ##",
+  "set probing_ffwd_enabled=0",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -238,8 +406,20 @@ test_id = "3.2.3"
 test_group = "3:BLOOM_MITIGATION"
 test_priority = "HIGH"
 test_description = "Check bloom mitigation works at 50 meters (HLZ4 format)"
-pass_condition = ""
-instructions = []
+pass_condition = "The blooming effect around the retro target in view of the sensor is mitigated within specification when the feature is turned on"
+instructions = [
+  "## Place the retro target at 50m from the sensor at a height of 6 feet ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Set the pixel format to HLZ4 (3) ##",
+  "set pixel_format=3",
+  "## Turn on the MST and the points enable ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Turn on the retro target blooming mitigation option (feed-forward) ##",
+  "set probing_ffwd_enabled=1",
+  "## Observe the points image on the display ##",
+  "## Turn off the retro target blooming mitigation option (feed-forward) ##",
+  "set probing_ffwd_enabled=0",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -247,17 +427,28 @@ test_id = "4.1"
 test_group = "4:FW_LOADING"
 test_priority = "LOW"
 test_description = "Validate firmware upload capability via CCC App"
-pass_condition = ""
-instructions = ["ccc update-firmware"]
-test_authors_and_contact_persons = ["TBD"]
+pass_condition = "Firmware updates successfully and the FW version change is observed when checked"
+instructions = [
+  "## Run the update firmware command on the sensor ##",
+  "ccc update-firmware",
+  "## Power cycle the sensor ##",
+  "## Check that the FW version has been updated ##",
+  "ccc list-sensors"
+]
 
+test_authors_and_contact_persons = ["TBD"]
 [[test]]
 test_id = "4.2"
 test_group = "4:FW_LOADING"
 test_priority = "LOW"
 test_description = "Validate firmware upload capability via CCC App"
-pass_condition = ""
-instructions = ["ccc boot-server"]
+pass_condition = "Firmware updates successfully and the FW version change is observed when checked"
+instructions = [
+  "## Run the boot server command on the sensor ##",
+  "ccc update-firmware",
+  "## Check that the FW version has been updated ##",
+  "ccc list-sensors",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -265,8 +456,13 @@ test_id = "4.3"
 test_group = "4:FW_LOADING"
 test_priority = "LOW"
 test_description = "Validate firmware rescue mode via CCC App"
-pass_condition = ""
-instructions = ["ccc update-firmware --rescue-mode"]
+pass_condition = "Firmware updates successfully and the FW version change is observed when checked"
+instructions = [  
+  "## Run the rescue mode command on the sensor ##",
+  "ccc update-firmware --rescue-mode",
+  "## Check that the FW version has been updated ##",
+  "ccc list-sensors", 
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -274,8 +470,15 @@ test_id = "5.1"
 test_group = "5:STARTUP"
 test_priority = "LOW"
 test_description = "Measure the time between the sensor power on and connection to CeptonViewer (Spec < 8 seconds)"
-pass_condition = ""
-instructions = []
+pass_condition = "The time between sensor power on and connection to Cepton Viewer is less than 8 seconds"
+instructions = [
+  "## Ensure that the sensor has default configurations ##",
+  "## Ensure that the sensor is set to display points when power cycled ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Power off the sensors ##",
+  "## Ensure that Cepton Viewer is opened and no points is displayed ##",
+  "## Power on the sensor and measure the time to get points image on Cepton Viewer ##",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -283,8 +486,20 @@ test_id = "6.1.1"
 test_group = "6:NETWORKING"
 test_priority = "LOW"
 test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data on) using STDV format"
-pass_condition = ""
-instructions = []
+pass_condition = "STDV points data packets have the updated source IP"
+instructions = [
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the sensor source IP is set to a common reference value ##",
+  "set src_ip=192.168.32.32",
+  "## Set the pixel format to STDV (0) ##",
+  "set pixel_format=0",
+  "## Turn on mst and points enable ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Observe the current points data packets source IP ##",  
+  "## Change the source IP ##",
+  "set src_ip=192.168.32.44",
+  "## Observe the points data packets source IP ##",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -292,8 +507,20 @@ test_id = "6.1.2"
 test_group = "6:NETWORKING"
 test_priority = "LOW"
 test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data off) using STDV format"
-pass_condition = ""
-instructions = []
+pass_condition = "INFZ data packets have the updated source IP"
+instructions = [
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the sensor source IP is set to a common reference value ##",
+  "set src_ip=192.168.32.32",
+  "## Set the pixel format to STDV (0) ##",
+  "set pixel_format=0",
+  "## Turn off mst and points enable ##",
+  "set point_enable=0, drive_big_mirror=0",
+  "## Observe the current INFZ data packets source IP ##",  
+  "## Change the source IP ##",
+  "set src_ip=192.168.32.44",
+  "## Observe the INFZ data packets source IP ##",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -301,8 +528,20 @@ test_id = "6.2.1"
 test_group = "6:NETWORKING"
 test_priority = "LOW"
 test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data on) using HRAD format"
-pass_condition = ""
-instructions = []
+pass_condition = "HRAD points data packets have the updated source IP"
+instructions = [
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the sensor source IP is set to a common reference value ##",
+  "set src_ip=192.168.32.32",
+  "## Set the pixel format to HRAD (2) ##",
+  "set pixel_format=2",
+  "## Turn on mst and points enable ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Observe the current points data packets source IP ##",  
+  "## Change the source IP ##",
+  "set src_ip=192.168.32.44",
+  "## Observe the points data packets source IP ##",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -310,8 +549,20 @@ test_id = "6.2.2"
 test_group = "6:NETWORKING"
 test_priority = "LOW"
 test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data off) using HRAD format"
-pass_condition = ""
-instructions = []
+pass_condition = "INFZ data packets have the updated source IP"
+instructions = [
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the sensor source IP is set to a common reference value ##",
+  "set src_ip=192.168.32.32",
+  "## Set the pixel format to HRAD (2) ##",
+  "set pixel_format=2",
+  "## Turn off mst and points enable ##",
+  "set point_enable=0, drive_big_mirror=0",
+  "## Observe the current INFZ data packets source IP ##",  
+  "## Change the source IP ##",
+  "set src_ip=192.168.32.44",
+  "## Observe the INFZ data packets source IP ##",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -319,8 +570,20 @@ test_id = "6.3.1"
 test_group = "6:NETWORKING"
 test_priority = "LOW"
 test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data on) using HLZ4 format"
-pass_condition = ""
-instructions = []
+pass_condition = "HLZ4 points data packets have the updated source IP"
+instructions = [
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the sensor source IP is set to a common reference value ##",
+  "set src_ip=192.168.32.32",
+  "## Set the pixel format to HLZ4 (3) ##",
+  "set pixel_format=3",
+  "## Turn on mst and points enable ##",
+  "set point_enable=1, drive_big_mirror=1",
+  "## Observe the current points data packets source IP ##",  
+  "## Change the source IP ##",
+  "set src_ip=192.168.32.44",
+  "## Observe the points data packets source IP ##",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -328,8 +591,20 @@ test_id = "6.3.2"
 test_group = "6:NETWORKING"
 test_priority = "LOW"
 test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data off) using HLZ4 format"
-pass_condition = ""
-instructions = []
+pass_condition = "INFZ data packets have the updated source IP"
+instructions = [
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the sensor source IP is set to a common reference value ##",
+  "set src_ip=192.168.32.32",
+  "## Set the pixel format to HLZ4 (3) ##",
+  "set pixel_format=3",
+  "## Turn off mst and points enable ##",
+  "set point_enable=0, drive_big_mirror=0",
+  "## Observe the current INFZ data packets source IP ##",  
+  "## Change the source IP ##",
+  "set src_ip=192.168.32.44",
+  "## Observe the INFZ data packets source IP ##",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
