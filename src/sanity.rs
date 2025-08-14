@@ -12,13 +12,13 @@ struct ScriptCheck<'a> {
 const SCRIPT_CHECKS: &[ScriptCheck] = &[
     ScriptCheck {
         path: "resources/excel_format.py",
-        expected_version: "1.1.2",
-        expected_hash: 0x97785123, // Replace with actual hash
+        expected_version: "1.1.3",
+        expected_hash: 0xCEFE6438, // Replace with actual hash
     },
     ScriptCheck {
         path: "resources/excel_to_email_template.py",
-        expected_version: "1.1.2",
-        expected_hash: 0x37FB4823, // Replace with actual hash
+        expected_version: "1.1.3",
+        expected_hash: 0x11A47757, // Replace with actual hash
     },
 ];
 

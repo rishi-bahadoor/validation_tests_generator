@@ -1,4 +1,4 @@
-# VERSION 1.1.2
+# VERSION 1.1.3
 
 import sys
 from pathlib import Path
@@ -147,11 +147,14 @@ class EmailBodyBuilder:
         self.msg["To"]      = ", ".join(recipients)
         self._html_parts   = []
 
-    def email_body_add_intro(self, lines):
+    def email_body_add_lines(self, lines):
         html = ""
         for line in lines:
             html += f"<p style='font-family:Arial; margin:4px 0'>{line}</p>"
         self._html_parts.append(html)
+
+    def email_body_add_empty_line(self, count=1):
+        self._html_parts.append("<br/>" * count)
 
     def email_body_start(self, title: str):
         self._html_parts.append(f"<h2 style='font-family:Arial'>{title}</h2><hr>")
@@ -188,7 +191,7 @@ class EmailBodyBuilder:
 
     def _render_plain_table(self, rows):
         if not rows:
-            return "<p><em>No data</em></p>"
+            return "<p><em></em></p>"
 
         headers = [
             h for h in rows[0].keys()
@@ -273,7 +276,7 @@ def build_email_message(xlsx_path, from_addr, recipients):
         sender=from_addr,
         recipients=recipients
     )
-    builder.email_body_add_intro([
+    builder.email_body_add_lines([
         "Hello team,",
         "Please find the latest validation report below. Let me know if you have any questions."
     ])
@@ -282,7 +285,12 @@ def build_email_message(xlsx_path, from_addr, recipients):
     builder.email_body_add_table(meta_data, data_type="meta")
 
     # inline images from default folder
+    builder.email_body_add_empty_line(1)
+    builder.email_body_add_lines([
+        "GitHub Issues: https://github.com/ceptontech/unified_firmware/issues?q=state%3Aopen%20label%3A%22QA%22"
+    ])
     builder.email_body_inline_images_from_folder()
+    builder.email_body_add_empty_line(2)
 
     # Attach misc images as file attachments
     builder.email_body_attach_images(IMAGES_FOLDER_MISC)
