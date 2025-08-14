@@ -235,6 +235,10 @@ class EmailBodyBuilder:
             img.add_header("Content-Disposition", "attachment", filename=img_path.name)
             self.msg.attach(img)
 
+    def email_body_add_outro(self, text):
+        self._html_parts.append(f"<p>{text}</p>")
+        self._html_parts.append("<hr/>")
+
     def email_body_close(self):
         full_html = "<html><body>" + "".join(self._html_parts) + "</body></html>"
         self.msg.attach(MIMEText(full_html, "html"))
@@ -286,6 +290,8 @@ def build_email_message(xlsx_path, from_addr, recipients):
     # Render subtables and secondary table
     builder.email_body_add_table(main_subtables, data_type="subtables")
     builder.email_body_add_table(secondary_tbl, data_type="table")
+
+    builder.email_body_add_outro("Best regards,<br/>Validation Team")
 
     return builder.email_body_close()
 
