@@ -74,10 +74,10 @@ pub fn sanity_check() -> Result<(), String> {
             println!("!! DEVELOPER WARNING !!");
             println!("Script files have changed.");
             println!(
-                "Please update the version number in the script header for {}.",
+                "Update the version number in the script header for {}.",
                 check.path
             );
-            println!("Then update the new hash value in sanity.rs.");
+            println!("Then update the new VERSION and HASH value in sanity.rs.");
             return Err(format!(
                 "Hash mismatch in '{}': expected 0x{:08X}, found 0x{:08X}",
                 check.path, check.expected_hash, actual_hash
