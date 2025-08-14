@@ -13,12 +13,12 @@ const SCRIPT_CHECKS: &[ScriptCheck] = &[
     ScriptCheck {
         path: "resources/excel_format.py",
         expected_version: "1.1.1",
-        expected_hash: 0x80CE2DAF, // Replace with actual hash
+        expected_hash: 0x3465C856, // Replace with actual hash
     },
     ScriptCheck {
         path: "resources/excel_to_email_template.py",
-        expected_version: "1.1.1",
-        expected_hash: 0x57BF7F6A, // Replace with actual hash
+        expected_version: "1.1.2",
+        expected_hash: 0x5693839C, // Replace with actual hash
     },
 ];
 

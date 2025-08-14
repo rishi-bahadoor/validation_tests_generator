@@ -26,7 +26,7 @@ example:
 ### Specify the test list
 
 example:
-- .\vtg.exe --input C:\Users\name\Downloads\validation_gen\validation_tests_generator\tests_list.toml
+- .\vtg.exe --input C:\Users\name\Downloads\validation_gen\validation_tests_generator\base_tests_list.toml
 
 ### Specify the output file name
 
@@ -63,7 +63,7 @@ test_authors_and_contact_persons = [
 
 ### Generating the email template
 
-To generate the email template, ensure that a report named `test_report.xlsx` already exists in the source directory. This file is used as input to create a technician-ready HTML email preview.
+To generate the email template, ensure that a report named `validation_test_report.xlsx` already exists in the source directory. This file is used as input to create a technician-ready HTML email preview.
 
 The email includes:
 - Metadata rows (e.g., technician name, firmware version)

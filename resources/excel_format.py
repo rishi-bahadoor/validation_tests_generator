@@ -122,7 +122,6 @@ def format_excel_sheet(path):
     populate_single_cell(tech_ws, "Technician Issues")
 
     wb.save(path)
-    print(f"✅ Excel formatting applied to: {path}")
 
 ## Small helper kept in place ##
 def populate_single_cell(ws, title_text):

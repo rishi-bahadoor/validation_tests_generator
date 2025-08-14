@@ -1,4 +1,4 @@
-# VERSION 1.1.1
+# VERSION 1.1.2
 
 import sys
 from pathlib import Path
@@ -14,7 +14,7 @@ from datetime import date
 # =============================================================================
 EMAIL_FROM_DEFAULT    = "no-reply@example.com"
 EMAIL_TO_DEFAULT      = ["alice@example.com", "bob@example.com"]
-EXCEL_FILE_DEFAULT    = "test_report.xlsx"
+EXCEL_FILE_DEFAULT    = "validation_test_report.xlsx"
 IMAGES_FOLDER_DEFAULT = "images_github_issues/"
 IMAGES_FOLDER_MISC    = "images_misc/"
 
@@ -25,6 +25,7 @@ STATUS_COLORS = {
     "Blocked": "#add8e6",
 }
 
+EMAIL_FILE_NAME = "validation_report_message.eml"
 EMAIL_SUBJECT   = f"UFB Ultra Release Status Track - {date.today().strftime('%d-%m-%Y')}"
 
 # =============================================================================
@@ -294,22 +295,23 @@ def build_email_message(xlsx_path, from_addr, recipients):
 # =============================================================================
 
 def main():
-    if len(sys.argv) == 3:
-        from_addr = sys.argv[1]
-        to_addr   = sys.argv[2]
+    if len(sys.argv) == 4:
+        from_addr   = sys.argv[1]
+        to_addr     = sys.argv[2]
+        excel_file  = sys.argv[3]
     elif len(sys.argv) == 1:
         from_addr = EMAIL_FROM_DEFAULT
         to_addr   = EMAIL_TO_DEFAULT
+        excel_file = EXCEL_FILE_DEFAULT
     else:
         print(f"Usage: {sys.argv[0]} [sender_email recipient_email]")
         sys.exit(1)
 
     recipients = to_addr if isinstance(to_addr, list) else [to_addr]
-    message    = build_email_message(EXCEL_FILE_DEFAULT, from_addr, recipients)
+    message    = build_email_message(excel_file, from_addr, recipients)
 
-    with open("report_message.eml", "w") as f:
+    with open(EMAIL_FILE_NAME, "w") as f:
         f.write(message.as_string())
-    print("Email body generated: report_message.eml")
 
 
 if __name__ == "__main__":

@@ -27,6 +27,11 @@ pub fn test_file_filter(
     ids: &[String],
     priority: &Option<String>,
 ) -> Result<Vec<Test>, Box<dyn Error>> {
+    // Check if the file exists
+    if !std::path::Path::new(input_path).exists() {
+        return Err(format!("File does not exist: '{}' ", input_path).into());
+    }
+
     let toml_str = fs::read_to_string(input_path)?;
     let test_list: TestList = toml::from_str(&toml_str)?;
 

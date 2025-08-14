@@ -16,16 +16,18 @@ use misc::press_enter;
 use sanity::sanity_check;
 use test_file_ops::{export_grouped_toml, test_file_filter};
 
+const EXCEL_FILE_DEFAULT: &str = "validation_test_report.xlsx";
+
 #[derive(Parser, Debug)]
 #[command(name = "vtg.exe", version = "1.1")]
 #[command(about = "Generates filtered validation test reports")]
 pub struct Args {
     /// Input TOML of tests
-    #[arg(short, long, default_value = "tests_list.toml")]
+    #[arg(short, long, default_value = "base_tests_list.toml")]
     pub input: String,
 
     /// Output CSV path
-    #[arg(short, long, default_value = "test_report.csv")]
+    #[arg(short, long, default_value = "validation_test_report.csv")]
     pub output: String,
 
     /// Optional priority filter
@@ -79,7 +81,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     if args.email_gen {
         let sender = args.sender_email.as_deref().unwrap();
         let recipient = args.recipient_email.as_deref().unwrap();
-        let _ = generate_email_using_python(sender, recipient)?;
+        let _ = generate_email_using_python(sender, recipient, EXCEL_FILE_DEFAULT)?;
         return Ok(());
     }
 
@@ -115,7 +117,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     format_excel_sheet(&xlsx_path)?;
 
     // Export a grouped TOML summary
-    let toml_out = "test_instructions.toml";
+    let toml_out = "validation_test_instructions.toml";
     export_grouped_toml(&grouped_tests, toml_out)?;
 
     Ok(())

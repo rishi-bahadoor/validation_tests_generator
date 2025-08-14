@@ -2,7 +2,7 @@
 /images_misc
 /images_github_issues
 
-/test_instructions.toml
+/validation_test_instructions.toml
 
 /*.eml
 /*.xlsx

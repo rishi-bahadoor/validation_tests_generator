@@ -8,11 +8,6 @@ use std::process::Command;
 use crate::scripts_find::script_path;
 
 pub fn convert_csv_to_excel<P: AsRef<Path>>(csv_path: P) -> Result<PathBuf, Box<dyn Error>> {
-    println!(
-        "✅ Converting CSV to Excel: {}",
-        csv_path.as_ref().display()
-    );
-
     // Prepare output path
     let xlsx_path = csv_path.as_ref().with_extension("xlsx");
     let xlsx_filename = xlsx_path.to_str().ok_or("Invalid output path")?;
@@ -44,11 +39,6 @@ pub fn convert_csv_to_excel<P: AsRef<Path>>(csv_path: P) -> Result<PathBuf, Box<
 }
 
 pub fn format_excel_sheet<P: AsRef<Path>>(xlsx_path: P) -> Result<(), Box<dyn Error>> {
-    println!(
-        "✅ Formatting Excel sheet: {}",
-        xlsx_path.as_ref().display()
-    );
-
     // resolve the .py location
     let script = script_path("excel_format.py")?;
 
