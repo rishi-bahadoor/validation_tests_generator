@@ -1,5 +1,6 @@
 use clap::{CommandFactory, Parser};
 use std::io::{self, Write};
+use std::process;
 
 mod csv_ops;
 mod email_ops;
@@ -54,10 +55,11 @@ pub struct Args {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    match sanity_check() {
-        Ok(_) => println!("✅ Sanity check passed."),
-        Err(e) => eprintln!("❌ Sanity check failed: {}", e),
+    if let Err(e) = sanity_check() {
+        eprintln!("Sanity check failed: {}", e);
+        process::exit(1); // Exit with non-zero status
     }
+    println!("✅ Sanity check passed.");
 
     // Show help if no args
     if std::env::args().len() == 1 {
