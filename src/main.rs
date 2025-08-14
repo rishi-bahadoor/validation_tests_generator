@@ -4,12 +4,14 @@ use std::io::{self, Write};
 mod csv_ops;
 mod email_ops;
 mod excel_ops;
+mod sanity;
 mod scripts_find;
 mod test_file_ops;
 
 use csv_ops::export_grouped_csv;
 use email_ops::generate_email_using_python;
 use excel_ops::{convert_csv_to_excel, format_excel_sheet};
+use sanity::sanity_check;
 use test_file_ops::{export_grouped_toml, test_file_filter};
 
 #[derive(Parser, Debug)]
@@ -52,6 +54,11 @@ pub struct Args {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    match sanity_check() {
+        Ok(_) => println!("✅ Sanity check passed."),
+        Err(e) => eprintln!("❌ Sanity check failed: {}", e),
+    }
+
     // Show help if no args
     if std::env::args().len() == 1 {
         let mut cmd = Args::command();

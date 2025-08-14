@@ -1,3 +1,5 @@
+# VERSION 1.1.1
+
 import sys
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter

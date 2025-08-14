@@ -1,3 +1,5 @@
+# VERSION 1.1.1
+
 import sys
 from pathlib import Path
 
