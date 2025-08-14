@@ -1,10 +1,10 @@
 use clap::{CommandFactory, Parser};
-use std::io::{self, Write};
 use std::process;
 
 mod csv_ops;
 mod email_ops;
 mod excel_ops;
+mod misc;
 mod sanity;
 mod scripts_find;
 mod test_file_ops;
@@ -12,6 +12,7 @@ mod test_file_ops;
 use csv_ops::export_grouped_csv;
 use email_ops::generate_email_using_python;
 use excel_ops::{convert_csv_to_excel, format_excel_sheet};
+use misc::press_enter;
 use sanity::sanity_check;
 use test_file_ops::{export_grouped_toml, test_file_filter};
 
@@ -57,6 +58,7 @@ pub struct Args {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     if let Err(e) = sanity_check() {
         eprintln!("Sanity check failed: {}", e);
+        press_enter();
         process::exit(1); // Exit with non-zero status
     }
 
@@ -67,10 +69,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!("\nvtg version: {}", version);
         cmd.print_help()?;
         println!();
-        print!("Press Enter to continue…");
-        io::stdout().flush()?;
-        let mut buf = String::new();
-        io::stdin().read_line(&mut buf)?;
+        press_enter();
         return Ok(());
     }
 

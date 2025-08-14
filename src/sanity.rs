@@ -13,7 +13,7 @@ const SCRIPT_CHECKS: &[ScriptCheck] = &[
     ScriptCheck {
         path: "resources/excel_format.py",
         expected_version: "1.1.1",
-        expected_hash: 0xB02EE3BA, // Replace with actual hash
+        expected_hash: 0x80CE2DAF, // Replace with actual hash
     },
     ScriptCheck {
         path: "resources/excel_to_email_template.py",
@@ -36,7 +36,9 @@ fn read_version_from_script(path: &str) -> Result<String, String> {
     if first_line.starts_with(version_prefix) {
         Ok(first_line.trim()[version_prefix.len()..].to_string())
     } else {
-        Err(format!("Malformed or missing version line in '{}'", path))
+        println!("Incorrect script version: '{}'", path);
+        println!("Contact the developer.");
+        Err(format!("Incorrect version"))
     }
 }
 

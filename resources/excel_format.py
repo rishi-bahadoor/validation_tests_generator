@@ -20,10 +20,10 @@ HEADERS = [
 
 STATUS_OPTIONS = ["Pass", "Fail", "Pending", "Blocked"]
 STATUS_COLORS  = {
-    "Pass":    "00C851",
-    "Fail":    "ff4444",
-    "Pending": "ffbb33",
-    "Blocked": "33b5e5",
+    "Pass":    "c6efce",
+    "Fail":    "ffc7ce",
+    "Pending": "ffeb9c",
+    "Blocked": "add8e6",
 }
 
 ## Helpers ##
