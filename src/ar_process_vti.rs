@@ -2,20 +2,20 @@ use std::error::Error;
 use std::fs;
 use toml::Value;
 
-use crate::ar_auto_commands::{check_for_commands, command_selector};
+use crate::ar_auto_commands::{check_for_commands, auto_command_selector};
 
 fn process_fetched_instructions(instructions: &Vec<Value>) -> Result<(), Box<dyn Error>> {
-    let mut command = 0;
+    let mut auto_command = 0;
     for instr in instructions {
         if let Some(line) = instr.as_str() {
             println!("  - {}", line);
-            if command == 0 {
-                command = check_for_commands(line);
+            if auto_command == 0 {
+                auto_command = check_for_commands(line);
             }
         }
     }
 
-    command_selector(command)?;
+    auto_command_selector(auto_command, instructions)?;
 
     Ok(())
 }

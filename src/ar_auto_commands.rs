@@ -1,4 +1,5 @@
 use std::error::Error;
+use toml::Value;
 
 use crate::misc::get_key_entry_y;
 
@@ -7,6 +8,49 @@ const COMMAND_KEYWORDS: &[&str] = &[
     "FULL_AUTO",
     // Add more as needed
 ];
+
+fn semi_auto_command_handler(_instructions: &Vec<Value>) -> Result<(), Box<dyn Error>> {
+    println!("\nSEMI_AUTO detected.");
+    if get_key_entry_y()? == 0 {
+        println!("Skipping automatic steps.");
+        return Ok(());
+    }
+
+    // Add semi-automatic logic here
+
+    Ok(())
+}
+
+fn full_auto_command_handler(_instructions: &Vec<Value>) -> Result<(), Box<dyn Error>> {
+    println!("\nFULL_AUTO detected.");
+    if get_key_entry_y()? == 0 {
+        println!("Skipping automatic steps.");
+        return Ok(());
+    }
+
+    // Add semi-automatic logic here
+
+    Ok(())
+}
+
+pub fn auto_command_selector(
+    command: u32,
+    instructions: &Vec<Value>,
+) -> Result<(), Box<dyn Error>> {
+    if command == 1 {
+        if let Err(e) = semi_auto_command_handler(instructions) {
+            eprintln!("Error in semi-automatic command handler: {}", e);
+        }
+    } else if command == 2 {
+        if let Err(e) = full_auto_command_handler(instructions) {
+            eprintln!("Error in full-automatic command handler: {}", e);
+        }
+    } else {
+        println!("No auto commands found in instructions.");
+    }
+
+    Ok(())
+}
 
 pub fn check_for_commands(line: &str) -> u32 {
     let trimmed = line.trim();
@@ -27,50 +71,4 @@ pub fn check_for_commands(line: &str) -> u32 {
     }
 
     0
-}
-
-fn semi_auto_command_handler() -> Result<(), Box<dyn Error>> {
-    println!("\nSEMI_AUTO detected.");
-    println!("Enter 'y' to proceed with semi-automatic steps, or any other key to skip.");
-
-    let key = get_key_entry_y()?;
-    if key == 1 {
-        println!("Proceeding with semi-automatic steps...");
-        // Add semi-automatic logic here
-    } else {
-        println!("Skipping semi-automatic steps.");
-    }
-
-    Ok(())
-}
-
-fn full_auto_command_handler() -> Result<(), Box<dyn Error>> {
-    println!("\nFULL_AUTO detected.");
-    println!("Enter 'y' to proceed with semi-automatic steps, or any other key to skip.");
-
-    let key = get_key_entry_y()?;
-    if key == 1 {
-        println!("Proceeding with semi-automatic steps...");
-        // Add semi-automatic logic here
-    } else {
-        println!("Skipping semi-automatic steps.");
-    }
-
-    Ok(())
-}
-
-pub fn command_selector(command: u32) -> Result<(), Box<dyn Error>> {
-    if command == 1 {
-        if let Err(e) = semi_auto_command_handler() {
-            eprintln!("Error in semi-automatic command handler: {}", e);
-        }
-    } else if command == 2 {
-        if let Err(e) = full_auto_command_handler() {
-            eprintln!("Error in full-automatic command handler: {}", e);
-        }
-    } else {
-        println!("No auto commands found in instructions.");
-    }
-
-    Ok(())
 }
