@@ -7,9 +7,9 @@ pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
   "## Ensure the sensor has default configurations ##",
   "## Set pixel format to STDV (0) ##",
-  "set pixel_format=0",
+  "ccc set pixel_format=0",
   "## Turn on point enable and MST ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe display for 2 minutes ##"
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -23,9 +23,9 @@ pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
   "## Ensure the sensor has default configurations ##",
   "## Set pixel format to HRAD (2) ##",
-  "set pixel_format=2",
+  "ccc set pixel_format=2",
   "## Turn on point enable and MST ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe display for 2 minutes ##"
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -39,9 +39,9 @@ pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
   "## Ensure the sensor has default configurations ##",
   "## Set pixel format to HLZ4 (3) ##",
-  "set pixel_format=3",
+  "ccc set pixel_format=3",
   "## Turn on point enable and MST ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe display for 2 minutes ##"
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -55,21 +55,21 @@ pass_condition = "No flickering on the display of the point cloud"
 instructions = [
   "## Ensure the sensor has default configuration ##",
   "## Set pixel format to STDV (0) ##",
-  "set pixel_format=0",
+  "ccc set pixel_format=0",
   "## Turn on point enable and MST ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe display for 2 minutes ##",
   "## Ensure the sensor has default configuration ##",
   "## Set pixel format to HRAD (2) ##",
-  "set pixel_format=2",
+  "ccc set pixel_format=2",
   "## Turn on point enable and MST ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe display for 2 minutes ##",
   "## Ensure the sensor has default configuration ##",
   "## Set pixel format to HLZ4 (3) ##",
-  "set pixel_format=3",
+  "ccc set pixel_format=3",
   "## Turn on point enable and MST ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe display for 2 minutes ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -84,11 +84,11 @@ instructions = [
   "## Set these specific fields below ##",
   "horiz_fov_left=-2185698,horiz_fov_right=2185698,horiz_firing_period=5916,horiz_fov_left_roi=-699050,horiz_fov_right_roi=699050,horiz_firing_period_roi=2548,nr_slot=2103,roi_enable=1,mst_cycle_duration=200000,pixel_format=0",
   "## Turn on point enable and MST ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe the image display ##",
   "## Restore the sensor setting to defaults ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
-  "diag --fix",
+  "ccc diag --fix",
   ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -102,11 +102,11 @@ instructions = [
   "## Set these specific fields below ##",
   "horiz_fov_left=-2185698,horiz_fov_right=2185698,horiz_firing_period=5916,horiz_fov_left_roi=-699050,horiz_fov_right_roi=699050,horiz_firing_period_roi=2548,nr_slot=2103,roi_enable=1,mst_cycle_duration=200000,pixel_format=3",
   "## Turn on point enable and MST ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe the image display ##",
   "## Restore the sensor setting to defaults ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
-  "diag --fix",
+  "ccc diag --fix",
   ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -119,9 +119,9 @@ pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
   "## Ensure the sensor has default configurations ##",
   "## Set pixel format to STDV (0) ##",
-  "set pixel_format=0",
+  "ccc set pixel_format=0",
   "## Turn on point enable and MST ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe display for 15 minutes ##"
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -135,9 +135,9 @@ pass_condition = ""
 instructions = [
   "## Ensure the sensor has default configurations ##",
   "## Set pixel format to HRAD (2) ##",
-  "set pixel_format=2",
+  "ccc set pixel_format=2",
   "## Turn on point enable and MST ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe display for 15 minutes ##"
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -151,9 +151,9 @@ pass_condition = ""
 instructions = [
   "## Ensure the sensor has default configurations ##",
   "## Set pixel format to HLZ4 (3) ##",
-  "set pixel_format=3",
+  "ccc set pixel_format=3",
   "## Turn on point enable and MST ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe display for 15 minutes ##"
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -166,11 +166,11 @@ test_description = "Check MST frequency at 10Hz"
 pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS is 10Hz within +/- 0.005Hz"
 instructions = [
   "## Set the pixel format to STDV (0) ##",
-  "set pixel_format=0",
+  "ccc set pixel_format=0",
   "## Turn on mst and point enable ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Set the mst frequency to 10Hz ##",
-  "set mst_cycle_duration=200000",
+  "ccc set mst_cycle_duration=200000",
   "## Observe the mst gui Real Time FPS monitor ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -183,11 +183,11 @@ test_description = "Check MST frequency at 20Hz"
 pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS is 20Hz within +/- 0.005Hz"
 instructions = [
   "## Set the pixel format to STDV (0) ##",
-  "set pixel_format=0",
+  "ccc set pixel_format=0",
   "## Turn on mst and point enable ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Set the mst frequency to 20Hz ##",
-  "set mst_cycle_duration=100000",
+  "ccc set mst_cycle_duration=100000",
   "## Observe the mst gui Real Time FPS monitor ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -200,11 +200,11 @@ test_description = "Check MST frequency does not go above 21Hz"
 pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS is not exceeding 21Hz within +/- 0.005Hz with FPS entries greater than 21Hz"
 instructions = [
   "## Set the pixel format to STDV (0) ##",
-  "set pixel_format=0",
+  "ccc set pixel_format=0",
   "## Turn on mst and point enable ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Set the mst frequency to 40Hz ##",
-  "set mst_cycle_duration=50000",
+  "ccc set mst_cycle_duration=50000",
   "## Observe the mst gui Real Time FPS monitor ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -217,17 +217,17 @@ test_description = "Check MST frequency change: gradual adjustments (10Hz to 11H
 pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS matches the incrementing FPS within +/- 0.005Hz"
 instructions = [
   "## Set the pixel format to STDV (0) ##",
-  "set pixel_format=0",
+  "ccc set pixel_format=0",
   "## Turn on mst and point enable ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Set the mst frequency to 10Hz ##",
-  "set mst_cycle_duration=200000",
+  "ccc set mst_cycle_duration=200000",
   "## Observe the mst gui Real Time FPS monitor ##",
   "## Set the mst frequency to 11Hz ##",
-  "set mst_cycle_duration=181818",
+  "ccc set mst_cycle_duration=181818",
   "## Observe the mst gui Real Time FPS monitor ##",
   "## Set the mst frequency to 12Hz ##",
-  "set mst_cycle_duration=166666",
+  "ccc set mst_cycle_duration=166666",
   "## Observe the mst gui Real Time FPS monitor ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -240,14 +240,14 @@ test_description = "Check MST frequency change: large adjustments (10HZ to 20Hz 
 pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS matches the incrementing FPS within +/- 0.005Hz"
 instructions = [
   "## Set the pixel format to STDV (0) ##",
-  "set pixel_format=0",
+  "ccc set pixel_format=0",
   "## Turn on mst and point enable ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Set the mst frequency to 10Hz ##",
-  "set mst_cycle_duration=200000",
+  "ccc set mst_cycle_duration=200000",
   "## Observe the mst gui Real Time FPS monitor ##",
   "## Set the mst frequency to 20Hz ##",
-  "set mst_cycle_duration=100000",
+  "ccc set mst_cycle_duration=100000",
   "## Observe the mst gui Real Time FPS monitor ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -260,11 +260,11 @@ test_description = "Check MST stability (shake sensor rotate etc.)"
 pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS matches the set FPS within +/- 0.005Hz while shaking"
 instructions = [
   "## Set the pixel format to STDV (0) ##",
-  "set pixel_format=0",
+  "ccc set pixel_format=0",
   "## Turn on mst and point enable ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Set the mst frequency to 10Hz ##",
-  "set mst_cycle_duration=200000",
+  "ccc set mst_cycle_duration=200000",
   "## Shake the sensor and observe the mst gui Real Time FPS monitor ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -306,14 +306,14 @@ instructions = [
   "## Place the retro target at 10m from the sensor at a height of 6 feet ##",
   "## Ensure the sensor has default configurations ##",
   "## Set the pixel format to STDV (0) ##",
-  "set pixel_format=0",
+  "ccc set pixel_format=0",
   "## Turn on the MST and the points enable ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Turn on the retro target blooming mitigation option (feed-forward) ##",
-  "set probing_ffwd_enabled=1",
+  "ccc set probing_ffwd_enabled=1",
   "## Observe the points image on the display ##",
   "## Turn off the retro target blooming mitigation option (feed-forward) ##",
-  "set probing_ffwd_enabled=0",
+  "ccc set probing_ffwd_enabled=0",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -327,14 +327,14 @@ instructions = [
   "## Place the retro target at 10m from the sensor at a height of 6 feet ##",
   "## Ensure the sensor has default configurations ##",
   "## Set the pixel format to HRAD (2) ##",
-  "set pixel_format=2",
+  "ccc set pixel_format=2",
   "## Turn on the MST and the points enable ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Turn on the retro target blooming mitigation option (feed-forward) ##",
-  "set probing_ffwd_enabled=1",
+  "ccc set probing_ffwd_enabled=1",
   "## Observe the points image on the display ##",
   "## Turn off the retro target blooming mitigation option (feed-forward) ##",
-  "set probing_ffwd_enabled=0",
+  "ccc set probing_ffwd_enabled=0",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -348,14 +348,14 @@ instructions = [
   "## Place the retro target at 10m from the sensor at a height of 6 feet ##",
   "## Ensure the sensor has default configurations ##",
   "## Set the pixel format to HLZ4 (3) ##",
-  "set pixel_format=3",
+  "ccc set pixel_format=3",
   "## Turn on the MST and the points enable ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Turn on the retro target blooming mitigation option (feed-forward) ##",
-  "set probing_ffwd_enabled=1",
+  "ccc set probing_ffwd_enabled=1",
   "## Observe the points image on the display ##",
   "## Turn off the retro target blooming mitigation option (feed-forward) ##",
-  "set probing_ffwd_enabled=0",
+  "ccc set probing_ffwd_enabled=0",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -369,14 +369,14 @@ instructions = [
   "## Place the retro target at 50m from the sensor at a height of 6 feet ##",
   "## Ensure the sensor has default configurations ##",
   "## Set the pixel format to STDV (0) ##",
-  "set pixel_format=0",
+  "ccc set pixel_format=0",
   "## Turn on the MST and the points enable ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Turn on the retro target blooming mitigation option (feed-forward) ##",
-  "set probing_ffwd_enabled=1",
+  "ccc set probing_ffwd_enabled=1",
   "## Observe the points image on the display ##",
   "## Turn off the retro target blooming mitigation option (feed-forward) ##",
-  "set probing_ffwd_enabled=0",
+  "ccc set probing_ffwd_enabled=0",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -390,14 +390,14 @@ instructions = [
   "## Place the retro target at 50m from the sensor at a height of 6 feet ##",
   "## Ensure the sensor has default configurations ##",
   "## Set the pixel format to HRAD (2) ##",
-  "set pixel_format=2",
+  "ccc set pixel_format=2",
   "## Turn on the MST and the points enable ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Turn on the retro target blooming mitigation option (feed-forward) ##",
-  "set probing_ffwd_enabled=1",
+  "ccc set probing_ffwd_enabled=1",
   "## Observe the points image on the display ##",
   "## Turn off the retro target blooming mitigation option (feed-forward) ##",
-  "set probing_ffwd_enabled=0",
+  "ccc set probing_ffwd_enabled=0",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -411,14 +411,14 @@ instructions = [
   "## Place the retro target at 50m from the sensor at a height of 6 feet ##",
   "## Ensure the sensor has default configurations ##",
   "## Set the pixel format to HLZ4 (3) ##",
-  "set pixel_format=3",
+  "ccc set pixel_format=3",
   "## Turn on the MST and the points enable ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Turn on the retro target blooming mitigation option (feed-forward) ##",
-  "set probing_ffwd_enabled=1",
+  "ccc set probing_ffwd_enabled=1",
   "## Observe the points image on the display ##",
   "## Turn off the retro target blooming mitigation option (feed-forward) ##",
-  "set probing_ffwd_enabled=0",
+  "ccc set probing_ffwd_enabled=0",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -445,7 +445,7 @@ test_description = "Validate firmware upload capability via CCC App"
 pass_condition = "Firmware updates successfully and the FW version change is observed when checked"
 instructions = [
   "## Run the boot server command on the sensor ##",
-  "ccc update-firmware",
+  "ccc boot-server",
   "## Check that the FW version has been updated ##",
   "ccc list-sensors",
 ]
@@ -474,7 +474,7 @@ pass_condition = "The time between sensor power on and connection to Cepton View
 instructions = [
   "## Ensure that the sensor has default configurations ##",
   "## Ensure that the sensor is set to display points when power cycled ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Power off the sensors ##",
   "## Ensure that Cepton Viewer is opened and no points is displayed ##",
   "## Power on the sensor and measure the time to get points image on Cepton Viewer ##",
@@ -490,14 +490,14 @@ pass_condition = "STDV points data packets have the updated source IP"
 instructions = [
   "## Ensure the sensor has default configurations ##",
   "## Ensure the sensor source IP is set to a common reference value ##",
-  "set src_ip=192.168.32.32",
+  "ccc set src_ip=192.168.32.32",
   "## Set the pixel format to STDV (0) ##",
-  "set pixel_format=0",
+  "ccc set pixel_format=0",
   "## Turn on mst and points enable ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe the current points data packets source IP ##",  
   "## Change the source IP ##",
-  "set src_ip=192.168.32.44",
+  "ccc set src_ip=192.168.32.44",
   "## Observe the points data packets source IP ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -511,14 +511,14 @@ pass_condition = "INFZ data packets have the updated source IP"
 instructions = [
   "## Ensure the sensor has default configurations ##",
   "## Ensure the sensor source IP is set to a common reference value ##",
-  "set src_ip=192.168.32.32",
+  "ccc set src_ip=192.168.32.32",
   "## Set the pixel format to STDV (0) ##",
-  "set pixel_format=0",
+  "ccc set pixel_format=0",
   "## Turn off mst and points enable ##",
-  "set point_enable=0, drive_big_mirror=0",
+  "ccc set point_enable=0, drive_big_mirror=0",
   "## Observe the current INFZ data packets source IP ##",  
   "## Change the source IP ##",
-  "set src_ip=192.168.32.44",
+  "ccc set src_ip=192.168.32.44",
   "## Observe the INFZ data packets source IP ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -532,14 +532,14 @@ pass_condition = "HRAD points data packets have the updated source IP"
 instructions = [
   "## Ensure the sensor has default configurations ##",
   "## Ensure the sensor source IP is set to a common reference value ##",
-  "set src_ip=192.168.32.32",
+  "ccc set src_ip=192.168.32.32",
   "## Set the pixel format to HRAD (2) ##",
-  "set pixel_format=2",
+  "ccc set pixel_format=2",
   "## Turn on mst and points enable ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe the current points data packets source IP ##",  
   "## Change the source IP ##",
-  "set src_ip=192.168.32.44",
+  "ccc set src_ip=192.168.32.44",
   "## Observe the points data packets source IP ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -553,14 +553,14 @@ pass_condition = "INFZ data packets have the updated source IP"
 instructions = [
   "## Ensure the sensor has default configurations ##",
   "## Ensure the sensor source IP is set to a common reference value ##",
-  "set src_ip=192.168.32.32",
+  "ccc set src_ip=192.168.32.32",
   "## Set the pixel format to HRAD (2) ##",
-  "set pixel_format=2",
+  "ccc set pixel_format=2",
   "## Turn off mst and points enable ##",
-  "set point_enable=0, drive_big_mirror=0",
+  "ccc set point_enable=0, drive_big_mirror=0",
   "## Observe the current INFZ data packets source IP ##",  
   "## Change the source IP ##",
-  "set src_ip=192.168.32.44",
+  "ccc set src_ip=192.168.32.44",
   "## Observe the INFZ data packets source IP ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -574,14 +574,14 @@ pass_condition = "HLZ4 points data packets have the updated source IP"
 instructions = [
   "## Ensure the sensor has default configurations ##",
   "## Ensure the sensor source IP is set to a common reference value ##",
-  "set src_ip=192.168.32.32",
+  "ccc set src_ip=192.168.32.32",
   "## Set the pixel format to HLZ4 (3) ##",
-  "set pixel_format=3",
+  "ccc set pixel_format=3",
   "## Turn on mst and points enable ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe the current points data packets source IP ##",  
   "## Change the source IP ##",
-  "set src_ip=192.168.32.44",
+  "ccc set src_ip=192.168.32.44",
   "## Observe the points data packets source IP ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -595,14 +595,14 @@ pass_condition = "INFZ data packets have the updated source IP"
 instructions = [
   "## Ensure the sensor has default configurations ##",
   "## Ensure the sensor source IP is set to a common reference value ##",
-  "set src_ip=192.168.32.32",
+  "ccc set src_ip=192.168.32.32",
   "## Set the pixel format to HLZ4 (3) ##",
-  "set pixel_format=3",
+  "ccc set pixel_format=3",
   "## Turn off mst and points enable ##",
-  "set point_enable=0, drive_big_mirror=0",
+  "ccc set point_enable=0, drive_big_mirror=0",
   "## Observe the current INFZ data packets source IP ##",  
   "## Change the source IP ##",
-  "set src_ip=192.168.32.44",
+  "ccc set src_ip=192.168.32.44",
   "## Observe the INFZ data packets source IP ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -618,7 +618,7 @@ instructions = [
   "## Connect the sensor ethernet port to the router ##",
   "## Disable the DHCP server on the router (power cycle of the router may be needed to release the IP lease) ##",
   "## Set sensor ip to 0.0.0.0 ##",
-  "set src_ip=0.0.0.0",
+  "ccc set src_ip=0.0.0.0",
   "## On Auto IP negotiation, the sensor src ip should be set to a 169.x.x.x IP ##",
   "## Remove static ip assignments from your pc network adapter to also get a 169.x.x.x IP ##",
   "## Verify the ip change in wireshark and also test connectivity from ccc tool ##",
@@ -636,7 +636,7 @@ instructions = [
   "## Connect the sensor ethernet port to the router ##",
   "## Enable the DHCP server on the router (power cycle of the router may be needed to release the IP lease) ##",
   "## Set sensor ip to 0.0.0.0 ##",
-  "set src_ip=0.0.0.0",
+  "ccc set src_ip=0.0.0.0",
   "## On DHCP IP assignment, the sensor src ip should be set to the DHCP IP range configured on the router IP ##",
   "## Remove static ip assignments from your pc network adapter to also get a DHCP assigned IP in the same subnet as the sensor ##",
   "## Verify the ip change in wireshark and also test connectivity from ccc tool ##",
@@ -654,7 +654,7 @@ instructions = [
   "## Ensure the sensor is pwered on and connected to the PC ##",
   "## Ensure the PC is on the Cepton network ##",
   "## Do a get all command using the ccc tool with no -d option ##",
-  "get-all",
+  "ccc get-all",
   "## Observe that the configurations are displayed with no errors ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
@@ -669,9 +669,9 @@ instructions = [
   "## Ensure the sensor has default configurations ##",
   "## Ensure the sensor is powered on ##",
   "## Ensure the mst and points are enabled ##",
-  "set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe the sensor activity and connectivity for 1 hour using viewer and doing list sensors commands ##",
-  "list-sensors",
+  "ccc list-sensors",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -686,7 +686,7 @@ instructions = [
   "## Ensure the sensor has uninitialized configurations or incorrect but safe values ##",
   "## Noteworthy configurations: ROI's, SPAD's, MST's ##",
   "## Run the diag fix command ##",
-  "diag --fix",
+  "ccc diag --fix",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
