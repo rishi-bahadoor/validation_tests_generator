@@ -1,6 +1,7 @@
 use clap::{CommandFactory, Parser};
 use std::process;
 
+mod ar_process_vti;
 mod csv_ops;
 mod email_ops;
 mod excel_ops;
@@ -9,6 +10,7 @@ mod sanity;
 mod scripts_find;
 mod test_file_ops;
 
+use ar_process_vti::ar_process_test_item;
 use csv_ops::export_grouped_csv;
 use email_ops::generate_email_using_python;
 use excel_ops::{convert_csv_to_excel, format_excel_sheet};
@@ -17,6 +19,7 @@ use sanity::sanity_check;
 use test_file_ops::{export_grouped_toml, test_file_filter};
 
 const EXCEL_FILE_DEFAULT: &str = "validation_test_report.xlsx";
+const DEFAULT_INSTRUCTION_FILE: &str = "validation_test_instructions.toml";
 
 #[derive(Parser, Debug)]
 #[command(name = "vtg.exe", version = "1.1")]
@@ -55,6 +58,16 @@ pub struct Args {
       num_args = 1..,
     )]
     pub groups: Vec<String>,
+
+    /// One test at a time
+    #[arg(
+      short = 't',
+      long = "test",
+      value_name = "TEST_ID",
+      help = "Get the test instructions, e.g. --test 1.1",
+      num_args = 1..,
+    )]
+    pub test: Vec<String>,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -82,6 +95,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let sender = args.sender_email.as_deref().unwrap();
         let recipient = args.recipient_email.as_deref().unwrap();
         let _ = generate_email_using_python(sender, recipient, EXCEL_FILE_DEFAULT)?;
+        return Ok(());
+    }
+
+    // Get test instructions only and return
+    if !args.test.is_empty() {
+        for test_id in &args.test {
+            ar_process_test_item(DEFAULT_INSTRUCTION_FILE, test_id);
+        }
+        press_enter();
         return Ok(());
     }
 
