@@ -1,6 +1,7 @@
 use clap::{CommandFactory, Parser};
 use std::process;
 
+mod ar_auto_commands;
 mod ar_process_vti;
 mod csv_ops;
 mod email_ops;
@@ -101,7 +102,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Get test instructions only and return
     if !args.test.is_empty() {
         for test_id in &args.test {
-            ar_process_test_item(DEFAULT_INSTRUCTION_FILE, test_id);
+            if let Err(e) = ar_process_test_item(DEFAULT_INSTRUCTION_FILE, test_id) {
+                eprintln!("Error processing test '{}': {}", test_id, e);
+            }
         }
         press_enter();
         return Ok(());
