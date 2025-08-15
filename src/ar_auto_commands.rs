@@ -26,10 +26,10 @@ fn semi_auto_ccc_handler(instructions: &Vec<Value>) -> Result<(), Box<dyn Error>
 
             if trimmed.starts_with("##") || trimmed.starts_with("#") {
                 println!("  - {}", line);
-            } else {
+            } else if trimmed.starts_with("ccc") {
                 println!("  - Press Enter to RUN: {}", line);
                 press_enter_no_message();
-                ccc_command_runner(line);
+                ccc_command_runner(line)?;
             }
         }
     }
