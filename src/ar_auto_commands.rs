@@ -1,7 +1,8 @@
 use std::error::Error;
 use toml::Value;
 
-use crate::misc::get_key_entry_y;
+use crate::ar_ccc_commands::ccc_command_runner;
+use crate::misc::{get_key_entry_y, press_enter_no_message};
 
 const COMMAND_KEYWORDS: &[&str] = &[
     "SEMI_AUTO",
@@ -9,14 +10,28 @@ const COMMAND_KEYWORDS: &[&str] = &[
     // Add more as needed
 ];
 
-fn semi_auto_command_handler(_instructions: &Vec<Value>) -> Result<(), Box<dyn Error>> {
+fn semi_auto_command_handler(instructions: &Vec<Value>) -> Result<(), Box<dyn Error>> {
     println!("\nSEMI_AUTO detected.");
     if get_key_entry_y()? == 0 {
         println!("Skipping automatic steps.");
         return Ok(());
     }
+    println!("--------------------------------------------------------------");
+    println!("Step by step semi automatic instrucion runner");
 
-    // Add semi-automatic logic here
+    for instr in instructions {
+        if let Some(line) = instr.as_str() {
+            let trimmed = line.trim();
+
+            if trimmed.starts_with("##") || trimmed.starts_with("#") {
+                println!("  - {}", line);
+            } else {
+                println!("  - Press Enter to RUN: {}", line);
+                press_enter_no_message();
+                ccc_command_runner(line);
+            }
+        }
+    }
 
     Ok(())
 }
@@ -28,7 +43,7 @@ fn full_auto_command_handler(_instructions: &Vec<Value>) -> Result<(), Box<dyn E
         return Ok(());
     }
 
-    // Add semi-automatic logic here
+    // Add full-automatic logic here
 
     Ok(())
 }
@@ -54,10 +69,6 @@ pub fn auto_command_selector(
 
 pub fn check_for_commands(line: &str) -> u32 {
     let trimmed = line.trim();
-
-    if trimmed.starts_with("##") || trimmed.starts_with("#") {
-        return 0;
-    }
 
     for &keyword in COMMAND_KEYWORDS {
         if trimmed.contains(keyword) {

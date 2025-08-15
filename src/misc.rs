@@ -9,6 +9,14 @@ pub fn press_enter() {
         .expect("Failed to read line");
 }
 
+pub fn press_enter_no_message() {
+    println!(">");
+    let mut input = String::new();
+    std::io::stdin()
+        .read_line(&mut input)
+        .expect("Failed to read line");
+}
+
 pub fn get_key_entry_y() -> Result<u32, Box<dyn Error>> {
     println!("Enter 'y' to proceed with semi-automatic steps, or any other key to skip.");
     print!("> ");

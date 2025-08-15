@@ -2,6 +2,7 @@ use clap::{CommandFactory, Parser};
 use std::process;
 
 mod ar_auto_commands;
+mod ar_ccc_commands;
 mod ar_process_vti;
 mod csv_ops;
 mod email_ops;
