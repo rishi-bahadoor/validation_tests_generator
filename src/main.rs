@@ -74,13 +74,14 @@ pub struct Args {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Sanity check on the scripts for version and hash.
     if let Err(e) = sanity_check() {
         eprintln!("Sanity check failed: {}", e);
         press_enter();
         process::exit(1); // Exit with non-zero status
     }
 
-    // Show help if no args
+    // Show help if no args.
     if std::env::args().len() == 1 {
         let mut cmd = Args::command();
         let version = cmd.get_version().unwrap_or("unknown");
