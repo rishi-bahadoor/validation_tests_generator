@@ -40,24 +40,29 @@ fn ccc_command_runner(line: &str) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn diag_command_check_and_run(trimmed_line: &str) -> Result<u32, Box<dyn Error>> {
+fn diag_command_check_and_run(trimmed_line: &str, auto: bool) -> Result<bool, Box<dyn Error>> {
     if trimmed_line.contains("diag") {
-        println!("  - Do you want to run diag:");
-        if get_key_entry_y()? == 1 {
-            ccc_command_runner(trimmed_line)?;
-            return Ok(1);
+        if !auto {
+            println!("  - Do you want to run diag:");
+            if get_key_entry_y()? == 1 {
+                ccc_command_runner(trimmed_line)?;
+            }
+            return Ok(true);
         }
-        return Ok(1);
+        ccc_command_runner(trimmed_line)?;
+        return Ok(true);
     }
-    Ok(0)
+    Ok(false)
 }
 
-pub fn ccc_handler(trimmed_line: &str) -> Result<(), Box<dyn Error>> {
-    if diag_command_check_and_run(trimmed_line)? == 1 {
+pub fn ccc_handler(trimmed_line: &str, auto: bool) -> Result<(), Box<dyn Error>> {
+    if diag_command_check_and_run(trimmed_line, auto)? {
         return Ok(());
     }
-    println!("  - Press Enter to RUN: {}", trimmed_line);
-    press_enter_no_message();
+    if !auto {
+        println!("  - Press Enter to RUN: {}", trimmed_line);
+        press_enter_no_message();
+    }
     ccc_command_runner(trimmed_line)?;
     Ok(())
 }

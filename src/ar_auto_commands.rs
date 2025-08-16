@@ -28,7 +28,7 @@ fn semi_auto_ccc_handler(instructions: &Vec<Value>) -> Result<(), Box<dyn Error>
             if trimmed.starts_with("##") || trimmed.starts_with("#") {
                 println!("  - {}", line);
             } else if trimmed.starts_with("ccc") {
-                ccc_handler(trimmed)?;
+                ccc_handler(trimmed, false)?;
             } else {
                 generic_runner(trimmed)?;
             }
