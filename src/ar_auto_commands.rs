@@ -19,14 +19,14 @@ fn semi_auto_ccc_handler(instructions: &Vec<Value>) -> Result<(), Box<dyn Error>
         return Ok(());
     }
     println!("--------------------------------------------------------------");
-    println!("Step by step semi automatic instrucion runner");
+    println!("Step by step semi automatic instruction runner");
 
     for instr in instructions {
         if let Some(line) = instr.as_str() {
             let trimmed = line.trim();
 
             if trimmed.starts_with("##") || trimmed.starts_with("#") {
-                println!("  - {}", line);
+                println!("  - {}", trimmed);
             } else if trimmed.starts_with("ccc") {
                 ccc_handler(trimmed, false)?;
             } else {
