@@ -2,12 +2,8 @@ use std::error::Error;
 
 use crate::misc::{press_enter, wait_s};
 
-/// Trims, replaces "ccc" with the actual exe path, runs the command,
-/// and returns Ok(()) if the process exits successfully or Err on failure.
-pub fn generic_runner(line: &str) -> Result<(), Box<dyn Error>> {
-    // 1. Prepare command string
-    let trimmed = line.trim();
-    let parts = trimmed.split_whitespace();
+pub fn generic_runner(trimmed_line: &str) -> Result<(), Box<dyn Error>> {
+    let parts = trimmed_line.split_whitespace();
     let args: Vec<&str> = parts.collect();
 
     if args[0] == "wait_s" {
