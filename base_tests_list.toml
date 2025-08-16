@@ -7,6 +7,7 @@ pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
   "## SEMI_AUTO_CCC ##",
   "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
   "## Set pixel format to STDV (0) ##",
   "ccc set pixel_format=0 --force",
@@ -24,12 +25,16 @@ test_priority = "MEDIUM"
 test_description = "Check that point cloud is being displayed correctly for 2 minutes (Both indoor/outdoor setting) using HRAD format (pixel_format=2)"
 pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Set pixel format to HRAD (2) ##",
   "ccc set pixel_format=2",
   "## Turn on point enable and MST ##",
   "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe display for 2 minutes ##",
+  "wait_s 120",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -40,12 +45,16 @@ test_priority = "MEDIUM"
 test_description = "Check that point cloud is being displayed correctly for 2 minutes (Both indoor/outdoor setting) using HLZ4 format (pixel_format=3)"
 pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Set pixel format to HLZ4 (3) ##",
   "ccc set pixel_format=3",
   "## Turn on point enable and MST ##",
   "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe display for 2 minutes ##",
+  "wait_s 120",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -56,24 +65,30 @@ test_priority = "HIGH"
 test_description = "Check per point stability that points do not flicker"
 pass_condition = "No flickering on the display of the point cloud"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## Ensure the sensor has default configuration ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Set pixel format to STDV (0) ##",
   "ccc set pixel_format=0",
   "## Turn on point enable and MST ##",
   "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe display for 2 minutes ##",
+  "wait_s 120",
   "## Ensure the sensor has default configuration ##",
   "## Set pixel format to HRAD (2) ##",
   "ccc set pixel_format=2",
   "## Turn on point enable and MST ##",
   "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe display for 2 minutes ##",
+  "wait_s 120",
   "## Ensure the sensor has default configuration ##",
   "## Set pixel format to HLZ4 (3) ##",
   "ccc set pixel_format=3",
   "## Turn on point enable and MST ##",
   "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe display for 2 minutes ##",
+  "wait_s 120",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -84,11 +99,13 @@ test_priority = "HIGH"
 test_description = "Testing with STDV. Left scan and right scan encoder range valid."
 pass_condition = "Ensure that the missing or bad left and right vertical image scan lines are less than 10"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## Set these specific fields below ##",
-  "horiz_fov_left=-2185698,horiz_fov_right=2185698,horiz_firing_period=5916,horiz_fov_left_roi=-699050,horiz_fov_right_roi=699050,horiz_firing_period_roi=2548,nr_slot=2103,roi_enable=1,mst_cycle_duration=200000,pixel_format=0",
+  "ccc set horiz_fov_left=-2185698,horiz_fov_right=2185698,horiz_firing_period=5916,horiz_fov_left_roi=-699050,horiz_fov_right_roi=699050,horiz_firing_period_roi=2548,nr_slot=2103,roi_enable=1,mst_cycle_duration=200000,pixel_format=0",
   "## Turn on point enable and MST ##",
-  "ccc set point_enable=1, drive_big_mirror=1",
+  "ccc set point_enable=1,drive_big_mirror=1",
   "## Observe the image display ##",
+  "wait_e",
   "## Restore the sensor setting to defaults ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -102,11 +119,13 @@ test_priority = "HIGH"
 test_description = "Testing with HLZ4. Left scan and right scan encoder range valid."
 pass_condition = ""
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## Set these specific fields below ##",
-  "horiz_fov_left=-2185698,horiz_fov_right=2185698,horiz_firing_period=5916,horiz_fov_left_roi=-699050,horiz_fov_right_roi=699050,horiz_firing_period_roi=2548,nr_slot=2103,roi_enable=1,mst_cycle_duration=200000,pixel_format=3",
+  "ccc set horiz_fov_left=-2185698,horiz_fov_right=2185698,horiz_firing_period=5916,horiz_fov_left_roi=-699050,horiz_fov_right_roi=699050,horiz_firing_period_roi=2548,nr_slot=2103,roi_enable=1,mst_cycle_duration=200000,pixel_format=3",
   "## Turn on point enable and MST ##",
   "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe the image display ##",
+  "wait_e",
   "## Restore the sensor setting to defaults ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -120,12 +139,16 @@ test_priority = "HIGH"
 test_description = "Check point cloud (STDV format) is being displayed correctly after running for 15 mins (outdoor setting)"
 pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Set pixel format to STDV (0) ##",
   "ccc set pixel_format=0",
   "## Turn on point enable and MST ##",
   "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe display for 15 minutes ##",
+  "wait_s 900",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -136,12 +159,16 @@ test_priority = "HIGH"
 test_description = "Check point cloud (HRAD format) is being displayed correctly after running for 15 mins (outdoor setting)"
 pass_condition = ""
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Set pixel format to HRAD (2) ##",
   "ccc set pixel_format=2",
   "## Turn on point enable and MST ##",
   "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe display for 15 minutes ##",
+  "wait_s 900",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -152,12 +179,16 @@ test_priority = "HIGH"
 test_description = "Check point cloud (HLZ4 format) is being displayed correctly after running for 15 mins (outdoor setting)"
 pass_condition = ""
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Set pixel format to HLZ4 (3) ##",
   "ccc set pixel_format=3",
   "## Turn on point enable and MST ##",
   "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe display for 15 minutes ##",
+  "wait_s 900",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -168,6 +199,10 @@ test_priority = "HIGH"
 test_description = "Check MST frequency at 10Hz"
 pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS is 10Hz within +/- 0.005Hz"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0",
   "## Turn on mst and point enable ##",
@@ -175,6 +210,7 @@ instructions = [
   "## Set the mst frequency to 10Hz ##",
   "ccc set mst_cycle_duration=200000",
   "## Observe the mst gui Real Time FPS monitor ##",
+  "wait_e",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -185,6 +221,10 @@ test_priority = "HIGH"
 test_description = "Check MST frequency at 20Hz"
 pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS is 20Hz within +/- 0.005Hz"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0",
   "## Turn on mst and point enable ##",
@@ -192,6 +232,7 @@ instructions = [
   "## Set the mst frequency to 20Hz ##",
   "ccc set mst_cycle_duration=100000",
   "## Observe the mst gui Real Time FPS monitor ##",
+  "wait_e",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -202,6 +243,10 @@ test_priority = "LOW"
 test_description = "Check MST frequency does not go above 21Hz"
 pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS is not exceeding 21Hz within +/- 0.005Hz with FPS entries greater than 21Hz"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0",
   "## Turn on mst and point enable ##",
@@ -209,6 +254,7 @@ instructions = [
   "## Set the mst frequency to 40Hz ##",
   "ccc set mst_cycle_duration=50000",
   "## Observe the mst gui Real Time FPS monitor ##",
+  "wait_e",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -219,6 +265,10 @@ test_priority = "LOW"
 test_description = "Check MST frequency change: gradual adjustments (10Hz to 11Hz etc.)"
 pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS matches the incrementing FPS within +/- 0.005Hz"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0",
   "## Turn on mst and point enable ##",
@@ -226,12 +276,15 @@ instructions = [
   "## Set the mst frequency to 10Hz ##",
   "ccc set mst_cycle_duration=200000",
   "## Observe the mst gui Real Time FPS monitor ##",
+  "wait_e",
   "## Set the mst frequency to 11Hz ##",
   "ccc set mst_cycle_duration=181818",
   "## Observe the mst gui Real Time FPS monitor ##",
+  "wait_e",
   "## Set the mst frequency to 12Hz ##",
   "ccc set mst_cycle_duration=166666",
   "## Observe the mst gui Real Time FPS monitor ##",
+  "wait_e",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -242,6 +295,10 @@ test_priority = "LOW"
 test_description = "Check MST frequency change: large adjustments (10HZ to 20Hz etc.)"
 pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS matches the incrementing FPS within +/- 0.005Hz"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0",
   "## Turn on mst and point enable ##",
@@ -249,9 +306,11 @@ instructions = [
   "## Set the mst frequency to 10Hz ##",
   "ccc set mst_cycle_duration=200000",
   "## Observe the mst gui Real Time FPS monitor ##",
+  "wait_e",
   "## Set the mst frequency to 20Hz ##",
   "ccc set mst_cycle_duration=100000",
   "## Observe the mst gui Real Time FPS monitor ##",
+  "wait_e",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -262,6 +321,10 @@ test_priority = "MEDIUM"
 test_description = "Check MST stability (shake sensor rotate etc.)"
 pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS matches the set FPS within +/- 0.005Hz while shaking"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0",
   "## Turn on mst and point enable ##",
@@ -269,6 +332,7 @@ instructions = [
   "## Set the mst frequency to 10Hz ##",
   "ccc set mst_cycle_duration=200000",
   "## Shake the sensor and observe the mst gui Real Time FPS monitor ##",
+  "wait_e",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
