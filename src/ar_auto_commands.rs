@@ -1,9 +1,9 @@
 use std::error::Error;
 use toml::Value;
 
-use crate::ar_ccc_commands::ccc_command_runner;
+use crate::ar_ccc_commands::ccc_handler;
 use crate::ar_generic_commands::generic_runner;
-use crate::misc::{get_key_entry_y, press_enter_no_message};
+use crate::misc::get_key_entry_y;
 
 const COMMAND_KEYWORDS: &[&str] = &[
     "SEMI_AUTO_CCC",
@@ -28,11 +28,9 @@ fn semi_auto_ccc_handler(instructions: &Vec<Value>) -> Result<(), Box<dyn Error>
             if trimmed.starts_with("##") || trimmed.starts_with("#") {
                 println!("  - {}", line);
             } else if trimmed.starts_with("ccc") {
-                println!("  - Press Enter to RUN: {}", line);
-                press_enter_no_message();
-                ccc_command_runner(line)?;
+                ccc_handler(trimmed)?;
             } else {
-                generic_runner(line)?;
+                generic_runner(trimmed)?;
             }
         }
     }

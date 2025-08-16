@@ -20,7 +20,7 @@ pub fn press_enter_no_message() {
 }
 
 pub fn get_key_entry_y() -> Result<u32, Box<dyn Error>> {
-    println!("Enter 'y' to proceed with semi-automatic steps, or any other key to skip.");
+    println!("Enter 'y' to proceed, or any other key to skip.");
     print!("> ");
     io::stdout().flush()?;
 

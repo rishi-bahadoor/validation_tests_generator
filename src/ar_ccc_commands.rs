@@ -1,10 +1,12 @@
 use std::{error::Error, io, path::Path, process::Command};
 
+use crate::misc::{get_key_entry_y, press_enter_no_message};
+
 const PATH_CCC_EXE: &str = "./ccc.exe";
 
 /// Trims, replaces "ccc" with the actual exe path, runs the command,
 /// and returns Ok(()) if the process exits successfully or Err on failure.
-pub fn ccc_command_runner(line: &str) -> Result<(), Box<dyn Error>> {
+fn ccc_command_runner(line: &str) -> Result<(), Box<dyn Error>> {
     // 1. Prepare command string
     let trimmed = line.trim();
     let command_line = trimmed.replacen("ccc", PATH_CCC_EXE, 1);
@@ -36,4 +38,26 @@ pub fn ccc_command_runner(line: &str) -> Result<(), Box<dyn Error>> {
             format!("ccc command error: {}", status),
         )))
     }
+}
+
+fn diag_command_check_and_run(trimmed_line: &str) -> Result<u32, Box<dyn Error>> {
+    if trimmed_line.contains("diag") {
+        println!("  - Do you want to run diag:");
+        if get_key_entry_y()? == 1 {
+            ccc_command_runner(trimmed_line)?;
+            return Ok(1);
+        }
+        return Ok(1);
+    }
+    Ok(0)
+}
+
+pub fn ccc_handler(trimmed_line: &str) -> Result<(), Box<dyn Error>> {
+    if diag_command_check_and_run(trimmed_line)? == 1 {
+        return Ok(());
+    }
+    println!("  - Press Enter to RUN: {}", trimmed_line);
+    press_enter_no_message();
+    ccc_command_runner(trimmed_line)?;
+    Ok(())
 }
