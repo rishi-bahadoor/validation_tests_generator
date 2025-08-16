@@ -2,6 +2,7 @@ use std::error::Error;
 use toml::Value;
 
 use crate::ar_ccc_commands::ccc_command_runner;
+use crate::ar_generic_commands::generic_runner;
 use crate::misc::{get_key_entry_y, press_enter_no_message};
 
 const COMMAND_KEYWORDS: &[&str] = &[
@@ -30,6 +31,8 @@ fn semi_auto_ccc_handler(instructions: &Vec<Value>) -> Result<(), Box<dyn Error>
                 println!("  - Press Enter to RUN: {}", line);
                 press_enter_no_message();
                 ccc_command_runner(line)?;
+            } else {
+                generic_runner(line)?;
             }
         }
     }

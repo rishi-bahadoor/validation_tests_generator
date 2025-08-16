@@ -3,6 +3,7 @@ use std::process;
 
 mod ar_auto_commands;
 mod ar_ccc_commands;
+mod ar_generic_commands;
 mod ar_process_vti;
 mod csv_ops;
 mod email_ops;
@@ -100,7 +101,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         return Ok(());
     }
 
-    // Get test instructions only and return
+    // Test-only mode
     if !args.test.is_empty() {
         for test_id in &args.test {
             if let Err(e) = ar_process_test_item(DEFAULT_INSTRUCTION_FILE, test_id) {
