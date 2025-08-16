@@ -79,7 +79,6 @@ pub fn check_for_commands(line: &str) -> u32 {
 
     for &keyword in COMMAND_KEYWORDS {
         if trimmed.contains(keyword) {
-            // TODO: return different values for different commands
             if keyword == "SEMI_AUTO_CCC" {
                 return 1;
             } else if keyword == "FULL_AUTO_CCC" {

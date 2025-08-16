@@ -5,12 +5,15 @@ test_priority = "MEDIUM"
 test_description = "Check that point cloud is being displayed correctly for 2 minutes (Both indoor/outdoor setting) using STDV format (pixel_format=0)"
 pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## Ensure the sensor has default configurations ##",
+  "ccc diag --fix",
   "## Set pixel format to STDV (0) ##",
-  "ccc set pixel_format=0",
+  "ccc set pixel_format=0 --force",
   "## Turn on point enable and MST ##",
-  "ccc set point_enable=1, drive_big_mirror=1",
-  "## Observe display for 2 minutes ##"
+  "ccc set point_enable=1, drive_big_mirror=1 --force",
+  "## Observe display for 2 minutes ##",
+  "wait_s 120",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -26,7 +29,7 @@ instructions = [
   "ccc set pixel_format=2",
   "## Turn on point enable and MST ##",
   "ccc set point_enable=1, drive_big_mirror=1",
-  "## Observe display for 2 minutes ##"
+  "## Observe display for 2 minutes ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -42,7 +45,7 @@ instructions = [
   "ccc set pixel_format=3",
   "## Turn on point enable and MST ##",
   "ccc set point_enable=1, drive_big_mirror=1",
-  "## Observe display for 2 minutes ##"
+  "## Observe display for 2 minutes ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -122,7 +125,7 @@ instructions = [
   "ccc set pixel_format=0",
   "## Turn on point enable and MST ##",
   "ccc set point_enable=1, drive_big_mirror=1",
-  "## Observe display for 15 minutes ##"
+  "## Observe display for 15 minutes ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -138,7 +141,7 @@ instructions = [
   "ccc set pixel_format=2",
   "## Turn on point enable and MST ##",
   "ccc set point_enable=1, drive_big_mirror=1",
-  "## Observe display for 15 minutes ##"
+  "## Observe display for 15 minutes ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -154,7 +157,7 @@ instructions = [
   "ccc set pixel_format=3",
   "## Turn on point enable and MST ##",
   "ccc set point_enable=1, drive_big_mirror=1",
-  "## Observe display for 15 minutes ##"
+  "## Observe display for 15 minutes ##",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
