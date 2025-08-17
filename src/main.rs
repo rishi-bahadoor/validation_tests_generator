@@ -5,7 +5,6 @@ mod ar_auto_commands;
 mod ar_ccc_commands;
 mod ar_generic_commands;
 mod ar_process_vti;
-mod csv_ops;
 mod email_ops;
 mod excel_ops;
 mod misc;
@@ -14,12 +13,11 @@ mod scripts_find;
 mod test_file_ops;
 
 use ar_process_vti::ar_process_test_item;
-use csv_ops::export_grouped_csv;
 use email_ops::generate_email_using_python;
 use excel_ops::{convert_csv_to_excel, format_excel_sheet};
 use misc::press_enter;
 use sanity::sanity_check;
-use test_file_ops::{export_grouped_toml, test_file_filter};
+use test_file_ops::{export_grouped_csv, export_grouped_toml, test_file_filter};
 
 const EXCEL_FILE_DEFAULT: &str = "validation_test_report.xlsx";
 const DEFAULT_INSTRUCTION_FILE: &str = "validation_test_instructions.toml";
@@ -139,14 +137,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         grouped_tests.push((label.clone(), filtered));
     }
 
+    // Export a grouped TOML summary
+    export_grouped_toml(&grouped_tests, DEFAULT_INSTRUCTION_FILE)?;
+
     // CSV → Excel pipeline
-    let csv_path = export_grouped_csv(&grouped_tests, &args.output)?;
+    let csv_path = export_grouped_csv(DEFAULT_INSTRUCTION_FILE, &args.output)?;
     let xlsx_path = convert_csv_to_excel(&csv_path)?;
     format_excel_sheet(&xlsx_path)?;
-
-    // Export a grouped TOML summary
-    let toml_out = "validation_test_instructions.toml";
-    export_grouped_toml(&grouped_tests, toml_out)?;
 
     Ok(())
 }

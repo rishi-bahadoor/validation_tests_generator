@@ -1,9 +1,10 @@
+use csv::Writer;
 use serde::Deserialize;
-use std::{
-    error::Error,
-    fs,
-    path::{Path, PathBuf},
-};
+use std::error::Error;
+use std::fs::{self, File};
+use std::io::{BufWriter, Write};
+use std::path::{Path, PathBuf};
+use toml::Value;
 
 #[derive(Debug, Deserialize)]
 pub struct Test {
@@ -68,7 +69,10 @@ pub fn export_grouped_toml<P: AsRef<Path>>(
 
             // Scalar fields
             toml_buf.push_str(&format!("test_id = {:?}\n", test.test_id));
+            toml_buf.push_str(&format!("test_group = {:?}\n", test.test_group));
+            toml_buf.push_str(&format!("test_priority = {:?}\n", test.test_priority));
             toml_buf.push_str(&format!("test_description = {:?}\n", test.test_description));
+            toml_buf.push_str(&format!("pass_condition = {:?}\n", test.pass_condition));
 
             // Multi-line instructions array
             toml_buf.push_str("instructions = [\n");
@@ -94,4 +98,87 @@ pub fn export_grouped_toml<P: AsRef<Path>>(
     fs::write(&out_path, toml_buf)?;
     println!("✅ TOML report generated: {}", out_path.as_ref().display());
     Ok(out_path.as_ref().to_path_buf())
+}
+
+pub fn export_grouped_csv<P: AsRef<Path>>(
+    toml_path: P,
+    output_path: P,
+) -> Result<PathBuf, Box<dyn Error>> {
+    let toml_str = fs::read_to_string(&toml_path)?;
+    let root: Value = toml::from_str(&toml_str)?;
+
+    // 2. Collect groups
+    let mut groups: Vec<(String, Vec<Test>)> = Vec::new();
+    if let Value::Table(table) = root {
+        for (label, section) in table {
+            if let Some(Value::Array(arr)) = section.get("test") {
+                let tests = arr
+                    .clone()
+                    .into_iter()
+                    .map(|tbl| tbl.try_into())
+                    .collect::<Result<_, _>>()?;
+                groups.push((label, tests));
+            }
+        }
+    }
+
+    // 3. Open output CSV file
+    let file = File::create(&output_path)?;
+    let mut buf = BufWriter::new(file);
+
+    // 4. Write fixed metadata header
+    for line in &[
+        "Technician Name:,",
+        "Firmware Type:,",
+        "Firmware Version:,",
+        "Sensor Serial Number:,",
+        "CCC Tool Version:,",
+    ] {
+        writeln!(buf, "{}", line)?;
+    }
+    writeln!(buf)?; // blank
+
+    // 5. Hand off to CSV writer
+    let mut wtr = Writer::from_writer(buf);
+
+    // 6. Emit each group in TOML order
+    for (label, tests) in groups {
+        let mut buf = wtr.into_inner()?;
+        writeln!(buf)?; // blank
+        writeln!(buf, "{}", label)?; // section label
+        wtr = Writer::from_writer(buf);
+
+        // table header
+        wtr.write_record(&[
+            "Test ID",
+            "Test Group",
+            "Priority",
+            "Description",
+            "Status",
+            "Notes",
+            "Frequency",
+        ])?;
+
+        // rows for this group
+        for t in tests {
+            wtr.write_record(&[
+                &t.test_id,
+                &t.test_group,
+                &t.test_priority,
+                &t.test_description,
+                "",
+                "",
+                "",
+            ])?;
+        }
+    }
+
+    // 7. Finalize
+    let mut buf = wtr.into_inner()?;
+    buf.flush()?;
+    println!(
+        "✅ CSV report generated: {}",
+        output_path.as_ref().display()
+    );
+    Ok(output_path.as_ref().to_path_buf())
 }
