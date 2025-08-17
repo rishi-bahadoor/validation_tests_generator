@@ -1,5 +1,6 @@
 use rust_xlsxwriter::{Format, Workbook};
 use std::error::Error;
+use std::fs;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
@@ -33,6 +34,7 @@ pub fn convert_csv_to_excel<P: AsRef<Path>>(csv_path: P) -> Result<PathBuf, Box<
     }
 
     workbook.close()?;
+    fs::remove_file(&csv_path)?;
     println!("✅ Excel file created: {}", xlsx_path.display());
 
     Ok(xlsx_path)

@@ -7,6 +7,18 @@
 ### Using the tool
 You can run the tool directly using .\vtg.exe.
 
+### Excel Report generation
+
+This functionality generates an excel report template using the filtered
+validation_test_instructions.toml.
+
+To generate the sheet, use the command: --excel or -x
+
+example:
+
+- .\vtg.exe --excel
+- .\vtg.exe -x
+
 ### Instruction types and using the validation test instructions toml
 
 This functionality reads the generated filtered toml list for a specific test 
@@ -29,6 +41,7 @@ To run a test from the list of tests generated, use the command: --test or -t
 example:
 
 - .\vtg.exe --test 1.1
+
 
 ### Generating the email template
 

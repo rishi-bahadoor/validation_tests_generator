@@ -19,19 +19,21 @@ use misc::press_enter;
 use sanity::sanity_check;
 use test_file_ops::{export_grouped_csv, export_grouped_toml, test_file_filter};
 
-const EXCEL_FILE_DEFAULT: &str = "validation_test_report.xlsx";
+const DEFAULT_EXCEL_FILE: &str = "validation_test_report.xlsx";
 const DEFAULT_INSTRUCTION_FILE: &str = "validation_test_instructions.toml";
+const DEFAULT_CSV_FILE: &str = "validation_test_report.csv";
+const DEFAULT_BASE_TOML: &str = "base_tests_list.toml";
 
 #[derive(Parser, Debug)]
-#[command(name = "vtg.exe", version = "1.1")]
+#[command(name = "vtg.exe", version = "2.1")]
 #[command(about = "Generates filtered validation test reports")]
 pub struct Args {
     /// Input TOML of tests
-    #[arg(short, long, default_value = "base_tests_list.toml")]
+    #[arg(short, long, default_value = DEFAULT_BASE_TOML)]
     pub input: String,
 
     /// Output CSV path
-    #[arg(short, long, default_value = "validation_test_report.csv")]
+    #[arg(short, long, default_value = DEFAULT_CSV_FILE)]
     pub output: String,
 
     /// Optional priority filter
@@ -69,6 +71,10 @@ pub struct Args {
       num_args = 1..,
     )]
     pub test: Vec<String>,
+
+    /// Generate excel from toml
+    #[arg(short = 'x', long)]
+    pub excel: bool,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -96,7 +102,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     if args.email_gen {
         let sender = args.sender_email.as_deref().unwrap();
         let recipient = args.recipient_email.as_deref().unwrap();
-        let _ = generate_email_using_python(sender, recipient, EXCEL_FILE_DEFAULT)?;
+        let _ = generate_email_using_python(sender, recipient, DEFAULT_EXCEL_FILE)?;
         return Ok(());
     }
 
@@ -108,6 +114,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         press_enter();
+        return Ok(());
+    }
+
+    // Excel generation mode only
+    if args.excel {
+        let csv_path = export_grouped_csv(DEFAULT_INSTRUCTION_FILE, &args.output)?;
+        let xlsx_path = convert_csv_to_excel(&csv_path)?;
+        format_excel_sheet(&xlsx_path)?;
         return Ok(());
     }
 

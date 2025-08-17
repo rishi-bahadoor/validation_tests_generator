@@ -87,6 +87,18 @@ instructions = [
 ]
 ```
 
+### Excel Report generation
+
+This functionality generates an excel report template using the filtered
+validation_test_instructions.toml.
+
+To generate the sheet, use the command: --excel or -x
+
+example:
+
+- .\vtg.exe --excel
+- .\vtg.exe -x
+
 ### Instruction types and using the validation test instructions toml
 
 This functionality reads the generated filtered toml list for a specific test 
