@@ -9,7 +9,7 @@
 ### Using the tool
 You can run the tool directly using .\vtg.exe.
 
-### Filter by test ID
+### Generate report template by test ID groups
 
 example:
 - .\vtg.exe --group GROUP_ONE:1.1,1.2 --group GROUP_TWO:1.3,1.4
@@ -18,7 +18,7 @@ or
 
 - .\vtg.exe -g GROUP_ONE:1.1,1.2 -g GROUP_TWO:1.3,1.4
 
-### Filter by priority
+###  Generate report template by priority
 
 example:
 - .\vtg.exe --priority MEDIUM
@@ -61,6 +61,70 @@ test_authors_and_contact_persons = [
 ]
 ```
 
+### Instruction commands for test writing
+There are some key-words that can be used in test instructions.
+
+- wait_s [UINT_32_VALUE] : waits for UINT_32_VALUE seconds before moving on to
+the next instruction.
+- wait_e : waits until the user presses the 'Enter Key' to move on to the next
+instruction.
+- event_timed [UINT_32_TIMEOUT] [UINT_32_PERIOD] [COMMAND_STRING_SPLITS] :
+starts an event loop for a total of UINT_32_TIMEOUT seconds to run
+COMMAND_STRING_SPLITS every UINT_32_PERIOD seconds.
+- ccc [ARGS...] : runs a ccc command.
+
+examples:
+
+``` toml
+instructions = [
+  "## Comment of instruction 1 ##",
+  "wait_s 60",
+  "## Do something ##",
+  "wait_e",
+  "## Do something ##",
+  "ccc get-all",
+  "event_timed 60 10 ccc list-sensors",
+]
+```
+
+### Instruction types and using the validation test instructions toml
+
+This functionality reads the generated filtered toml list for a specific test 
+and prints the instructions on the terminal for that test. If the test has some
+form of automation, the user will be prompted to use it. There are various
+types of automation levels:
+
+- SEMI_AUTO : allows for step by step execution of the instruction steps
+with ccc tool as the main sensor communication medium.
+- FULL_AUTO : allows automated execution of the instruction steps with
+ccc tool as the main sensor communication medium. (In development)
+- FULL_AUTO_PANORAMA : allows for automatically running a panorama test.
+ (In development)
+
+example:
+
+``` toml
+instructions = [
+  "## SEMI_AUTO ##",
+  "## Comment of instruction 1 ##",
+  "wait_s 60",
+  "## Do something ##",
+  "wait_e",
+  "## Do something ##",
+  "ccc get-all",
+  "event_timed 60 10 ccc list-sensors",
+]
+```
+
+If a test as no level of automation, the instruction will simply just be printed
+on the terminal.
+
+To run a test from the list of tests generated, use the command: --test or -t
+
+example:
+
+- .\vtg.exe --test 1.1
+
 ### Generating the email template
 
 To generate the email template, ensure that a report named `validation_test_report.xlsx` already exists in the source directory. This file is used as input to create a technician-ready HTML email preview.
@@ -73,26 +137,3 @@ The email includes:
 Once ready, run:
 
 - .\vtg.exe --email-gen example.sender@example.com example.recipient@example.com
-
-### Running tests using the validation test instructions toml
-
-This functionality reads the generated filtered toml list for a specific test 
-and prints the instructions on the terminal for that test. If the test has some
-form of automation, the user will be prompted to use it. There are various
-types of automation levels:
-
-- SEMI_AUTO_CCC : allows for step by step execution of the instruction steps
-with ccc tool as the main sensor communication medium.
-- FULL_AUTO_CCC : allows automated execution of the instruction steps with
-ccc tool as the main sensor communication medium. (In development)
-- FULL_AUTO_PANORAMA : allows for automatically running a panorama test.
- (In development)
-
-If a test as no level of automation, the instruction will simply just be printed
-on the terminal.
-
-To run a test from the list of tests generated, use the command: --test or -t
-
-example:
-
-- .\vtg.exe --test 1.1

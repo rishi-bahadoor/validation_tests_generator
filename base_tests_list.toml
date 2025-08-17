@@ -5,7 +5,7 @@ test_priority = "MEDIUM"
 test_description = "Check that point cloud is being displayed correctly for 2 minutes (Both indoor/outdoor setting) using STDV format (pixel_format=0)"
 pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -25,7 +25,7 @@ test_priority = "MEDIUM"
 test_description = "Check that point cloud is being displayed correctly for 2 minutes (Both indoor/outdoor setting) using HRAD format (pixel_format=2)"
 pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -45,7 +45,7 @@ test_priority = "MEDIUM"
 test_description = "Check that point cloud is being displayed correctly for 2 minutes (Both indoor/outdoor setting) using HLZ4 format (pixel_format=3)"
 pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -65,7 +65,7 @@ test_priority = "HIGH"
 test_description = "Check per point stability that points do not flicker"
 pass_condition = "No flickering on the display of the point cloud"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configuration ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -99,7 +99,7 @@ test_priority = "HIGH"
 test_description = "Testing with STDV. Left scan and right scan encoder range valid."
 pass_condition = "Ensure that the missing or bad left and right vertical image scan lines are less than 10"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Set these specific fields below ##",
   "ccc set horiz_fov_left=-2185698,horiz_fov_right=2185698,horiz_firing_period=5916,horiz_fov_left_roi=-699050,horiz_fov_right_roi=699050,horiz_firing_period_roi=2548,nr_slot=2103,roi_enable=1,mst_cycle_duration=200000,pixel_format=0",
   "## Turn on point enable and MST ##",
@@ -119,7 +119,7 @@ test_priority = "HIGH"
 test_description = "Testing with HLZ4. Left scan and right scan encoder range valid."
 pass_condition = ""
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Set these specific fields below ##",
   "ccc set horiz_fov_left=-2185698,horiz_fov_right=2185698,horiz_firing_period=5916,horiz_fov_left_roi=-699050,horiz_fov_right_roi=699050,horiz_firing_period_roi=2548,nr_slot=2103,roi_enable=1,mst_cycle_duration=200000,pixel_format=3",
   "## Turn on point enable and MST ##",
@@ -139,7 +139,7 @@ test_priority = "HIGH"
 test_description = "Check point cloud (STDV format) is being displayed correctly after running for 15 mins (outdoor setting)"
 pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -159,7 +159,7 @@ test_priority = "HIGH"
 test_description = "Check point cloud (HRAD format) is being displayed correctly after running for 15 mins (outdoor setting)"
 pass_condition = ""
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -179,7 +179,7 @@ test_priority = "HIGH"
 test_description = "Check point cloud (HLZ4 format) is being displayed correctly after running for 15 mins (outdoor setting)"
 pass_condition = ""
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -199,7 +199,7 @@ test_priority = "HIGH"
 test_description = "Check MST frequency at 10Hz"
 pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS is 10Hz within +/- 0.005Hz"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -221,7 +221,7 @@ test_priority = "HIGH"
 test_description = "Check MST frequency at 20Hz"
 pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS is 20Hz within +/- 0.005Hz"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -243,7 +243,7 @@ test_priority = "LOW"
 test_description = "Check MST frequency does not go above 21Hz"
 pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS is not exceeding 21Hz within +/- 0.005Hz with FPS entries greater than 21Hz"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -265,7 +265,7 @@ test_priority = "LOW"
 test_description = "Check MST frequency change: gradual adjustments (10Hz to 11Hz etc.)"
 pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS matches the incrementing FPS within +/- 0.005Hz"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -295,7 +295,7 @@ test_priority = "LOW"
 test_description = "Check MST frequency change: large adjustments (10HZ to 20Hz etc.)"
 pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS matches the incrementing FPS within +/- 0.005Hz"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -321,7 +321,7 @@ test_priority = "MEDIUM"
 test_description = "Check MST stability (shake sensor rotate etc.)"
 pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS matches the set FPS within +/- 0.005Hz while shaking"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -370,7 +370,7 @@ test_priority = "HIGH"
 test_description = "Check bloom mitigation works at 10 meters (STDV format)"
 pass_condition = "The blooming effect around the retro target in view of the sensor is mitigated within specification when the feature is turned on"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -396,7 +396,7 @@ test_priority = "HIGH"
 test_description = "Check bloom mitigation works at 10 meters (HRAD format)"
 pass_condition = "The blooming effect around the retro target in view of the sensor is mitigated within specification when the feature is turned on"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -422,7 +422,7 @@ test_priority = "HIGH"
 test_description = "Check bloom mitigation works at 10 meters (HLZ4 format)"
 pass_condition = "The blooming effect around the retro target in view of the sensor is mitigated within specification when the feature is turned on"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -448,7 +448,7 @@ test_priority = "HIGH"
 test_description = "Check bloom mitigation works at 50 meters (STDV format)"
 pass_condition = "The blooming effect around the retro target in view of the sensor is mitigated within specification when the feature is turned on"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -474,7 +474,7 @@ test_priority = "HIGH"
 test_description = "Check bloom mitigation works at 50 meters (HRAD format)"
 pass_condition = "The blooming effect around the retro target in view of the sensor is mitigated within specification when the feature is turned on"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -500,7 +500,7 @@ test_priority = "HIGH"
 test_description = "Check bloom mitigation works at 50 meters (HLZ4 format)"
 pass_condition = "The blooming effect around the retro target in view of the sensor is mitigated within specification when the feature is turned on"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -526,7 +526,7 @@ test_priority = "LOW"
 test_description = "Validate firmware upload capability via CCC App"
 pass_condition = "Firmware updates successfully and the FW version change is observed when checked"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Run the update firmware command on the sensor ##",
   "ccc update-firmware ultra.cepbin",
   "## Power cycle the sensor ##",
@@ -543,7 +543,7 @@ test_priority = "LOW"
 test_description = "Validate firmware upload capability via CCC App"
 pass_condition = "Firmware updates successfully and the FW version change is observed when checked"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Run the boot server command on the sensor ##",
   "ccc boot-server  ultra.cepbin",
   "## Check that the FW version has been updated ##",
@@ -558,7 +558,7 @@ test_priority = "LOW"
 test_description = "Validate firmware rescue mode via CCC App"
 pass_condition = "Firmware updates successfully and the FW version change is observed when checked"
 instructions = [  
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Run the rescue mode command on the sensor ##",
   "ccc update-firmware --rescue-mode",
   "## Check that the FW version has been updated ##",
@@ -573,7 +573,7 @@ test_priority = "LOW"
 test_description = "Measure the time between the sensor power on and connection to CeptonViewer (Spec < 8 seconds)"
 pass_condition = "The time between sensor power on and connection to Cepton Viewer is less than 8 seconds"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -592,7 +592,7 @@ test_priority = "LOW"
 test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data on) using STDV format"
 pass_condition = "STDV points data packets have the updated source IP"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -620,7 +620,7 @@ test_priority = "LOW"
 test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data off) using STDV format"
 pass_condition = "INFZ data packets have the updated source IP"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -648,7 +648,7 @@ test_priority = "LOW"
 test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data on) using HRAD format"
 pass_condition = "HRAD points data packets have the updated source IP"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -676,7 +676,7 @@ test_priority = "LOW"
 test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data off) using HRAD format"
 pass_condition = "INFZ data packets have the updated source IP"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -704,7 +704,7 @@ test_priority = "LOW"
 test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data on) using HLZ4 format"
 pass_condition = "HLZ4 points data packets have the updated source IP"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -732,7 +732,7 @@ test_priority = "LOW"
 test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data off) using HLZ4 format"
 pass_condition = "INFZ data packets have the updated source IP"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
@@ -760,7 +760,7 @@ test_priority = "LOW"
 test_description = "Check AutoIP functionality"
 pass_condition = ""
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## This is best tested using a router or dedicated DHCP server ##",
   "## Connect the sensor ethernet port to the router ##",
   "## Disable the DHCP server on the router (power cycle of the router may be needed to release the IP lease) ##",
@@ -779,7 +779,7 @@ test_priority = "LOW"
 test_description = "Check DHCP functionality"
 pass_condition = ""
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## This is best tested using a router or dedicated DHCP server ##",
   "## Connect the sensor ethernet port to the router ##",
   "## Enable the DHCP server on the router (power cycle of the router may be needed to release the IP lease) ##",
@@ -798,7 +798,7 @@ test_priority = "LOW"
 test_description = "Check user exposed configurations (do not rely on \"-d ultra_config.toml\")"
 pass_condition = "User exposed configuration fields are accessible without using -d file.toml option"
 instructions = [
-  "## SEMI_AUTO_CCC ##",
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
