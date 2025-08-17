@@ -816,12 +816,14 @@ test_priority = "LOW"
 test_description = "Check sensor connectivity after 1 hour"
 pass_condition = "Sensor communication is still functional after one hour"
 instructions = [
+  "## SEMI_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the sensor is powered on ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Ensure the mst and points are enabled ##",
   "ccc set point_enable=1, drive_big_mirror=1",
   "## Observe the sensor activity and connectivity for 1 hour using viewer and doing list sensors commands ##",
-  "ccc list-sensors",
+  "event_timed 3600 60 ccc list-sensors",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -832,9 +834,11 @@ test_priority = "LOW"
 test_description = "Using ccc diag --fix to restore settings"
 pass_condition = "Sensor configurations correctly set with no side effects such as mirror knocking"
 instructions = [
+  "## SEMI_AUTO ##",
   "## Ensure the sensor is powered on ##",
   "## Ensure the sensor has uninitialized configurations or incorrect but safe values ##",
   "## Noteworthy configurations: ROI's, SPAD's, MST's ##",
+  "## REPLACE THIS WITH : a set command that will set some wrong but safe configurations ##",
   "## Run the diag fix command ##",
   "ccc diag --fix",
 ]
