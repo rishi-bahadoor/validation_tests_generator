@@ -1,9 +1,8 @@
 /target
-/images_misc
-/images_github_issues
 
 /validation_test_instructions.toml
 
 /*.eml
 /*.xlsx
 /*.csv
+/*.png
