@@ -370,6 +370,10 @@ test_priority = "HIGH"
 test_description = "Check bloom mitigation works at 10 meters (STDV format)"
 pass_condition = "The blooming effect around the retro target in view of the sensor is mitigated within specification when the feature is turned on"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Place the retro target at 10m from the sensor at a height of 6 feet ##",
   "## Ensure the sensor has default configurations ##",
   "## Set the pixel format to STDV (0) ##",
@@ -379,6 +383,7 @@ instructions = [
   "## Turn on the retro target blooming mitigation option (feed-forward) ##",
   "ccc set probing_ffwd_enabled=1",
   "## Observe the points image on the display ##",
+  "wait_e",
   "## Turn off the retro target blooming mitigation option (feed-forward) ##",
   "ccc set probing_ffwd_enabled=0",
 ]
@@ -391,6 +396,10 @@ test_priority = "HIGH"
 test_description = "Check bloom mitigation works at 10 meters (HRAD format)"
 pass_condition = "The blooming effect around the retro target in view of the sensor is mitigated within specification when the feature is turned on"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Place the retro target at 10m from the sensor at a height of 6 feet ##",
   "## Ensure the sensor has default configurations ##",
   "## Set the pixel format to HRAD (2) ##",
@@ -400,6 +409,7 @@ instructions = [
   "## Turn on the retro target blooming mitigation option (feed-forward) ##",
   "ccc set probing_ffwd_enabled=1",
   "## Observe the points image on the display ##",
+  "wait_e",
   "## Turn off the retro target blooming mitigation option (feed-forward) ##",
   "ccc set probing_ffwd_enabled=0",
 ]
@@ -412,6 +422,10 @@ test_priority = "HIGH"
 test_description = "Check bloom mitigation works at 10 meters (HLZ4 format)"
 pass_condition = "The blooming effect around the retro target in view of the sensor is mitigated within specification when the feature is turned on"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Place the retro target at 10m from the sensor at a height of 6 feet ##",
   "## Ensure the sensor has default configurations ##",
   "## Set the pixel format to HLZ4 (3) ##",
@@ -421,6 +435,7 @@ instructions = [
   "## Turn on the retro target blooming mitigation option (feed-forward) ##",
   "ccc set probing_ffwd_enabled=1",
   "## Observe the points image on the display ##",
+  "wait_e",
   "## Turn off the retro target blooming mitigation option (feed-forward) ##",
   "ccc set probing_ffwd_enabled=0",
 ]
@@ -433,6 +448,10 @@ test_priority = "HIGH"
 test_description = "Check bloom mitigation works at 50 meters (STDV format)"
 pass_condition = "The blooming effect around the retro target in view of the sensor is mitigated within specification when the feature is turned on"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Place the retro target at 50m from the sensor at a height of 6 feet ##",
   "## Ensure the sensor has default configurations ##",
   "## Set the pixel format to STDV (0) ##",
@@ -442,6 +461,7 @@ instructions = [
   "## Turn on the retro target blooming mitigation option (feed-forward) ##",
   "ccc set probing_ffwd_enabled=1",
   "## Observe the points image on the display ##",
+  "wait_e",
   "## Turn off the retro target blooming mitigation option (feed-forward) ##",
   "ccc set probing_ffwd_enabled=0",
 ]
@@ -454,6 +474,10 @@ test_priority = "HIGH"
 test_description = "Check bloom mitigation works at 50 meters (HRAD format)"
 pass_condition = "The blooming effect around the retro target in view of the sensor is mitigated within specification when the feature is turned on"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Place the retro target at 50m from the sensor at a height of 6 feet ##",
   "## Ensure the sensor has default configurations ##",
   "## Set the pixel format to HRAD (2) ##",
@@ -463,6 +487,7 @@ instructions = [
   "## Turn on the retro target blooming mitigation option (feed-forward) ##",
   "ccc set probing_ffwd_enabled=1",
   "## Observe the points image on the display ##",
+  "wait_e",
   "## Turn off the retro target blooming mitigation option (feed-forward) ##",
   "ccc set probing_ffwd_enabled=0",
 ]
@@ -475,6 +500,10 @@ test_priority = "HIGH"
 test_description = "Check bloom mitigation works at 50 meters (HLZ4 format)"
 pass_condition = "The blooming effect around the retro target in view of the sensor is mitigated within specification when the feature is turned on"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Place the retro target at 50m from the sensor at a height of 6 feet ##",
   "## Ensure the sensor has default configurations ##",
   "## Set the pixel format to HLZ4 (3) ##",
@@ -484,6 +513,7 @@ instructions = [
   "## Turn on the retro target blooming mitigation option (feed-forward) ##",
   "ccc set probing_ffwd_enabled=1",
   "## Observe the points image on the display ##",
+  "wait_e",
   "## Turn off the retro target blooming mitigation option (feed-forward) ##",
   "ccc set probing_ffwd_enabled=0",
 ]
@@ -496,14 +526,16 @@ test_priority = "LOW"
 test_description = "Validate firmware upload capability via CCC App"
 pass_condition = "Firmware updates successfully and the FW version change is observed when checked"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## Run the update firmware command on the sensor ##",
-  "ccc update-firmware",
+  "ccc update-firmware ultra.cepbin",
   "## Power cycle the sensor ##",
+  "wait_e",
   "## Check that the FW version has been updated ##",
-  "ccc list-sensors"
+  "ccc list-sensors",
 ]
-
 test_authors_and_contact_persons = ["TBD"]
+
 [[test]]
 test_id = "4.2"
 test_group = "4:FW_LOADING"
@@ -511,8 +543,9 @@ test_priority = "LOW"
 test_description = "Validate firmware upload capability via CCC App"
 pass_condition = "Firmware updates successfully and the FW version change is observed when checked"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## Run the boot server command on the sensor ##",
-  "ccc boot-server",
+  "ccc boot-server  ultra.cepbin",
   "## Check that the FW version has been updated ##",
   "ccc list-sensors",
 ]
@@ -525,6 +558,7 @@ test_priority = "LOW"
 test_description = "Validate firmware rescue mode via CCC App"
 pass_condition = "Firmware updates successfully and the FW version change is observed when checked"
 instructions = [  
+  "## SEMI_AUTO_CCC ##",
   "## Run the rescue mode command on the sensor ##",
   "ccc update-firmware --rescue-mode",
   "## Check that the FW version has been updated ##",
@@ -539,7 +573,10 @@ test_priority = "LOW"
 test_description = "Measure the time between the sensor power on and connection to CeptonViewer (Spec < 8 seconds)"
 pass_condition = "The time between sensor power on and connection to Cepton Viewer is less than 8 seconds"
 instructions = [
-  "## Ensure that the sensor has default configurations ##",
+  "## SEMI_AUTO_CCC ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Ensure that the sensor is set to display points when power cycled ##",
   "ccc set point_enable=1, drive_big_mirror=1",
   "## Power off the sensors ##",
@@ -555,17 +592,24 @@ test_priority = "LOW"
 test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data on) using STDV format"
 pass_condition = "STDV points data packets have the updated source IP"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Ensure the sensor source IP is set to a common reference value ##",
   "ccc set src_ip=192.168.32.32",
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0",
   "## Turn on mst and points enable ##",
   "ccc set point_enable=1, drive_big_mirror=1",
-  "## Observe the current points data packets source IP ##",  
+  "## Observe the current points data packets source IP ##",
+  "wait_e",
   "## Change the source IP ##",
   "ccc set src_ip=192.168.32.44",
   "## Observe the points data packets source IP ##",
+  "wait_e",
+  "## Ensure the sensor source IP is set back to a common reference value ##",
+  "ccc set src_ip=192.168.32.32",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -576,17 +620,24 @@ test_priority = "LOW"
 test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data off) using STDV format"
 pass_condition = "INFZ data packets have the updated source IP"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Ensure the sensor source IP is set to a common reference value ##",
   "ccc set src_ip=192.168.32.32",
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0",
   "## Turn off mst and points enable ##",
   "ccc set point_enable=0, drive_big_mirror=0",
-  "## Observe the current INFZ data packets source IP ##",  
+  "## Observe the current INFZ data packets source IP ##",
+  "wait_e", 
   "## Change the source IP ##",
   "ccc set src_ip=192.168.32.44",
   "## Observe the INFZ data packets source IP ##",
+  "wait_e",
+  "## Ensure the sensor source IP is set back to a common reference value ##",
+  "ccc set src_ip=192.168.32.32",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -597,17 +648,24 @@ test_priority = "LOW"
 test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data on) using HRAD format"
 pass_condition = "HRAD points data packets have the updated source IP"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Ensure the sensor source IP is set to a common reference value ##",
   "ccc set src_ip=192.168.32.32",
   "## Set the pixel format to HRAD (2) ##",
   "ccc set pixel_format=2",
   "## Turn on mst and points enable ##",
   "ccc set point_enable=1, drive_big_mirror=1",
-  "## Observe the current points data packets source IP ##",  
+  "## Observe the current points data packets source IP ##",
+  "wait_e",  
   "## Change the source IP ##",
   "ccc set src_ip=192.168.32.44",
   "## Observe the points data packets source IP ##",
+  "wait_e",
+  "## Ensure the sensor source IP is set back to a common reference value ##",
+  "ccc set src_ip=192.168.32.32",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -618,17 +676,24 @@ test_priority = "LOW"
 test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data off) using HRAD format"
 pass_condition = "INFZ data packets have the updated source IP"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Ensure the sensor source IP is set to a common reference value ##",
   "ccc set src_ip=192.168.32.32",
   "## Set the pixel format to HRAD (2) ##",
   "ccc set pixel_format=2",
   "## Turn off mst and points enable ##",
   "ccc set point_enable=0, drive_big_mirror=0",
-  "## Observe the current INFZ data packets source IP ##",  
+  "## Observe the current INFZ data packets source IP ##", 
+  "wait_e", 
   "## Change the source IP ##",
   "ccc set src_ip=192.168.32.44",
   "## Observe the INFZ data packets source IP ##",
+  "wait_e",
+  "## Ensure the sensor source IP is set back to a common reference value ##",
+  "ccc set src_ip=192.168.32.32",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -639,17 +704,24 @@ test_priority = "LOW"
 test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data on) using HLZ4 format"
 pass_condition = "HLZ4 points data packets have the updated source IP"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Ensure the sensor source IP is set to a common reference value ##",
   "ccc set src_ip=192.168.32.32",
   "## Set the pixel format to HLZ4 (3) ##",
   "ccc set pixel_format=3",
   "## Turn on mst and points enable ##",
   "ccc set point_enable=1, drive_big_mirror=1",
-  "## Observe the current points data packets source IP ##",  
+  "## Observe the current points data packets source IP ##",
+  "wait_e",
   "## Change the source IP ##",
   "ccc set src_ip=192.168.32.44",
   "## Observe the points data packets source IP ##",
+  "wait_e",
+  "## Ensure the sensor source IP is set back to a common reference value ##",
+  "ccc set src_ip=192.168.32.32",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -660,17 +732,24 @@ test_priority = "LOW"
 test_description = "Connect sensor to computer change the src ip of the sensor via CCC application check for corresponding IP in Wireshark (Point data off) using HLZ4 format"
 pass_condition = "INFZ data packets have the updated source IP"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Ensure the sensor source IP is set to a common reference value ##",
   "ccc set src_ip=192.168.32.32",
   "## Set the pixel format to HLZ4 (3) ##",
   "ccc set pixel_format=3",
   "## Turn off mst and points enable ##",
   "ccc set point_enable=0, drive_big_mirror=0",
-  "## Observe the current INFZ data packets source IP ##",  
+  "## Observe the current INFZ data packets source IP ##",
+  "wait_e", 
   "## Change the source IP ##",
   "ccc set src_ip=192.168.32.44",
   "## Observe the INFZ data packets source IP ##",
+  "wait_e",
+  "## Ensure the sensor source IP is set back to a common reference value ##",
+  "ccc set src_ip=192.168.32.32",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -681,6 +760,7 @@ test_priority = "LOW"
 test_description = "Check AutoIP functionality"
 pass_condition = ""
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## This is best tested using a router or dedicated DHCP server ##",
   "## Connect the sensor ethernet port to the router ##",
   "## Disable the DHCP server on the router (power cycle of the router may be needed to release the IP lease) ##",
@@ -699,6 +779,7 @@ test_priority = "LOW"
 test_description = "Check DHCP functionality"
 pass_condition = ""
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## This is best tested using a router or dedicated DHCP server ##",
   "## Connect the sensor ethernet port to the router ##",
   "## Enable the DHCP server on the router (power cycle of the router may be needed to release the IP lease) ##",
@@ -717,8 +798,10 @@ test_priority = "LOW"
 test_description = "Check user exposed configurations (do not rely on \"-d ultra_config.toml\")"
 pass_condition = "User exposed configuration fields are accessible without using -d file.toml option"
 instructions = [
+  "## SEMI_AUTO_CCC ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the sensor is pwered on and connected to the PC ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
   "## Ensure the PC is on the Cepton network ##",
   "## Do a get all command using the ccc tool with no -d option ##",
   "ccc get-all",
