@@ -147,7 +147,7 @@ pub fn prepend_hash_to_toml<P: AsRef<Path>>(path: P) -> Result<PathBuf, Box<dyn 
 }
 
 /// Operation: Performs sanity check across all scripts
-pub fn sanity_check() -> Result<(), String> {
+pub fn sanity_check_python_scripts() -> Result<(), String> {
     for check in SCRIPT_CHECKS {
         let actual_version = read_version_from_script(check.path)?;
         if actual_version != check.expected_version {

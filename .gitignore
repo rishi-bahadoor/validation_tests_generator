@@ -1,6 +1,8 @@
 /target
 
 /validation_test_instructions.toml
+/ccc.exe
+/ultra.cepbin
 
 /*.eml
 /*.xlsx

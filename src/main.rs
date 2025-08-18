@@ -1,5 +1,4 @@
 use clap::{CommandFactory, Parser};
-use std::process;
 
 mod ar_auto_commands;
 mod ar_ccc_commands;
@@ -8,6 +7,7 @@ mod ar_process_vti;
 mod email_ops;
 mod excel_ops;
 mod misc;
+mod python_env;
 mod sanity;
 mod scripts_find;
 mod test_file_ops;
@@ -16,7 +16,8 @@ use ar_process_vti::ar_process_test_item;
 use email_ops::generate_email_using_python;
 use excel_ops::{convert_csv_to_excel, format_excel_sheet};
 use misc::press_enter;
-use sanity::{prepend_hash_to_toml, sanity_check, sanity_check_toml};
+use python_env::sanity_dependencies;
+use sanity::{prepend_hash_to_toml, sanity_check_python_scripts, sanity_check_toml};
 use test_file_ops::{export_grouped_csv, export_grouped_toml, test_file_filter};
 
 const DEFAULT_EXCEL_FILE: &str = "validation_test_report.xlsx";
@@ -78,13 +79,6 @@ pub struct Args {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Sanity check on the scripts for version and hash.
-    if let Err(e) = sanity_check() {
-        eprintln!("Sanity check failed: {}", e);
-        press_enter();
-        process::exit(1); // Exit with non-zero status
-    }
-
     // Show help if no args.
     if std::env::args().len() == 1 {
         let mut cmd = Args::command();
@@ -100,6 +94,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Email‐only mode
     if args.email_gen {
+        sanity_check_python_scripts()?;
+        sanity_dependencies()?;
+
         let sender = args.sender_email.as_deref().unwrap();
         let recipient = args.recipient_email.as_deref().unwrap();
         let _ = generate_email_using_python(sender, recipient, DEFAULT_EXCEL_FILE)?;
@@ -120,6 +117,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Excel generation mode only
     if args.excel {
+        sanity_check_python_scripts()?;
+        sanity_dependencies()?;
         sanity_check_toml(DEFAULT_INSTRUCTION_FILE)?;
         let csv_path = export_grouped_csv(DEFAULT_INSTRUCTION_FILE, &args.output)?;
         let xlsx_path = convert_csv_to_excel(&csv_path)?;
