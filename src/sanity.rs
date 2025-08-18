@@ -160,14 +160,20 @@ pub fn sanity_check() -> Result<(), String> {
         let actual_hash = compute_fnv1a_32(check.path)?;
         if actual_hash != check.expected_hash {
             println!("!! DEVELOPER WARNING !!");
-            println!("Script files have been tampered with {}.", check.path);
+
+            // For developer check.
+            // println!(
+            //     "expected 0x{:08X}, found 0x{:08X}",
+            //     check.expected_hash, actual_hash
+            // );
+
             /*
               Update the version number in the script header to indicate new script changes.
               Then update the new VERSION and HASH value in sanity.rs to pass the sanity check.
             */
             return Err(format!(
-                "Hash mismatch in '{}': expected 0x{:08X}, found 0x{:08X}",
-                check.path, check.expected_hash, actual_hash
+                "Script files have been tampered with {}.",
+                check.path
             ));
         }
     }
@@ -178,15 +184,15 @@ pub fn sanity_check_toml(path: &str) -> Result<(), String> {
     let actual_hash = toml_compute_fnv1a_32(path)?;
     let expected_hash = toml_hash_reader(path)?;
 
-    if actual_hash != expected_hash {
-        return Err(format!("Toml file tampered: '{}'.", path));
-    }
-
     // For developer check.
     // println!(
     //     "expected 0x{:08X}, found 0x{:08X}",
     //     expected_hash, actual_hash
     // );
+
+    if actual_hash != expected_hash {
+        return Err(format!("Toml file tampered: '{}'.", path));
+    }
 
     Ok(())
 }

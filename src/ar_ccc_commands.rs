@@ -44,14 +44,14 @@ fn diag_command_check_and_run(trimmed_line: &str, auto: bool) -> Result<bool, Bo
     if trimmed_line.contains("diag") {
         if !auto {
             println!("  - Do you want to run diag:");
-            if get_key_entry_y()? == 1 {
-                ccc_command_runner(trimmed_line)?;
+            if get_key_entry_y()? == 0 {
+                return Ok(true);
             }
-            return Ok(true);
         }
         ccc_command_runner(trimmed_line)?;
         return Ok(true);
     }
+    // No diag command was detected.
     Ok(false)
 }
 
