@@ -58,7 +58,7 @@ pub struct Args {
       short = 'g',
       long = "group",
       value_name = "LABEL:IDS",
-      help = "Define a group, e.g. --group heat:1.1,1.2",
+      help = "Define a group, e.g. --group heat:1.1,1.2 --group volt:2.1,2.2",
       num_args = 1..,
     )]
     pub groups: Vec<String>,
@@ -68,7 +68,7 @@ pub struct Args {
       short = 't',
       long = "test",
       value_name = "TEST_ID",
-      help = "Get the test instructions, e.g. --test 1.1",
+      help = "Get the test instructions, e.g. --test 1.1 1.2",
       num_args = 1..,
     )]
     pub test: Vec<String>,
@@ -158,6 +158,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     sanity_check_toml(DEFAULT_INSTRUCTION_FILE)?;
 
     // CSV → Excel pipeline
+    sanity_check_python_scripts()?;
+    sanity_dependencies()?;
     let csv_path = export_grouped_csv(DEFAULT_INSTRUCTION_FILE, &args.output)?;
     let xlsx_path = convert_csv_to_excel(&csv_path)?;
     format_excel_sheet(&xlsx_path)?;
