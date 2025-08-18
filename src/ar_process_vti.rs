@@ -2,7 +2,7 @@ use std::error::Error;
 use std::fs;
 use toml::Value;
 
-use crate::ar_auto_commands::{auto_command_selector, check_for_commands};
+use crate::ar_auto_commands::{auto_command_selector, check_for_auto_commands};
 
 fn process_fetched_instructions(instructions: &Vec<Value>) -> Result<(), Box<dyn Error>> {
     let mut auto_command = 0;
@@ -10,7 +10,7 @@ fn process_fetched_instructions(instructions: &Vec<Value>) -> Result<(), Box<dyn
         if let Some(line) = instr.as_str() {
             println!("  - {}", line);
             if auto_command == 0 {
-                auto_command = check_for_commands(line);
+                auto_command = check_for_auto_commands(line);
             }
         }
     }

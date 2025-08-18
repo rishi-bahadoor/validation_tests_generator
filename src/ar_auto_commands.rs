@@ -118,7 +118,7 @@ pub fn auto_command_selector(
     Ok(())
 }
 
-pub fn check_for_commands(line: &str) -> u32 {
+pub fn check_for_auto_commands(line: &str) -> u32 {
     let trimmed = line.trim();
 
     for &keyword in COMMAND_KEYWORDS {
