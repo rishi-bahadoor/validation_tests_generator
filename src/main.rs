@@ -16,7 +16,7 @@ use ar_process_vti::ar_process_test_item;
 use email_ops::generate_email_using_python;
 use excel_ops::{convert_csv_to_excel, format_excel_sheet};
 use misc::press_enter;
-use sanity::sanity_check;
+use sanity::{prepend_hash_to_toml, sanity_check, sanity_check_toml};
 use test_file_ops::{export_grouped_csv, export_grouped_toml, test_file_filter};
 
 const DEFAULT_EXCEL_FILE: &str = "validation_test_report.xlsx";
@@ -108,6 +108,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Test-only mode
     if !args.test.is_empty() {
+        sanity_check_toml(DEFAULT_INSTRUCTION_FILE)?;
         for test_id in &args.test {
             if let Err(e) = ar_process_test_item(DEFAULT_INSTRUCTION_FILE, test_id) {
                 eprintln!("Error processing test '{}': {}", test_id, e);
@@ -119,6 +120,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Excel generation mode only
     if args.excel {
+        sanity_check_toml(DEFAULT_INSTRUCTION_FILE)?;
         let csv_path = export_grouped_csv(DEFAULT_INSTRUCTION_FILE, &args.output)?;
         let xlsx_path = convert_csv_to_excel(&csv_path)?;
         format_excel_sheet(&xlsx_path)?;
@@ -153,6 +155,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Export a grouped TOML summary
     export_grouped_toml(&grouped_tests, DEFAULT_INSTRUCTION_FILE)?;
+    prepend_hash_to_toml(DEFAULT_INSTRUCTION_FILE)?;
+    sanity_check_toml(DEFAULT_INSTRUCTION_FILE)?;
 
     // CSV → Excel pipeline
     let csv_path = export_grouped_csv(DEFAULT_INSTRUCTION_FILE, &args.output)?;
