@@ -20,8 +20,6 @@ use python_env::sanity_dependencies;
 use sanity::{prepend_hash_to_toml, sanity_check_python_scripts, sanity_check_toml};
 use test_file_ops::{export_grouped_csv, export_grouped_toml, test_file_filter};
 
-use crate::ar_ccc_commands::VERBOSE;
-
 const DEFAULT_EXCEL_FILE: &str = "validation_test_report.xlsx";
 const DEFAULT_INSTRUCTION_FILE: &str = "validation_test_instructions.toml";
 const DEFAULT_CSV_FILE: &str = "validation_test_report.csv";
@@ -78,9 +76,6 @@ pub struct Args {
     /// Generate excel from toml
     #[arg(short = 'x', long)]
     pub excel: bool,
-
-    #[arg(long = "verbose", help = "Enable verbose output")]
-    pub verbose: bool,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -96,11 +91,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let args = Args::parse();
-
-    if args.verbose {
-        println!("Running in verbose mode");
-        VERBOSE.store(true, std::sync::atomic::Ordering::Relaxed);
-    }
 
     // Email‐only mode
     if args.email_gen {

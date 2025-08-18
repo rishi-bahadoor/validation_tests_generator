@@ -1,8 +1,6 @@
-use std::{error::Error, io, path::Path, process::Command, sync::atomic::AtomicBool};
+use std::{error::Error, io, path::Path, process::Command};
 
 use crate::misc::{get_key_entry_y, press_enter_no_message};
-
-pub static VERBOSE: AtomicBool = AtomicBool::new(false);
 
 const PATH_CCC_EXE: &str = "./ccc.exe";
 
@@ -23,10 +21,6 @@ fn ccc_command_runner(line: &str) -> Result<(), Box<dyn Error>> {
             io::ErrorKind::NotFound,
             format!("executable not found: {}", exe),
         )));
-    }
-
-    if VERBOSE.load(std::sync::atomic::Ordering::Relaxed) {
-        println!("Running command: {} {:?}", exe, args);
     }
 
     // 2. Spawn process, convert any I/O error into Box<dyn Error>
