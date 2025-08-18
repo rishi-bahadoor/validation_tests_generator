@@ -40,13 +40,11 @@ fn ccc_command_runner(line: &str) -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn diag_command_check_and_run(trimmed_line: &str, auto: bool) -> Result<bool, Box<dyn Error>> {
+fn diag_command_check_and_run(trimmed_line: &str) -> Result<bool, Box<dyn Error>> {
     if trimmed_line.contains("diag") {
-        if !auto {
-            println!("  - Do you want to run diag:");
-            if get_key_entry_y()? == 0 {
-                return Ok(true);
-            }
+        println!("  - Do you want to run diag:");
+        if get_key_entry_y()? == 0 {
+            return Ok(true);
         }
         ccc_command_runner(trimmed_line)?;
         return Ok(true);
@@ -56,7 +54,7 @@ fn diag_command_check_and_run(trimmed_line: &str, auto: bool) -> Result<bool, Bo
 }
 
 pub fn ccc_handler(trimmed_line: &str, auto: bool) -> Result<(), Box<dyn Error>> {
-    if diag_command_check_and_run(trimmed_line, auto)? {
+    if diag_command_check_and_run(trimmed_line)? {
         return Ok(());
     }
     if !auto {
