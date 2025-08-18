@@ -1,4 +1,4 @@
-# VERSION 1.1.3
+# VERSION 1.1.4
 
 import sys
 from pathlib import Path
@@ -287,7 +287,7 @@ def build_email_message(xlsx_path, from_addr, recipients):
     # inline images from default folder
     builder.email_body_add_empty_line(1)
     builder.email_body_add_lines([
-        "GitHub Issues: https://github.com/ceptontech/unified_firmware/issues?q=state%3Aopen%20label%3A%22QA%22"
+        "<a href='https://github.com/orgs/ceptontech/projects/21/views/1?filterQuery=label%3AQA+-status%3ADone'>Open QA issues</a>"
     ])
     builder.email_body_inline_images_from_folder()
     builder.email_body_add_empty_line(2)
