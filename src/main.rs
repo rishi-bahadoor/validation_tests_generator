@@ -14,9 +14,15 @@ mod sanity;
 mod scripts_find;
 mod test_file_ops;
 
-use args::Args;
-use misc::press_enter;
-use op_selector::{email_gen, excel_gen, group_tests_id, group_tests_priority, test_run};
+use crate::args::Args;
+use crate::excel_ops::{convert_csv_to_excel, format_excel_sheet};
+use crate::misc::press_enter;
+use crate::python_env::sanity_dependencies;
+use crate::sanity::{prepend_hash_to_toml, sanity_check_python_scripts, sanity_check_toml};
+use crate::test_file_ops::{export_grouped_csv, export_grouped_toml, test_file_filter};
+use op_selector::{email_gen, excel_gen, test_run};
+
+const DEFAULT_INSTRUCTION_FILE: &str = "validation_test_instructions.toml";
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Show help if no args.
@@ -51,15 +57,42 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // Parse groups: Vec<(label, Vec<test_id>)>
-    if !args.groups.is_empty() || args.priority.as_ref().map_or(false, |p| !p.is_empty()) {
-        group_tests_id(args)?;
-        return Ok(());
+    let mut label_groups = Vec::new();
+    if !args.groups.is_empty() {
+        for raw in &args.groups {
+            let mut parts = raw.splitn(2, ':');
+            let label = parts.next().unwrap().to_string();
+            let ids = parts
+                .next()
+                .unwrap_or("")
+                .split(',')
+                .filter(|s| !s.is_empty())
+                .map(String::from)
+                .collect();
+            label_groups.push((label, ids));
+        }
+    } else if let Some(prio) = &args.priority {
+        label_groups.push((prio.clone(), Vec::new()));
     }
 
-    if args.priority.as_ref().map_or(false, |p| !p.is_empty()) {
-        group_tests_priority(args)?;
-        return Ok(());
+    // Apply filter
+    let mut grouped_tests = Vec::new();
+    for (label, ids) in &label_groups {
+        let filtered = test_file_filter(&args.input, ids, &args.priority)?;
+        grouped_tests.push((label.clone(), filtered));
     }
+
+    // Export a grouped TOML summary
+    export_grouped_toml(&grouped_tests, DEFAULT_INSTRUCTION_FILE)?;
+    prepend_hash_to_toml(DEFAULT_INSTRUCTION_FILE)?;
+    sanity_check_toml(DEFAULT_INSTRUCTION_FILE)?;
+
+    // CSV → Excel pipeline
+    sanity_check_python_scripts()?;
+    sanity_dependencies()?;
+    let csv_path = export_grouped_csv(DEFAULT_INSTRUCTION_FILE, &args.output)?;
+    let xlsx_path = convert_csv_to_excel(&csv_path)?;
+    format_excel_sheet(&xlsx_path)?;
 
     Ok(())
 }
