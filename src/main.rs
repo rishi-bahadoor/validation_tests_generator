@@ -59,5 +59,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         group_tests_priority(args)?;
         return Ok(());
     }
+
+    println!("\nError: Invalid Input");
     Ok(())
 }
