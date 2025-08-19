@@ -1,3 +1,4 @@
+use indicatif::{HumanDuration, ProgressBar, ProgressStyle};
 use std::error::Error;
 use std::io::{self, Write};
 use std::thread::sleep;
@@ -31,12 +32,19 @@ pub fn get_key_entry_y() -> Result<u32, Box<dyn Error>> {
 }
 
 pub fn wait_s(seconds: u32) {
-    let timer_1 = seconds;
-    println!("Timer: {} seconds", timer_1);
-    for n in 0..(timer_1 + 1) {
-        sleep(Duration::from_millis(1000));
-        print!("\r{:3} ", timer_1 - n); // Use padding for consistent width
-        io::stdout().flush().unwrap(); // Ensure output is shown immediately
+    let pb = ProgressBar::new(seconds as u64)
+        .with_style(
+            ProgressStyle::with_template(
+                "{msg:>12.yellow} {bar:40.cyan/blue} {pos:>7}/{len:7}",
+            )
+            .unwrap(),
+        )
+        .with_message("Waiting...");
+    for s in 0..seconds {
+        sleep(Duration::from_secs(1));
+        pb.inc(1);
+        pb.set_message(HumanDuration(Duration::from_secs(s as u64)).to_string());
     }
-    println!(); // Move to a new line after the loop finishes
+    pb.finish_with_message("Done");
 }
+
