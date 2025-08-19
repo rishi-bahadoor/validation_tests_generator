@@ -16,7 +16,7 @@ mod test_file_ops;
 
 use crate::args::Args;
 use crate::misc::press_enter;
-use op_selector::{email_gen, excel_gen, group_tests_id, group_tests_priority, test_run};
+use crate::op_selector::{email_gen, excel_gen, group_tests_id, group_tests_priority, test_run};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Show help if no args.
