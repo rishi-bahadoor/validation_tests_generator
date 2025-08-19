@@ -12,6 +12,7 @@ use crate::test_file_ops::{export_grouped_toml, test_file_filter};
 
 const DEFAULT_EXCEL_FILE: &str = "validation_test_report.xlsx";
 const DEFAULT_INSTRUCTION_FILE: &str = "validation_test_instructions.toml";
+const DEFAULT_CSV_FILE: &str = "validation_test_report.csv";
 
 pub fn email_gen(sender_email: &String, recipient_email: &String) -> Result<(), Box<dyn Error>> {
     sanity_check_python_scripts()?;
@@ -23,14 +24,27 @@ pub fn email_gen(sender_email: &String, recipient_email: &String) -> Result<(), 
     Ok(())
 }
 
-pub fn test_run(test_ids: &Vec<String>) -> Result<(), Box<dyn Error>> {
-    sanity_check_toml(DEFAULT_INSTRUCTION_FILE)?;
+pub fn test_run(
+    test_ids: &Vec<String>,
+    input_instruction_file: &Option<String>,
+    is_file_custom: bool,
+) -> Result<(), Box<dyn Error>> {
+    // Extract &str from Option<String>
+    let file_path: &str = input_instruction_file
+        .as_deref()
+        .unwrap_or(DEFAULT_INSTRUCTION_FILE);
+
+    if !is_file_custom {
+        sanity_check_toml(file_path)?; // Now passes &str
+    }
+
     for test_id in test_ids {
         println!("======================================================================");
-        if let Err(e) = ar_process_test_item(DEFAULT_INSTRUCTION_FILE, test_id) {
+        if let Err(e) = ar_process_test_item(file_path, test_id) {
             eprintln!("Error processing test '{}': {}", test_id, e);
         }
     }
+
     press_enter();
     Ok(())
 }
@@ -49,7 +63,6 @@ pub fn group_tests_id(
     groups: &Vec<String>,
     priority: &Option<String>,
     input: &String,
-    output: &String,
 ) -> Result<(), Box<dyn Error>> {
     // Parse groups: Vec<(label, Vec<test_id>)>
     let mut label_groups = Vec::new();
@@ -84,18 +97,14 @@ pub fn group_tests_id(
     // CSV → Excel pipeline
     sanity_check_python_scripts()?;
     sanity_dependencies()?;
-    let csv_path = export_grouped_csv(DEFAULT_INSTRUCTION_FILE, output.as_str())?;
+    let csv_path = export_grouped_csv(DEFAULT_INSTRUCTION_FILE, DEFAULT_CSV_FILE)?;
     let xlsx_path = convert_csv_to_excel(&csv_path)?;
     format_excel_sheet(&xlsx_path)?;
 
     Ok(())
 }
 
-pub fn group_tests_priority(
-    priority: &String,
-    input: &String,
-    output: &String,
-) -> Result<(), Box<dyn Error>> {
+pub fn group_tests_priority(priority: &String, input: &String) -> Result<(), Box<dyn Error>> {
     let mut label_groups = Vec::new();
 
     // Create Option<String> from &String
@@ -124,7 +133,7 @@ pub fn group_tests_priority(
     // CSV → Excel pipeline
     sanity_check_python_scripts()?;
     sanity_dependencies()?;
-    let csv_path = export_grouped_csv(DEFAULT_INSTRUCTION_FILE, output.as_str())?;
+    let csv_path = export_grouped_csv(DEFAULT_INSTRUCTION_FILE, DEFAULT_CSV_FILE)?;
     let xlsx_path = convert_csv_to_excel(&csv_path)?;
     format_excel_sheet(&xlsx_path)?;
 

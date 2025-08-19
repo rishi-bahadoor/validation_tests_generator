@@ -25,30 +25,28 @@ pub enum Command {
     Test {
         #[arg(value_name = "TEST_ID")]
         test_ids: Vec<String>,
+        #[arg(short = 'i', long = "input-instruction-file")]
+        input_instruction_file: Option<String>,
     },
     /// Generate Excel report from grouped CSV
     Excel {
-        #[arg(short, long, default_value = DEFAULT_CSV_FILE)]
+        #[arg(short = 'o', long = "output-excel-file", default_value = DEFAULT_CSV_FILE)]
         output: String,
     },
     /// Group tests by label and IDs
     IdGroups {
-        #[arg(short, long = "group", value_name = "LABEL:IDS", num_args = 1..)]
+        #[arg(short = 'g', long = "group", value_name = "LABEL:IDS", num_args = 1..)]
         groups: Vec<String>,
-        #[arg(short, long)]
+        #[arg(short = 'p', long = "priority")]
         priority: Option<String>,
-        #[arg(short, long, default_value = DEFAULT_BASE_TOML)]
+        #[arg(short = 'i', long = "input-instruction-file", default_value = DEFAULT_BASE_TOML)]
         input: String,
-        #[arg(short, long, default_value = DEFAULT_CSV_FILE)]
-        output: String,
     },
     /// Group tests by priority only
     Priority {
-        #[arg(short, long)]
+        #[arg(short = 'p', long = "priority")]
         priority: String,
-        #[arg(short, long, default_value = DEFAULT_BASE_TOML)]
+        #[arg(short = 'i', long = "input-instruction-file", default_value = DEFAULT_BASE_TOML)]
         input: String,
-        #[arg(short, long, default_value = DEFAULT_CSV_FILE)]
-        output: String,
     },
 }
