@@ -557,10 +557,10 @@ test_group = "4:FW_LOADING"
 test_priority = "LOW"
 test_description = "Validate firmware rescue mode via CCC App"
 pass_condition = "Firmware updates successfully and the FW version change is observed when checked"
-instructions = [  
+instructions = [
   "## FULL_AUTO ##",
   "## Run the rescue mode command on the sensor ##",
-  "ccc update-firmware --rescue-mode",
+  "ccc update-firmware --rescue-mode ultra.cepbin",
   "## Check that the FW version has been updated ##",
   "ccc list-sensors",
 ]
