@@ -1,4 +1,4 @@
-use clap::Parser;
+use clap::{CommandFactory, Parser};
 
 mod ar_auto_commands;
 mod ar_ccc_commands;
@@ -17,9 +17,20 @@ mod test_file_ops;
 use crate::interface::Cli;
 
 use crate::interface::Command;
+use crate::misc::press_enter;
 use crate::op_selector::{email_gen, excel_gen, group_tests_id, group_tests_priority, test_run};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Show help if no arguments are passed
+    if std::env::args().len() == 1 {
+        let mut cmd = Cli::command();
+        println!("\nvtg version: {}", cmd.get_version().unwrap_or("unknown"));
+        cmd.print_help()?;
+        println!();
+        press_enter();
+        return Ok(());
+    }
+
     let args = Cli::parse();
 
     match args.command {
