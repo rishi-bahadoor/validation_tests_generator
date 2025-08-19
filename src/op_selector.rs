@@ -45,23 +45,23 @@ pub fn excel_gen(args: Args) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-pub fn group_tests_groups(args: Args) -> Result<(), Box<dyn Error>> {
+pub fn group_tests_id(args: Args) -> Result<(), Box<dyn Error>> {
+    // Parse groups: Vec<(label, Vec<test_id>)>
     let mut label_groups = Vec::new();
-    if !args.groups.is_empty() {
-        for raw in &args.groups {
-            let mut parts = raw.splitn(2, ':');
-            let label = parts.next().unwrap().to_string();
-            let ids = parts
-                .next()
-                .unwrap_or("")
-                .split(',')
-                .filter(|s| !s.is_empty())
-                .map(String::from)
-                .collect();
-            label_groups.push((label, ids));
-        }
-    } else if let Some(prio) = &args.priority {
-        label_groups.push((prio.clone(), Vec::new()));
+    let mut label: String;
+    let mut ids: Vec<String>;
+
+    for raw in &args.groups {
+        let mut parts = raw.splitn(2, ':');
+        label = parts.next().unwrap().to_string();
+        ids = parts
+            .next()
+            .unwrap_or("")
+            .split(',')
+            .filter(|s| !s.is_empty())
+            .map(String::from)
+            .collect();
+        label_groups.push((label, ids));
     }
 
     // Apply filter
