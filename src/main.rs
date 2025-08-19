@@ -50,8 +50,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             test_run(&test_ids, &input_instruction_file, is_file_custom)?;
         }
-        Command::Excel { output } => {
-            excel_gen(&output)?;
+        Command::Excel {} => {
+            excel_gen()?;
         }
         Command::IdGroups {
             groups,

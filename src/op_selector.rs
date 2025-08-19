@@ -49,11 +49,11 @@ pub fn test_run(
     Ok(())
 }
 
-pub fn excel_gen(output: &String) -> Result<(), Box<dyn Error>> {
+pub fn excel_gen() -> Result<(), Box<dyn Error>> {
     sanity_check_python_scripts()?;
     sanity_dependencies()?;
     sanity_check_toml(DEFAULT_INSTRUCTION_FILE)?;
-    let csv_path = export_grouped_csv(DEFAULT_INSTRUCTION_FILE, output)?;
+    let csv_path = export_grouped_csv(DEFAULT_INSTRUCTION_FILE, DEFAULT_CSV_FILE)?;
     let xlsx_path = convert_csv_to_excel(&csv_path)?;
     format_excel_sheet(&xlsx_path)?;
     Ok(())
