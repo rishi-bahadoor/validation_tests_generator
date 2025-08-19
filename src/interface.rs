@@ -17,7 +17,7 @@ pub struct Cli {
 #[derive(Subcommand, Debug)]
 pub enum Command {
     /// Generate email report
-    Email {
+    EmailGen {
         sender_email: String,
         recipient_email: String,
     },
@@ -32,7 +32,7 @@ pub enum Command {
         output: String,
     },
     /// Group tests by label and IDs
-    Group {
+    IdGroups {
         #[arg(short, long = "group", value_name = "LABEL:IDS", num_args = 1..)]
         groups: Vec<String>,
         #[arg(short, long)]

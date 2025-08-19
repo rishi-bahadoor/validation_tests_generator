@@ -23,7 +23,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Cli::parse();
 
     match args.command {
-        Command::Email {
+        Command::EmailGen {
             sender_email,
             recipient_email,
         } => {
@@ -35,7 +35,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Command::Excel { output } => {
             excel_gen(&output)?;
         }
-        Command::Group {
+        Command::IdGroups {
             groups,
             priority,
             input,
