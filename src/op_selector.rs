@@ -26,6 +26,7 @@ pub fn email_gen(sender_email: &String, recipient_email: &String) -> Result<(), 
 pub fn test_run(test_ids: &Vec<String>) -> Result<(), Box<dyn Error>> {
     sanity_check_toml(DEFAULT_INSTRUCTION_FILE)?;
     for test_id in test_ids {
+        println!("======================================================================");
         if let Err(e) = ar_process_test_item(DEFAULT_INSTRUCTION_FILE, test_id) {
             eprintln!("Error processing test '{}': {}", test_id, e);
         }

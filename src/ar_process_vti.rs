@@ -29,7 +29,7 @@ pub fn ar_process_test_item(file: &str, user_input_test_id: &str) -> Result<(), 
             for test in tests {
                 let test_id = test.get("test_id").and_then(|v| v.as_str()).unwrap_or("");
                 if test_id == user_input_test_id {
-                    println!("\nTest Group: {}", group_name);
+                    println!("Test Group: {}", group_name);
                     println!("Test ID: {}", test_id);
                     println!("Instructions:");
                     if let Some(instructions) = test.get("instructions").and_then(|v| v.as_array())
