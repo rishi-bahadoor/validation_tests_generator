@@ -4,9 +4,9 @@ mod ar_auto_commands;
 mod ar_ccc_commands;
 mod ar_generic_commands;
 mod ar_process_vti;
-mod args;
 mod email_ops;
 mod excel_ops;
+mod interface;
 mod misc;
 mod op_selector;
 mod python_env;
@@ -14,13 +14,13 @@ mod sanity;
 mod scripts_find;
 mod test_file_ops;
 
-use crate::args::Args;
+use crate::interface::Cli;
 
-use crate::args::Command;
+use crate::interface::Command;
 use crate::op_selector::{email_gen, excel_gen, group_tests_id, group_tests_priority, test_run};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let args = Args::parse();
+    let args = Cli::parse();
 
     match args.command {
         Command::Email {

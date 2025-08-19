@@ -9,7 +9,7 @@ const DEFAULT_BASE_TOML: &str = "base_tests_list.toml";
     version = "2.1",
     about = "Generates filtered validation test reports"
 )]
-pub struct Args {
+pub struct Cli {
     #[command(subcommand)]
     pub command: Command,
 }
