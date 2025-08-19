@@ -4,9 +4,9 @@ mod ar_auto_commands;
 mod ar_ccc_commands;
 mod ar_generic_commands;
 mod ar_process_vti;
-mod args;
 mod email_ops;
 mod excel_ops;
+mod interface;
 mod misc;
 mod op_selector;
 mod python_env;
@@ -14,52 +14,54 @@ mod sanity;
 mod scripts_find;
 mod test_file_ops;
 
-use crate::args::Args;
+use crate::interface::Cli;
+
+use crate::interface::Command;
 use crate::misc::press_enter;
 use crate::op_selector::{email_gen, excel_gen, group_tests_id, group_tests_priority, test_run};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Show help if no args.
+    // Show help if no arguments are passed
     if std::env::args().len() == 1 {
-        let mut cmd = Args::command();
-        let version = cmd.get_version().unwrap_or("unknown");
-        println!("\nvtg version: {}", version);
+        let mut cmd = Cli::command();
+        println!("\nvtg version: {}", cmd.get_version().unwrap_or("unknown"));
         cmd.print_help()?;
         println!();
         press_enter();
         return Ok(());
     }
 
-    let args = Args::parse();
+    let args = Cli::parse();
 
-    // Email‐only mode
-    if args.email_gen {
-        email_gen(args)?;
-        return Ok(());
+    match args.command {
+        Command::EmailGen {
+            sender_email,
+            recipient_email,
+        } => {
+            email_gen(&sender_email, &recipient_email)?;
+        }
+        Command::Test { test_ids } => {
+            test_run(&test_ids)?;
+        }
+        Command::Excel { output } => {
+            excel_gen(&output)?;
+        }
+        Command::IdGroups {
+            groups,
+            priority,
+            input,
+            output,
+        } => {
+            group_tests_id(&groups, &priority, &input, &output)?;
+        }
+        Command::Priority {
+            priority,
+            input,
+            output,
+        } => {
+            group_tests_priority(&priority, &input, &output)?;
+        }
     }
 
-    // Test-only mode
-    if !args.test.is_empty() {
-        test_run(args)?;
-        return Ok(());
-    }
-
-    // Excel generation mode only
-    if args.excel {
-        excel_gen(args)?;
-        return Ok(());
-    }
-
-    if !args.groups.is_empty() {
-        group_tests_id(args)?;
-        return Ok(());
-    }
-
-    if args.priority.as_ref().map_or(false, |p| !p.is_empty()) {
-        group_tests_priority(args)?;
-        return Ok(());
-    }
-
-    println!("\nError: Invalid Input");
     Ok(())
 }

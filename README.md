@@ -12,27 +12,12 @@ You can run the tool directly using .\vtg.exe.
 ### Generate report template by test ID groups
 
 example:
-- .\vtg.exe --group GROUP_ONE:1.1,1.2 --group GROUP_TWO:1.3,1.4
-
-or
-
-- .\vtg.exe -g GROUP_ONE:1.1,1.2 -g GROUP_TWO:1.3,1.4
+- .\vtg.exe id-groups --group 1_POINT_CLOUD:1.1,1.2 --group GROUP_TWO:1.3,1.4
 
 ###  Generate report template by priority
 
 example:
 - .\vtg.exe --priority MEDIUM
-
-### Specify the test list
-
-example:
-- .\vtg.exe --input C:\Users\name\Downloads\validation_gen\validation_tests_generator\base_tests_list.toml
-
-### Specify the output file name
-
-example:
-- .\vtg.exe --output test.csv
-
 
 ### Updating the test_list.toml
 The test list is done using a toml file type.
@@ -144,7 +129,7 @@ To generate the email template, ensure that a report named `validation_test_repo
 The email includes:
 - Metadata rows (e.g., technician name, firmware version)
 - A formatted test result table with conditional coloring
-- Additional sheets like `Technician_Issues` or `Github_Issues` rendered as simple tables
+- Additional sheets like `Technician_Issues` are rendered as simple tables
 
 Once ready, run:
 
