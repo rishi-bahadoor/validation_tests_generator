@@ -13,11 +13,14 @@ use crate::test_file_ops::{export_grouped_toml, test_file_filter};
 const DEFAULT_EXCEL_FILE: &str = "validation_test_report.xlsx";
 const DEFAULT_INSTRUCTION_FILE: &str = "validation_test_instructions.toml";
 const DEFAULT_CSV_FILE: &str = "validation_test_report.csv";
+const DEFAULT_BASE_TOML: &str = "base_tests_list.toml";
 
 pub fn email_gen(sender_email: &String, recipient_email: &String) -> Result<(), Box<dyn Error>> {
+    // Sanity check the python scripts used for excel sheet operations.
     sanity_check_python_scripts()?;
     sanity_dependencies()?;
 
+    // Generate the email template.
     let sender = sender_email.as_str();
     let recipient = recipient_email.as_str();
     let _ = generate_email_using_python(sender, recipient, DEFAULT_EXCEL_FILE)?;
@@ -27,17 +30,25 @@ pub fn email_gen(sender_email: &String, recipient_email: &String) -> Result<(), 
 pub fn test_run(
     test_ids: &Vec<String>,
     input_instruction_file: &Option<String>,
-    is_file_custom: bool,
 ) -> Result<(), Box<dyn Error>> {
+    // Set flag to skip sanity check if input is a custom file.
+    let is_file_custom = match input_instruction_file {
+        Some(_) => true,
+        None => false,
+    };
     // Extract &str from Option<String>
     let file_path: &str = input_instruction_file
         .as_deref()
         .unwrap_or(DEFAULT_INSTRUCTION_FILE);
 
+    // Skip this sanity check if the input is a custom file.
+    // We can remove the skip and check all if all scripts are intended to be
+    // non tampering.
     if !is_file_custom {
         sanity_check_toml(file_path)?; // Now passes &str
     }
 
+    // process the test.
     for test_id in test_ids {
         println!("======================================================================");
         if let Err(e) = ar_process_test_item(file_path, test_id) {
@@ -49,11 +60,28 @@ pub fn test_run(
     Ok(())
 }
 
-pub fn excel_gen() -> Result<(), Box<dyn Error>> {
+pub fn excel_gen(input: &Option<String>) -> Result<(), Box<dyn Error>> {
+    // Set flag to skip sanity check if input is a custom file.
+    let is_file_custom = match input {
+        Some(_) => true,
+        None => false,
+    };
+    // Extract &str from Option<String>
+    let file_path: &str = input.as_deref().unwrap_or(DEFAULT_INSTRUCTION_FILE);
+
+    // Skip this sanity check if the input is a custom file.
+    // We can remove the skip and check all if all scripts are intended to be
+    // non tampering.
+    if !is_file_custom {
+        sanity_check_toml(file_path)?; // Now passes &str
+    }
+
+    // Sanity check the python scripts used for excel sheet operations.
     sanity_check_python_scripts()?;
     sanity_dependencies()?;
-    sanity_check_toml(DEFAULT_INSTRUCTION_FILE)?;
-    let csv_path = export_grouped_csv(DEFAULT_INSTRUCTION_FILE, DEFAULT_CSV_FILE)?;
+
+    // Perform the excel generation.
+    let csv_path = export_grouped_csv(file_path, DEFAULT_CSV_FILE)?;
     let xlsx_path = convert_csv_to_excel(&csv_path)?;
     format_excel_sheet(&xlsx_path)?;
     Ok(())
@@ -62,8 +90,11 @@ pub fn excel_gen() -> Result<(), Box<dyn Error>> {
 pub fn group_tests_id(
     groups: &Vec<String>,
     priority: &Option<String>,
-    input: &String,
+    input: &Option<String>,
 ) -> Result<(), Box<dyn Error>> {
+    // Extract &str from Option<String>
+    let file_path: &str = input.as_deref().unwrap_or(DEFAULT_BASE_TOML);
+
     // Parse groups: Vec<(label, Vec<test_id>)>
     let mut label_groups = Vec::new();
     let mut label: String;
@@ -85,7 +116,7 @@ pub fn group_tests_id(
     // Apply filter
     let mut grouped_tests = Vec::new();
     for (label, ids) in &label_groups {
-        let filtered = test_file_filter(input.as_str(), ids, priority)?;
+        let filtered = test_file_filter(file_path, ids, priority)?;
         grouped_tests.push((label.clone(), filtered));
     }
 
@@ -104,7 +135,13 @@ pub fn group_tests_id(
     Ok(())
 }
 
-pub fn group_tests_priority(priority: &String, input: &String) -> Result<(), Box<dyn Error>> {
+pub fn group_tests_priority(
+    priority: &String,
+    input: &Option<String>,
+) -> Result<(), Box<dyn Error>> {
+    // Extract &str from Option<String>
+    let file_path: &str = input.as_deref().unwrap_or(DEFAULT_BASE_TOML);
+
     let mut label_groups = Vec::new();
 
     // Create Option<String> from &String
@@ -121,7 +158,7 @@ pub fn group_tests_priority(priority: &String, input: &String) -> Result<(), Box
     // Apply filter
     let mut grouped_tests = Vec::new();
     for (label, ids) in &label_groups {
-        let filtered = test_file_filter(input.as_str(), ids, &priority_opt)?;
+        let filtered = test_file_filter(file_path, ids, &priority_opt)?;
         grouped_tests.push((label.clone(), filtered));
     }
 

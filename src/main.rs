@@ -43,25 +43,25 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             test_ids,
             input_instruction_file,
         } => {
-            let is_file_custom = match input_instruction_file {
-                Some(_) => true,
-                None => false,
-            };
-
-            test_run(&test_ids, &input_instruction_file, is_file_custom)?;
+            test_run(&test_ids, &input_instruction_file)?;
         }
-        Command::Excel {} => {
-            excel_gen()?;
+        Command::Excel {
+            input_instruction_file,
+        } => {            
+            excel_gen(&input_instruction_file)?;
         }
         Command::IdGroups {
             groups,
             priority,
-            input,
+            input_instruction_file,
         } => {
-            group_tests_id(&groups, &priority, &input)?;
+            group_tests_id(&groups, &priority, &input_instruction_file)?;
         }
-        Command::Priority { priority, input } => {
-            group_tests_priority(&priority, &input)?;
+        Command::Priority {
+            priority,
+            input_instruction_file,
+        } => {
+            group_tests_priority(&priority, &input_instruction_file)?;
         }
     }
 

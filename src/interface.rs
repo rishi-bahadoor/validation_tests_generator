@@ -1,7 +1,5 @@
 use clap::{Parser, Subcommand};
 
-const DEFAULT_BASE_TOML: &str = "base_tests_list.toml";
-
 #[derive(Parser, Debug)]
 #[command(
     name = "vtg",
@@ -17,7 +15,9 @@ pub struct Cli {
 pub enum Command {
     /// Generate email report
     EmailGen {
+        #[arg(short = 's', long = "sender_email")]
         sender_email: String,
+        #[arg(short = 'r', long = "recipient_email")]
         recipient_email: String,
     },
     /// Run specific test instructions
@@ -28,21 +28,24 @@ pub enum Command {
         input_instruction_file: Option<String>,
     },
     /// Generate Excel report from grouped CSV
-    Excel {},
+    Excel {
+        #[arg(short = 'i', long = "input-instruction-file")]
+        input_instruction_file: Option<String>,
+    },
     /// Group tests by label and IDs
     IdGroups {
-        #[arg(short = 'g', long = "group", value_name = "LABEL:IDS", num_args = 1..)]
+        #[arg(value_name = "LABEL:IDS", num_args = 1..)]
         groups: Vec<String>,
         #[arg(short = 'p', long = "priority")]
         priority: Option<String>,
-        #[arg(short = 'i', long = "input-instruction-file", default_value = DEFAULT_BASE_TOML)]
-        input: String,
+        #[arg(short = 'i', long = "input-instruction-file")]
+        input_instruction_file: Option<String>,
     },
     /// Group tests by priority only
     Priority {
-        #[arg(short = 'p', long = "priority")]
+        #[arg(value_name = "PRIORITY")]
         priority: String,
-        #[arg(short = 'i', long = "input-instruction-file", default_value = DEFAULT_BASE_TOML)]
-        input: String,
+        #[arg(short = 'i', long = "input-instruction-file")]
+        input_instruction_file: Option<String>,
     },
 }
