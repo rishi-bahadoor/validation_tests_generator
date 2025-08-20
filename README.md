@@ -12,12 +12,21 @@ You can run the tool directly using .\vtg.exe.
 ### Generate report template by test ID groups
 
 example:
-- .\vtg.exe id-groups --group 1_POINT_CLOUD:1.1,1.2 --group GROUP_TWO:1.3,1.4
+- .\vtg.exe id-groups 1_POINT_CLOUD:1.1,1.2 GROUP_TWO:1.3,1.4
+
+Filter a certain [PRIORITY] from the entered IDs.
+- .\vtg.exe id-groups 1_POINT_CLOUD:1.1,1.2 GROUP_TWO:1.3,1.4 -p HIGH
+
+Specify the output files name
+- .\vtg.exe id-groups 1_POINT_CLOUD:1.1,1.2 GROUP_TWO:1.3,1.4 -o my_report_example
 
 ###  Generate report template by priority
 
 example:
 - .\vtg.exe --priority MEDIUM
+
+Specify the output files name
+- .\vtg.exe --priority MEDIUM -o my_report_example
 
 ### Updating the test_list.toml
 The test list is done using a toml file type.
@@ -53,10 +62,10 @@ There are some key-words that can be used in test instructions.
 the next instruction.
 - wait_e : waits until the user presses the 'Enter Key' to move on to the next
 instruction.
+- ccc [ARGS...] : runs a ccc command.
 - event_timed [UINT_32_TIMEOUT] [UINT_32_PERIOD] [COMMAND_STRING_SPLITS] :
 starts an event loop for a total of UINT_32_TIMEOUT seconds to run
 COMMAND_STRING_SPLITS every UINT_32_PERIOD seconds.
-- ccc [ARGS...] : runs a ccc command.
 
 examples:
 
@@ -68,6 +77,7 @@ instructions = [
   "wait_e",
   "## Do something ##",
   "ccc get-all",
+  "## Do an event every 10s for 60s total ##",
   "event_timed 60 10 ccc list-sensors",
 ]
 ```
@@ -77,12 +87,11 @@ instructions = [
 This functionality generates an excel report template using the filtered
 validation_test_instructions.toml.
 
-To generate the sheet, use the command: --excel or -x
+To generate the sheet, use the command: --excel
 
 example:
 
 - .\vtg.exe --excel
-- .\vtg.exe -x
 
 ### Instruction types and using the validation test instructions toml
 
@@ -116,11 +125,21 @@ instructions = [
 If a test as no level of automation, the instruction will simply just be printed
 on the terminal.
 
-To run a test from the list of tests generated, use the command: --test or -t
+To run a test from the list of tests generated, use the command: --test
 
 example:
 
+Single run-
 - .\vtg.exe --test 1.1
+
+Multi run-
+- .\vtg.exe --test 1.1 1.2 1.3
+
+Run all in instruction file
+- .\vtg.exe --test
+
+Specify an instruction toml file
+- .\vtg.exe --test -i Path/To/Instruction.toml
 
 ### Generating the email template
 
@@ -130,6 +149,7 @@ The email includes:
 - Metadata rows (e.g., technician name, firmware version)
 - A formatted test result table with conditional coloring
 - Additional sheets like `Technician_Issues` are rendered as simple tables
+- Automatically attached images if the correct folder path exist
 
 Once ready, run:
 

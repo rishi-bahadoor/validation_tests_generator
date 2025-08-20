@@ -182,3 +182,35 @@ pub fn export_grouped_csv<P: AsRef<Path>>(
     );
     Ok(output_path.as_ref().to_path_buf())
 }
+
+pub fn extract_test_ids<P: AsRef<Path>>(path: P) -> Result<Vec<String>, Box<dyn Error>> {
+    // Read the TOML file into a string
+    let toml_str = fs::read_to_string(path)?;
+
+    // Parse the string into a toml::Value
+    let root = toml_str.parse::<Value>()?;
+
+    let mut ids = Vec::new();
+
+    // Ensure the top-level is a table
+    if let Value::Table(tables) = root {
+        // Iterate over each top-level table (e.g. "1_POINT_CLOUD")
+        for (_, group_val) in tables {
+            if let Value::Table(group) = group_val {
+                // Look for an array-of-tables named "test"
+                if let Some(Value::Array(tests)) = group.get("test") {
+                    for test_val in tests {
+                        if let Value::Table(test_tbl) = test_val {
+                            // Extract the "test_id" field if it exists
+                            if let Some(Value::String(id)) = test_tbl.get("test_id") {
+                                ids.push(id.clone());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Ok(ids)
+}

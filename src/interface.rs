@@ -1,8 +1,5 @@
 use clap::{Parser, Subcommand};
 
-const DEFAULT_CSV_FILE: &str = "validation_test_report.csv";
-const DEFAULT_BASE_TOML: &str = "base_tests_list.toml";
-
 #[derive(Parser, Debug)]
 #[command(
     name = "vtg",
@@ -18,37 +15,41 @@ pub struct Cli {
 pub enum Command {
     /// Generate email report
     EmailGen {
+        #[arg(value_name = "SENDER_EMAIL")]
         sender_email: String,
+        #[arg(value_name = "RECIPIENT_EMAIL")]
         recipient_email: String,
     },
     /// Run specific test instructions
     Test {
         #[arg(value_name = "TEST_ID")]
-        test_ids: Vec<String>,
+        test_ids: Option<Vec<String>>,
+        #[arg(short = 'i', long = "input-instruction-file")]
+        input_instruction_file: Option<String>,
     },
     /// Generate Excel report from grouped CSV
     Excel {
-        #[arg(short, long, default_value = DEFAULT_CSV_FILE)]
-        output: String,
+        #[arg(short = 'i', long = "input-instruction-file")]
+        input_instruction_file: Option<String>,
     },
     /// Group tests by label and IDs
     IdGroups {
-        #[arg(short, long = "group", value_name = "LABEL:IDS", num_args = 1..)]
+        #[arg(value_name = "LABEL:IDS", num_args = 1..)]
         groups: Vec<String>,
-        #[arg(short, long)]
+        #[arg(short = 'p', long = "priority")]
         priority: Option<String>,
-        #[arg(short, long, default_value = DEFAULT_BASE_TOML)]
-        input: String,
-        #[arg(short, long, default_value = DEFAULT_CSV_FILE)]
-        output: String,
+        #[arg(short = 'i', long = "input-instruction-file")]
+        input_instruction_file: Option<String>,
+        #[arg(short = 'o', long = "output-name")]
+        output_name: Option<String>,
     },
     /// Group tests by priority only
     Priority {
-        #[arg(short, long)]
+        #[arg(value_name = "PRIORITY")]
         priority: String,
-        #[arg(short, long, default_value = DEFAULT_BASE_TOML)]
-        input: String,
-        #[arg(short, long, default_value = DEFAULT_CSV_FILE)]
-        output: String,
+        #[arg(short = 'i', long = "input-instruction-file")]
+        input_instruction_file: Option<String>,
+        #[arg(short = 'o', long = "output-name")]
+        output_name: Option<String>,
     },
 }
