@@ -43,11 +43,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             test_ids,
             input_instruction_file,
         } => {
-            test_run(&test_ids, &input_instruction_file)?;
+            test_run(test_ids, &input_instruction_file)?;
         }
         Command::Excel {
             input_instruction_file,
-        } => {            
+        } => {
             excel_gen(&input_instruction_file)?;
         }
         Command::IdGroups {

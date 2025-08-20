@@ -23,7 +23,7 @@ pub enum Command {
     /// Run specific test instructions
     Test {
         #[arg(value_name = "TEST_ID")]
-        test_ids: Vec<String>,
+        test_ids: Option<Vec<String>>,
         #[arg(short = 'i', long = "input-instruction-file")]
         input_instruction_file: Option<String>,
     },

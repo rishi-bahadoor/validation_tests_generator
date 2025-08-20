@@ -182,3 +182,26 @@ pub fn export_grouped_csv<P: AsRef<Path>>(
     );
     Ok(output_path.as_ref().to_path_buf())
 }
+
+pub fn extract_test_ids<P: AsRef<Path>>(
+    path: P,
+) -> Result<Vec<String>, Box<dyn std::error::Error>> {
+    let content = fs::read_to_string(path)?;
+    let parsed: Value = content.parse::<Value>()?;
+
+    let mut test_ids = Vec::new();
+
+    if let Some(high_section) = parsed.get("HIGH") {
+        if let Some(tests) = high_section.get("test") {
+            if let Some(array) = tests.as_array() {
+                for test in array {
+                    if let Some(test_id) = test.get("test_id").and_then(|v| v.as_str()) {
+                        test_ids.push(test_id.to_string());
+                    }
+                }
+            }
+        }
+    }
+
+    Ok(test_ids)
+}

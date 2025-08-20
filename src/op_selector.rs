@@ -7,8 +7,9 @@ use crate::misc::press_enter;
 use crate::python_env::sanity_dependencies;
 use crate::sanity::prepend_hash_to_toml;
 use crate::sanity::{sanity_check_python_scripts, sanity_check_toml};
-use crate::test_file_ops::export_grouped_csv;
-use crate::test_file_ops::{export_grouped_toml, test_file_filter};
+use crate::test_file_ops::{
+    export_grouped_csv, export_grouped_toml, extract_test_ids, test_file_filter,
+};
 
 const DEFAULT_EXCEL_FILE: &str = "validation_test_report.xlsx";
 const DEFAULT_INSTRUCTION_FILE: &str = "validation_test_instructions.toml";
@@ -28,15 +29,13 @@ pub fn email_gen(sender_email: &String, recipient_email: &String) -> Result<(), 
 }
 
 pub fn test_run(
-    test_ids: &Vec<String>,
+    test_ids: Option<Vec<String>>,
     input_instruction_file: &Option<String>,
 ) -> Result<(), Box<dyn Error>> {
-    // Set flag to skip sanity check if input is a custom file.
-    let is_file_custom = match input_instruction_file {
-        Some(_) => true,
-        None => false,
-    };
-    // Extract &str from Option<String>
+    // Determine if the file is custom
+    let is_file_custom = input_instruction_file.is_some();
+
+    // Resolve file path
     let file_path: &str = input_instruction_file
         .as_deref()
         .unwrap_or(DEFAULT_INSTRUCTION_FILE);
@@ -45,13 +44,19 @@ pub fn test_run(
     // We can remove the skip and check all if all scripts are intended to be
     // non tampering.
     if !is_file_custom {
-        sanity_check_toml(file_path)?; // Now passes &str
+        sanity_check_toml(file_path)?;
     }
 
-    // process the test.
-    for test_id in test_ids {
+    // Extract test IDs if none were provided
+    let ids_to_run = match test_ids {
+        Some(ids) => ids,
+        None => extract_test_ids(file_path)?,
+    };
+
+    // Process each test ID
+    for test_id in ids_to_run {
         println!("======================================================================");
-        if let Err(e) = ar_process_test_item(file_path, test_id) {
+        if let Err(e) = ar_process_test_item(file_path, &test_id) {
             eprintln!("Error processing test '{}': {}", test_id, e);
         }
     }
@@ -60,14 +65,14 @@ pub fn test_run(
     Ok(())
 }
 
-pub fn excel_gen(input: &Option<String>) -> Result<(), Box<dyn Error>> {
+pub fn excel_gen(input_instruction_file: &Option<String>) -> Result<(), Box<dyn Error>> {
     // Set flag to skip sanity check if input is a custom file.
-    let is_file_custom = match input {
-        Some(_) => true,
-        None => false,
-    };
+    let is_file_custom = input_instruction_file.is_some();
+
     // Extract &str from Option<String>
-    let file_path: &str = input.as_deref().unwrap_or(DEFAULT_INSTRUCTION_FILE);
+    let file_path: &str = input_instruction_file
+        .as_deref()
+        .unwrap_or(DEFAULT_INSTRUCTION_FILE);
 
     // Skip this sanity check if the input is a custom file.
     // We can remove the skip and check all if all scripts are intended to be
