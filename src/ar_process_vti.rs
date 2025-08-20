@@ -31,6 +31,11 @@ pub fn ar_process_test_item(file: &str, user_input_test_id: &str) -> Result<(), 
                 if test_id == user_input_test_id {
                     println!("Test Group: {}", group_name);
                     println!("Test ID: {}", test_id);
+                    let pass_condition = test
+                        .get("pass_condition")
+                        .and_then(|v| v.as_str())
+                        .unwrap_or("");
+                    println!("Pass Condition: {}", pass_condition);
                     println!("Instructions:");
                     if let Some(instructions) = test.get("instructions").and_then(|v| v.as_array())
                     {

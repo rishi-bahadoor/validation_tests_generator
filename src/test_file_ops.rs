@@ -81,11 +81,6 @@ pub fn export_grouped_toml<P: AsRef<Path>>(
             }
             toml_buf.push_str("]\n");
 
-            toml_buf.push_str(&format!(
-                "test_pass_condition = {:?}\n",
-                test.pass_condition
-            ));
-
             // Multi-line authors/contact array
             toml_buf.push_str("test_authors_and_contact_persons = [\n");
             for author in &test.test_authors_and_contact_persons {
