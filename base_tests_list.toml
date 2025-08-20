@@ -528,7 +528,7 @@ pass_condition = "Firmware updates successfully and the FW version change is obs
 instructions = [
   "## FULL_AUTO ##",
   "## Run the update firmware command on the sensor ##",
-  "ccc update-firmware ultra.cepbin",
+  "ccc update-firmware ultra.cepbin --force",
   "## Power cycle the sensor ##",
   "wait_e",
   "## Check that the FW version has been updated ##",
