@@ -4,18 +4,27 @@ use toml::Value;
 
 use crate::ar_auto_commands::{auto_command_selector, check_for_auto_commands};
 
-fn process_fetched_instructions(instructions: &Vec<Value>) -> Result<(), Box<dyn Error>> {
-    let mut auto_command = 0;
+pub fn process_fetched_instructions(instructions: &Vec<Value>) -> Result<(), Box<dyn Error>> {
+    let mut auto_command: Option<&'static str> = None;
+
     for instr in instructions {
         if let Some(line) = instr.as_str() {
             println!("  - {}", line);
-            if auto_command == 0 {
-                auto_command = check_for_auto_commands(line);
+
+            if auto_command.is_none() {
+                match check_for_auto_commands(line)? {
+                    Some(cmd) => auto_command = Some(cmd),
+                    None => {
+                        // No auto command found in this line; continue
+                    }
+                }
             }
         }
     }
 
-    auto_command_selector(auto_command, instructions)?;
+    if let Some(cmd) = auto_command {
+        auto_command_selector(cmd, instructions)?;
+    }
 
     Ok(())
 }

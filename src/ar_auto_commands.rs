@@ -83,55 +83,54 @@ fn instruction_handler(instructions: &Vec<Value>, auto: bool) -> Result<(), Box<
 }
 
 pub fn auto_command_selector(
-    command: u32,
+    command: &str,
     instructions: &Vec<Value>,
 ) -> Result<(), Box<dyn Error>> {
-    if command == 1 {
-        println!("\nSEMI_AUTO detected.");
-        if get_key_entry_y()? == 0 {
-            println!("Skipping automatic steps.");
-            return Ok(());
+    match command {
+        "SEMI_AUTO" => {
+            println!("\nSEMI_AUTO detected.");
+            if get_key_entry_y()? == 0 {
+                println!("Skipping automatic steps.");
+                return Ok(());
+            }
+            println!("--------------------------------------------------------------");
+            println!("Step by step semi automatic instruction runner");
+            if let Err(e) = instruction_handler(instructions, false) {
+                eprintln!("Error in semi-automatic command handler: {}", e);
+            }
         }
-        println!("--------------------------------------------------------------");
-        println!("Step by step semi automatic instruction runner");
-        if let Err(e) = instruction_handler(instructions, false) {
-            eprintln!("Error in semi-automatic command handler: {}", e);
+        "FULL_AUTO" => {
+            println!("\nFULL_AUTO detected.");
+            if get_key_entry_y()? == 0 {
+                println!("Skipping automatic steps.");
+                return Ok(());
+            }
+            println!("--------------------------------------------------------------");
+            println!("Automatic instruction runner");
+            if let Err(e) = instruction_handler(instructions, true) {
+                eprintln!("Error in full-automatic command handler: {}", e);
+            }
         }
-    } else if command == 2 {
-        println!("\nFULL_AUTO detected.");
-        if get_key_entry_y()? == 0 {
-            println!("Skipping automatic steps.");
-            return Ok(());
+        "FULL_AUTO_PANORAMA" => {
+            // TODO: add panorama handler.
+            println!("PANORAMA mode is in development.");
         }
-        println!("--------------------------------------------------------------");
-        println!("Automatic instruction runner");
-        if let Err(e) = instruction_handler(instructions, true) {
-            eprintln!("Error in full-automatic command handler: {}", e);
+        _ => {
+            println!("No auto commands found in instructions.");
         }
-    } else if command == 3 {
-        // TODO: add panorama handler.
-        println!("In development");
-    } else {
-        println!("No auto commands found in instructions.");
     }
 
     Ok(())
 }
 
-pub fn check_for_auto_commands(line: &str) -> u32 {
+pub fn check_for_auto_commands(line: &str) -> Result<Option<&'static str>, Box<dyn Error>> {
     let trimmed = line.trim();
 
     for &keyword in COMMAND_KEYWORDS {
         if trimmed.contains(keyword) {
-            if keyword == "SEMI_AUTO" {
-                return 1;
-            } else if keyword == "FULL_AUTO" {
-                return 2;
-            } else if keyword == "FULL_AUTO_PANORAMA" {
-                return 3;
-            }
+            return Ok(Some(keyword));
         }
     }
 
-    0
+    Ok(None)
 }
