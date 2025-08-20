@@ -15,7 +15,6 @@ mod scripts_find;
 mod test_file_ops;
 
 use crate::interface::Cli;
-
 use crate::interface::Command;
 use crate::misc::press_enter;
 use crate::op_selector::{email_gen, excel_gen, group_tests_id, group_tests_priority, test_run};
@@ -40,26 +39,31 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         } => {
             email_gen(&sender_email, &recipient_email)?;
         }
-        Command::Test { test_ids } => {
-            test_run(&test_ids)?;
+        Command::Test {
+            test_ids,
+            input_instruction_file,
+        } => {
+            test_run(test_ids, &input_instruction_file)?;
         }
-        Command::Excel { output } => {
-            excel_gen(&output)?;
+        Command::Excel {
+            input_instruction_file,
+        } => {
+            excel_gen(&input_instruction_file)?;
         }
         Command::IdGroups {
             groups,
             priority,
-            input,
-            output,
+            input_instruction_file,
+            output_name,
         } => {
-            group_tests_id(&groups, &priority, &input, &output)?;
+            group_tests_id(&groups, &priority, &input_instruction_file, &output_name)?;
         }
         Command::Priority {
             priority,
-            input,
-            output,
+            input_instruction_file,
+            output_name,
         } => {
-            group_tests_priority(&priority, &input, &output)?;
+            group_tests_priority(&priority, &input_instruction_file, &output_name)?;
         }
     }
 

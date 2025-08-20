@@ -7,39 +7,86 @@ use crate::misc::press_enter;
 use crate::python_env::sanity_dependencies;
 use crate::sanity::prepend_hash_to_toml;
 use crate::sanity::{sanity_check_python_scripts, sanity_check_toml};
-use crate::test_file_ops::export_grouped_csv;
-use crate::test_file_ops::{export_grouped_toml, test_file_filter};
+use crate::test_file_ops::{
+    export_grouped_csv, export_grouped_toml, extract_test_ids, test_file_filter,
+};
 
 const DEFAULT_EXCEL_FILE: &str = "validation_test_report.xlsx";
 const DEFAULT_INSTRUCTION_FILE: &str = "validation_test_instructions.toml";
+const DEFAULT_CSV_FILE: &str = "validation_test_report.csv";
+const DEFAULT_BASE_TOML: &str = "base_tests_list.toml";
 
 pub fn email_gen(sender_email: &String, recipient_email: &String) -> Result<(), Box<dyn Error>> {
+    // Sanity check the python scripts used for excel sheet operations.
     sanity_check_python_scripts()?;
     sanity_dependencies()?;
 
+    // Generate the email template.
     let sender = sender_email.as_str();
     let recipient = recipient_email.as_str();
     let _ = generate_email_using_python(sender, recipient, DEFAULT_EXCEL_FILE)?;
     Ok(())
 }
 
-pub fn test_run(test_ids: &Vec<String>) -> Result<(), Box<dyn Error>> {
-    sanity_check_toml(DEFAULT_INSTRUCTION_FILE)?;
-    for test_id in test_ids {
+pub fn test_run(
+    test_ids: Option<Vec<String>>,
+    input_instruction_file: &Option<String>,
+) -> Result<(), Box<dyn Error>> {
+    // Determine if the file is custom
+    let is_file_custom = input_instruction_file.is_some();
+
+    // Resolve file path
+    let file_path: &str = input_instruction_file
+        .as_deref()
+        .unwrap_or(DEFAULT_INSTRUCTION_FILE);
+
+    // Skip this sanity check if the input is a custom file.
+    // We can remove the skip and check all if all scripts are intended to be
+    // non tampering.
+    if !is_file_custom {
+        sanity_check_toml(file_path)?;
+    }
+
+    // Extract test IDs if none were provided
+    let ids_to_run = match test_ids {
+        Some(ids) => ids,
+        None => extract_test_ids(file_path)?,
+    };
+
+    // Process each test ID
+    for test_id in ids_to_run {
         println!("======================================================================");
-        if let Err(e) = ar_process_test_item(DEFAULT_INSTRUCTION_FILE, test_id) {
+        if let Err(e) = ar_process_test_item(file_path, &test_id) {
             eprintln!("Error processing test '{}': {}", test_id, e);
         }
     }
+
     press_enter();
     Ok(())
 }
 
-pub fn excel_gen(output: &String) -> Result<(), Box<dyn Error>> {
+pub fn excel_gen(input_instruction_file: &Option<String>) -> Result<(), Box<dyn Error>> {
+    // Set flag to skip sanity check if input is a custom file.
+    let is_file_custom = input_instruction_file.is_some();
+
+    // Extract &str from Option<String>
+    let file_path: &str = input_instruction_file
+        .as_deref()
+        .unwrap_or(DEFAULT_INSTRUCTION_FILE);
+
+    // Skip this sanity check if the input is a custom file.
+    // We can remove the skip and check all if all scripts are intended to be
+    // non tampering.
+    if !is_file_custom {
+        sanity_check_toml(file_path)?; // Now passes &str
+    }
+
+    // Sanity check the python scripts used for excel sheet operations.
     sanity_check_python_scripts()?;
     sanity_dependencies()?;
-    sanity_check_toml(DEFAULT_INSTRUCTION_FILE)?;
-    let csv_path = export_grouped_csv(DEFAULT_INSTRUCTION_FILE, output)?;
+
+    // Perform the excel generation.
+    let csv_path = export_grouped_csv(file_path, DEFAULT_CSV_FILE)?;
     let xlsx_path = convert_csv_to_excel(&csv_path)?;
     format_excel_sheet(&xlsx_path)?;
     Ok(())
@@ -48,9 +95,12 @@ pub fn excel_gen(output: &String) -> Result<(), Box<dyn Error>> {
 pub fn group_tests_id(
     groups: &Vec<String>,
     priority: &Option<String>,
-    input: &String,
-    output: &String,
+    input_base: &Option<String>,
+    output_name: &Option<String>,
 ) -> Result<(), Box<dyn Error>> {
+    // Extract &str from Option<String>
+    let file_path: &str = input_base.as_deref().unwrap_or(DEFAULT_BASE_TOML);
+
     // Parse groups: Vec<(label, Vec<test_id>)>
     let mut label_groups = Vec::new();
     let mut label: String;
@@ -72,19 +122,32 @@ pub fn group_tests_id(
     // Apply filter
     let mut grouped_tests = Vec::new();
     for (label, ids) in &label_groups {
-        let filtered = test_file_filter(input.as_str(), ids, priority)?;
+        let filtered = test_file_filter(file_path, ids, priority)?;
         grouped_tests.push((label.clone(), filtered));
     }
 
+    // Generate output file names from Option<String>
+    let output_toml_owned: String = match output_name {
+        Some(name) => format!("{}.toml", name),
+        None => DEFAULT_INSTRUCTION_FILE.to_string(),
+    };
+    let output_csv_owned: String = match output_name {
+        Some(name) => format!("{}.csv", name),
+        None => DEFAULT_CSV_FILE.to_string(),
+    };
+
+    let output_toml_file: &String = &output_toml_owned;
+    let output_csv_file: &String = &output_csv_owned;
+
     // Export a grouped TOML summary
-    export_grouped_toml(&grouped_tests, DEFAULT_INSTRUCTION_FILE)?;
-    prepend_hash_to_toml(DEFAULT_INSTRUCTION_FILE)?;
-    sanity_check_toml(DEFAULT_INSTRUCTION_FILE)?;
+    export_grouped_toml(&grouped_tests, output_toml_file)?;
+    prepend_hash_to_toml(output_toml_file)?;
+    sanity_check_toml(output_toml_file)?;
 
     // CSV → Excel pipeline
     sanity_check_python_scripts()?;
     sanity_dependencies()?;
-    let csv_path = export_grouped_csv(DEFAULT_INSTRUCTION_FILE, output.as_str())?;
+    let csv_path = export_grouped_csv(output_toml_file, output_csv_file)?;
     let xlsx_path = convert_csv_to_excel(&csv_path)?;
     format_excel_sheet(&xlsx_path)?;
 
@@ -93,9 +156,12 @@ pub fn group_tests_id(
 
 pub fn group_tests_priority(
     priority: &String,
-    input: &String,
-    output: &String,
+    input_base: &Option<String>,
+    output_name: &Option<String>,
 ) -> Result<(), Box<dyn Error>> {
+    // Extract &str from Option<String>
+    let file_path: &str = input_base.as_deref().unwrap_or(DEFAULT_BASE_TOML);
+
     let mut label_groups = Vec::new();
 
     // Create Option<String> from &String
@@ -112,19 +178,32 @@ pub fn group_tests_priority(
     // Apply filter
     let mut grouped_tests = Vec::new();
     for (label, ids) in &label_groups {
-        let filtered = test_file_filter(input.as_str(), ids, &priority_opt)?;
+        let filtered = test_file_filter(file_path, ids, &priority_opt)?;
         grouped_tests.push((label.clone(), filtered));
     }
 
+    // Generate output file names from Option<String>
+    let output_toml_owned: String = match output_name {
+        Some(name) => format!("{}.toml", name),
+        None => DEFAULT_INSTRUCTION_FILE.to_string(),
+    };
+    let output_csv_owned: String = match output_name {
+        Some(name) => format!("{}.csv", name),
+        None => DEFAULT_CSV_FILE.to_string(),
+    };
+
+    let output_toml_file: &String = &output_toml_owned;
+    let output_csv_file: &String = &output_csv_owned;
+
     // Export a grouped TOML summary
-    export_grouped_toml(&grouped_tests, DEFAULT_INSTRUCTION_FILE)?;
-    prepend_hash_to_toml(DEFAULT_INSTRUCTION_FILE)?;
-    sanity_check_toml(DEFAULT_INSTRUCTION_FILE)?;
+    export_grouped_toml(&grouped_tests, output_toml_file)?;
+    prepend_hash_to_toml(output_toml_file)?;
+    sanity_check_toml(output_toml_file)?;
 
     // CSV → Excel pipeline
     sanity_check_python_scripts()?;
     sanity_dependencies()?;
-    let csv_path = export_grouped_csv(DEFAULT_INSTRUCTION_FILE, output.as_str())?;
+    let csv_path = export_grouped_csv(output_toml_file, output_csv_file)?;
     let xlsx_path = convert_csv_to_excel(&csv_path)?;
     format_excel_sheet(&xlsx_path)?;
 
