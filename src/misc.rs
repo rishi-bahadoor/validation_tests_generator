@@ -33,19 +33,12 @@ pub fn get_key_entry_y() -> Result<u32, Box<dyn Error>> {
 
 pub fn wait_s(seconds: u32) {
     let pb = ProgressBar::new(seconds as u64)
-        .with_style(
-            ProgressStyle::with_template("{msg:>12.blue} {bar:40.green/yellow} {pos:>7}/{len:7}")
-                .unwrap(),
-        )
+        .with_style(ProgressStyle::with_template("{bar:40.green/yellow} {msg:>12.blue}").unwrap())
         .with_message("Waiting...");
     for s in 0..seconds {
         sleep(Duration::from_secs(1));
         pb.inc(1);
-        pb.set_message(format!(
-            "{} {}",
-            s + 1,
-            if s == 0 { "second" } else { "seconds" }
-        ));
+        pb.set_message(format!("Timeout {}s\t{seconds}s total", seconds - s));
     }
     pb.finish_with_message("Done");
 }
