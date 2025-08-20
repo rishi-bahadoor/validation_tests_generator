@@ -54,14 +54,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             groups,
             priority,
             input_instruction_file,
+            output_name,
         } => {
-            group_tests_id(&groups, &priority, &input_instruction_file)?;
+            group_tests_id(&groups, &priority, &input_instruction_file, &output_name)?;
         }
         Command::Priority {
             priority,
             input_instruction_file,
+            output_name,
         } => {
-            group_tests_priority(&priority, &input_instruction_file)?;
+            group_tests_priority(&priority, &input_instruction_file, &output_name)?;
         }
     }
 

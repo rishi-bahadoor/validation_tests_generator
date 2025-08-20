@@ -95,10 +95,11 @@ pub fn excel_gen(input_instruction_file: &Option<String>) -> Result<(), Box<dyn 
 pub fn group_tests_id(
     groups: &Vec<String>,
     priority: &Option<String>,
-    input: &Option<String>,
+    input_base: &Option<String>,
+    output_name: &Option<String>,
 ) -> Result<(), Box<dyn Error>> {
     // Extract &str from Option<String>
-    let file_path: &str = input.as_deref().unwrap_or(DEFAULT_BASE_TOML);
+    let file_path: &str = input_base.as_deref().unwrap_or(DEFAULT_BASE_TOML);
 
     // Parse groups: Vec<(label, Vec<test_id>)>
     let mut label_groups = Vec::new();
@@ -125,15 +126,28 @@ pub fn group_tests_id(
         grouped_tests.push((label.clone(), filtered));
     }
 
+    // Generate output file names from Option<String>
+    let output_toml_owned: String = match output_name {
+        Some(name) => format!("{}.toml", name),
+        None => DEFAULT_INSTRUCTION_FILE.to_string(),
+    };
+    let output_csv_owned: String = match output_name {
+        Some(name) => format!("{}.csv", name),
+        None => DEFAULT_CSV_FILE.to_string(),
+    };
+
+    let output_toml_file: &String = &output_toml_owned;
+    let output_csv_file: &String = &output_csv_owned;
+
     // Export a grouped TOML summary
-    export_grouped_toml(&grouped_tests, DEFAULT_INSTRUCTION_FILE)?;
-    prepend_hash_to_toml(DEFAULT_INSTRUCTION_FILE)?;
-    sanity_check_toml(DEFAULT_INSTRUCTION_FILE)?;
+    export_grouped_toml(&grouped_tests, output_toml_file)?;
+    prepend_hash_to_toml(output_toml_file)?;
+    sanity_check_toml(output_toml_file)?;
 
     // CSV → Excel pipeline
     sanity_check_python_scripts()?;
     sanity_dependencies()?;
-    let csv_path = export_grouped_csv(DEFAULT_INSTRUCTION_FILE, DEFAULT_CSV_FILE)?;
+    let csv_path = export_grouped_csv(output_toml_file, output_csv_file)?;
     let xlsx_path = convert_csv_to_excel(&csv_path)?;
     format_excel_sheet(&xlsx_path)?;
 
@@ -142,10 +156,11 @@ pub fn group_tests_id(
 
 pub fn group_tests_priority(
     priority: &String,
-    input: &Option<String>,
+    input_base: &Option<String>,
+    output_name: &Option<String>,
 ) -> Result<(), Box<dyn Error>> {
     // Extract &str from Option<String>
-    let file_path: &str = input.as_deref().unwrap_or(DEFAULT_BASE_TOML);
+    let file_path: &str = input_base.as_deref().unwrap_or(DEFAULT_BASE_TOML);
 
     let mut label_groups = Vec::new();
 
@@ -167,15 +182,28 @@ pub fn group_tests_priority(
         grouped_tests.push((label.clone(), filtered));
     }
 
+    // Generate output file names from Option<String>
+    let output_toml_owned: String = match output_name {
+        Some(name) => format!("{}.toml", name),
+        None => DEFAULT_INSTRUCTION_FILE.to_string(),
+    };
+    let output_csv_owned: String = match output_name {
+        Some(name) => format!("{}.csv", name),
+        None => DEFAULT_CSV_FILE.to_string(),
+    };
+
+    let output_toml_file: &String = &output_toml_owned;
+    let output_csv_file: &String = &output_csv_owned;
+
     // Export a grouped TOML summary
-    export_grouped_toml(&grouped_tests, DEFAULT_INSTRUCTION_FILE)?;
-    prepend_hash_to_toml(DEFAULT_INSTRUCTION_FILE)?;
-    sanity_check_toml(DEFAULT_INSTRUCTION_FILE)?;
+    export_grouped_toml(&grouped_tests, output_toml_file)?;
+    prepend_hash_to_toml(output_toml_file)?;
+    sanity_check_toml(output_toml_file)?;
 
     // CSV → Excel pipeline
     sanity_check_python_scripts()?;
     sanity_dependencies()?;
-    let csv_path = export_grouped_csv(DEFAULT_INSTRUCTION_FILE, DEFAULT_CSV_FILE)?;
+    let csv_path = export_grouped_csv(output_toml_file, output_csv_file)?;
     let xlsx_path = convert_csv_to_excel(&csv_path)?;
     format_excel_sheet(&xlsx_path)?;
 

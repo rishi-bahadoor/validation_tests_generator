@@ -15,9 +15,9 @@ pub struct Cli {
 pub enum Command {
     /// Generate email report
     EmailGen {
-        #[arg(short = 's', long = "sender_email")]
+        #[arg(value_name = "SENDER_EMAIL")]
         sender_email: String,
-        #[arg(short = 'r', long = "recipient_email")]
+        #[arg(value_name = "RECIPIENT_EMAIL")]
         recipient_email: String,
     },
     /// Run specific test instructions
@@ -40,6 +40,8 @@ pub enum Command {
         priority: Option<String>,
         #[arg(short = 'i', long = "input-instruction-file")]
         input_instruction_file: Option<String>,
+        #[arg(short = 'o', long = "output-name")]
+        output_name: Option<String>,
     },
     /// Group tests by priority only
     Priority {
@@ -47,5 +49,7 @@ pub enum Command {
         priority: String,
         #[arg(short = 'i', long = "input-instruction-file")]
         input_instruction_file: Option<String>,
+        #[arg(short = 'o', long = "output-name")]
+        output_name: Option<String>,
     },
 }
