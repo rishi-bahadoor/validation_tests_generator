@@ -125,6 +125,8 @@ instructions = [
 If a test as no level of automation, the instruction will simply just be printed
 on the terminal.
 
+### Running tests
+
 To run a test from the list of tests generated, use the command: --test
 
 example:

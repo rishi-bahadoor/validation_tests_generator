@@ -42,3 +42,11 @@ pub fn wait_s(seconds: u32) {
     }
     pb.finish_with_message("Done");
 }
+
+pub fn print_thick_separator() {
+    println!("=========================================================================");
+}
+
+pub fn print_thin_separator() {
+    println!("-------------------------------------------------------------------------");
+}

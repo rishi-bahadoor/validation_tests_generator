@@ -3,7 +3,7 @@ use toml::Value;
 
 use crate::ar_ccc_commands::ccc_handler;
 use crate::ar_generic_commands::generic_runner;
-use crate::misc::{get_key_entry_y, wait_s};
+use crate::misc::{get_key_entry_y, print_thin_separator, wait_s};
 
 const COMMAND_KEYWORDS: &[&str] = &[
     "SEMI_AUTO",
@@ -93,7 +93,7 @@ pub fn auto_command_selector(
                 println!("Skipping automatic steps.");
                 return Ok(());
             }
-            println!("--------------------------------------------------------------");
+            print_thin_separator();
             println!("Step by step semi automatic instruction runner");
             if let Err(e) = instruction_handler(instructions, false) {
                 eprintln!("Error in semi-automatic command handler: {}", e);
@@ -105,7 +105,7 @@ pub fn auto_command_selector(
                 println!("Skipping automatic steps.");
                 return Ok(());
             }
-            println!("--------------------------------------------------------------");
+            print_thin_separator();
             println!("Automatic instruction runner");
             if let Err(e) = instruction_handler(instructions, true) {
                 eprintln!("Error in full-automatic command handler: {}", e);

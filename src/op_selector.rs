@@ -1,9 +1,9 @@
 use std::error::Error;
 
-use crate::ar_process_vti::ar_process_test_item;
+use crate::ar_process_vti::{ar_print_test_item, ar_process_test_item};
 use crate::email_ops::generate_email_using_python;
 use crate::excel_ops::{convert_csv_to_excel, format_excel_sheet};
-use crate::misc::press_enter;
+use crate::misc::{get_key_entry_y, press_enter, print_thick_separator};
 use crate::python_env::sanity_dependencies;
 use crate::sanity::prepend_hash_to_toml;
 use crate::sanity::{sanity_check_python_scripts, sanity_check_toml};
@@ -34,6 +34,7 @@ pub fn test_run(
 ) -> Result<(), Box<dyn Error>> {
     // Determine if the file is custom
     let is_file_custom = input_instruction_file.is_some();
+    let is_ids_provided = test_ids.is_some();
 
     // Resolve file path
     let file_path: &str = input_instruction_file
@@ -53,9 +54,22 @@ pub fn test_run(
         None => extract_test_ids(file_path)?,
     };
 
+    if !is_ids_provided {
+        for test_id in ids_to_run.clone() {
+            if let Err(e) = ar_print_test_item(file_path, &test_id) {
+                eprintln!("Error processing test '{}': {}", test_id, e);
+            }
+        }
+        print_thick_separator();
+        println!("Do you want to run all tests?");
+        if get_key_entry_y()? == 0 {
+            return Ok(());
+        }
+    }
+
     // Process each test ID
     for test_id in ids_to_run {
-        println!("======================================================================");
+        print_thick_separator();
         if let Err(e) = ar_process_test_item(file_path, &test_id) {
             eprintln!("Error processing test '{}': {}", test_id, e);
         }
