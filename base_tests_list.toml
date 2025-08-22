@@ -831,7 +831,7 @@ test_authors_and_contact_persons = ["TBD"]
 test_id = "8.3"
 test_group = "8:MISC"
 test_priority = "LOW"
-test_description = "Using ccc diag --fix to restore settings"
+test_description = "Using ccc factory-init to restore settings"
 pass_condition = "Sensor configurations correctly set with no side effects such as mirror knocking"
 instructions = [
   "## FULL_AUTO ##",
@@ -839,8 +839,8 @@ instructions = [
   "## Ensure the sensor has uninitialized configurations or incorrect but safe values ##",
   "## Noteworthy configurations: ROI's, SPAD's, MST's ##",
   "## REPLACE THIS WITH : a set command that will set some wrong but safe configurations ##",
-  "## Run the diag fix command ##",
-  "ccc diag --fix",
+  "## Run the factory-init command ##",
+  "factory_init",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
