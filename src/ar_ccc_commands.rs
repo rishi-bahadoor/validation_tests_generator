@@ -64,3 +64,44 @@ pub fn ccc_handler(trimmed_line: &str, auto: bool) -> Result<(), Box<dyn Error>>
     ccc_command_runner(trimmed_line)?;
     Ok(())
 }
+
+pub fn get_ccc_output(arg: &str) -> Result<String, Box<dyn Error>> {
+    let output = Command::new(PATH_CCC_EXE)
+        .arg("get")
+        .arg(arg)
+        .output()
+        .map_err(|e| Box::new(e) as Box<dyn Error>)?;
+
+    if output.status.success() {
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        Ok(stdout.to_string())
+    } else {
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        Err(Box::new(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            format!("ccc get command failed: {}", stderr),
+        )))
+    }
+}
+
+pub fn factory_init() -> Result<(), Box<dyn Error>> {
+    println!("Running factory_init...");
+
+    let serial_number_output = get_ccc_output("serial_number")?;
+    let serial_number = serial_number_output
+        .split("serial_number:")
+        .nth(1)
+        .ok_or("Failed to extract serial number from output string")?
+        .trim();
+
+    println!("Found serial number: {}", serial_number);
+
+    let line = format!(
+        "ccc factory-init --sku 0 --serial-number {} ultra.cepbin",
+        serial_number
+    );
+
+    println!("Running {}", line);
+
+    ccc_command_runner(&line)
+}
