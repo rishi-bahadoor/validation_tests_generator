@@ -33,7 +33,9 @@ pub fn get_key_entry_y() -> Result<u32, Box<dyn Error>> {
 
 pub fn wait_s(seconds: u32) {
     let pb = ProgressBar::new(seconds as u64)
-        .with_style(ProgressStyle::with_template("{bar:40.green/yellow} {msg:>12.blue}").unwrap())
+        .with_style(
+            ProgressStyle::with_template("    {bar:40.green/yellow} {msg:>12.cyan}").unwrap(),
+        )
         .with_message("Waiting...");
     for s in 0..seconds {
         sleep(Duration::from_secs(1));
