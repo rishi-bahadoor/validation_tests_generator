@@ -197,20 +197,16 @@ test_id = "2.1"
 test_group = "2:MAGNOSTEER"
 test_priority = "HIGH"
 test_description = "Check MST frequency at 10Hz"
-pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS is 10Hz within +/- 0.005Hz"
+pass_condition = "Report pass/fail based on the generated panorama test report"
 instructions = [
-  "## FULL_AUTO ##",
+  "## FULL_AUTO_PANORAMA ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0 --force",
-  "## Turn on mst and point enable ##",
-  "ccc set point_enable=1,drive_big_mirror=1 --force",
-  "## Set the mst frequency to 10Hz ##",
-  "ccc set mst_cycle_duration=200000 --force",
-  "## Observe the mst gui Real Time FPS monitor ##",
-  "wait_e",
+  "## Observe the panorama 10Hz test ##",
+  "panorama_cli run -t TestValidationMST10HZ",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -219,20 +215,16 @@ test_id = "2.2"
 test_group = "2:MAGNOSTEER"
 test_priority = "HIGH"
 test_description = "Check MST frequency at 20Hz"
-pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS is 20Hz within +/- 0.005Hz"
+pass_condition = "Report pass/fail based on the generated panorama test report"
 instructions = [
-  "## FULL_AUTO ##",
+  "## FULL_AUTO_PANORAMA ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0 --force",
-  "## Turn on mst and point enable ##",
-  "ccc set point_enable=1,drive_big_mirror=1 --force",
-  "## Set the mst frequency to 20Hz ##",
-  "ccc set mst_cycle_duration=100000 --force",
-  "## Observe the mst gui Real Time FPS monitor ##",
-  "wait_e",
+  "## Observe the panorama 20Hz test ##",
+  "panorama_cli run -t TestValidationMST20HZ",
 ]
 test_authors_and_contact_persons = ["TBD"]
 

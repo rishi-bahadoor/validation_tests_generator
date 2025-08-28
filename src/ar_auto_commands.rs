@@ -3,6 +3,7 @@ use toml::Value;
 
 use crate::ar_ccc_commands::ccc_handler;
 use crate::ar_generic_commands::generic_runner;
+use crate::ar_panorama_commands::panorama_cli_handler;
 use crate::misc::{get_key_entry_y, print_thin_separator, wait_s};
 
 const COMMAND_KEYWORDS: &[&str] = &[
@@ -73,6 +74,8 @@ fn instruction_handler(instructions: &Vec<Value>, auto: bool) -> Result<(), Box<
                 ccc_handler(trimmed, auto)?;
             } else if trimmed.starts_with("event_timed") {
                 event_timed(trimmed)?;
+            } else if trimmed.starts_with("panorama_cli") {
+                panorama_cli_handler(trimmed)?;
             } else {
                 generic_runner(trimmed)?;
             }
@@ -113,7 +116,16 @@ pub fn auto_command_selector(
         }
         "FULL_AUTO_PANORAMA" => {
             // TODO: add panorama handler.
-            println!("PANORAMA mode is in development.");
+            println!("\nFULL_AUTO_PANORAMA detected.");
+            if get_key_entry_y()? == 0 {
+                println!("Skipping automatic steps.");
+                return Ok(());
+            }
+            print_thin_separator();
+            println!("Automatic panorama instruction runner");
+            if let Err(e) = instruction_handler(instructions, true) {
+                eprintln!("Error in full-automatic panorama command handler: {}", e);
+            }
         }
         _ => {
             println!("No auto commands found in instructions.");
@@ -126,8 +138,18 @@ pub fn auto_command_selector(
 pub fn check_for_auto_commands(line: &str) -> Result<Option<&'static str>, Box<dyn Error>> {
     let trimmed = line.trim();
 
+    let fields = trimmed
+        .split_whitespace()
+        .filter(|&field| !field.is_empty() && field != ("##"))
+        .collect::<Vec<&str>>();
+
+    if fields.is_empty() || fields.len() != 1 {
+        // line doesn't have format `## <command> ##`
+        return Ok(None);
+    }
+
     for &keyword in COMMAND_KEYWORDS {
-        if trimmed.contains(keyword) {
+        if fields[0] == keyword {
             return Ok(Some(keyword));
         }
     }
