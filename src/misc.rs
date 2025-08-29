@@ -4,6 +4,14 @@ use std::io::{self, Write};
 use std::thread::sleep;
 use std::time::Duration;
 
+use crate::ar_ccc_commands::get_config_dump;
+
+const EMAIL_ATTACHMENTS_FLDR: &str = "./email_attachments/";
+
+pub fn generate_email_attachments() -> Result<(), Box<dyn Error>> {
+    get_config_dump(EMAIL_ATTACHMENTS_FLDR)
+}
+
 pub fn press_enter() {
     println!("\nPress Enter to continue...");
     let mut input = String::new();

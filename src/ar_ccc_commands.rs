@@ -1,4 +1,6 @@
-use std::{error::Error, io, path::Path, process::Command};
+use std::{error::Error, fs, io, path::Path, process::Command};
+
+use chrono::Local;
 
 use crate::misc::{get_key_entry_y, press_enter_no_message};
 
@@ -104,4 +106,32 @@ pub fn factory_init() -> Result<(), Box<dyn Error>> {
     println!("Running {}", line);
 
     ccc_command_runner(&line)
+}
+
+pub fn get_config_dump(path: &str) -> Result<(), Box<dyn Error>> {
+    if !std::path::Path::new(path).exists() {
+        std::fs::create_dir_all(path)?;
+    }
+
+    for entry in fs::read_dir(path)? {
+        let entry = entry?;
+        let file_type = entry.file_type()?;
+        if file_type.is_file()
+            && entry
+                .file_name()
+                .to_string_lossy()
+                .starts_with("sensor_config_dump_")
+        {
+            fs::remove_file(entry.path())?;
+        }
+    }
+
+    let now = Local::now();
+    let timestamp = now.format("[%d_%m_%Y]_[%Hhr_%Mmin]").to_string();
+
+    // Do a get-all to get config at email generation time
+    ccc_handler(
+        &format!("ccc get-all -o {path}/sensor_config_dump_{timestamp}.txt -d ultra_config.toml"),
+        true,
+    )
 }

@@ -3,7 +3,9 @@ use std::error::Error;
 use crate::ar_process_vti::{ar_print_test_item, ar_process_test_item};
 use crate::email_ops::generate_email_using_python;
 use crate::excel_ops::{convert_csv_to_excel, format_excel_sheet};
-use crate::misc::{get_key_entry_y, press_enter, print_thick_separator};
+use crate::misc::{
+    generate_email_attachments, get_key_entry_y, press_enter, print_thick_separator,
+};
 use crate::python_env::sanity_dependencies;
 use crate::sanity::prepend_hash_to_toml;
 use crate::sanity::{sanity_check_python_scripts, sanity_check_toml};
@@ -20,6 +22,8 @@ pub fn email_gen(sender_email: &String, recipient_email: &String) -> Result<(), 
     // Sanity check the python scripts used for excel sheet operations.
     sanity_check_python_scripts()?;
     sanity_dependencies()?;
+
+    generate_email_attachments()?;
 
     // Generate the email template.
     let sender = sender_email.as_str();
