@@ -3,12 +3,12 @@ use toml::Value;
 
 use crate::ar_ccc_commands::{ccc_handler, factory_init};
 use crate::ar_generic_commands::generic_runner;
+use crate::ar_panorama_commands::panorama_cli_handler;
 use crate::misc::{get_key_entry_y, print_thin_separator, wait_s};
 
 const COMMAND_KEYWORDS: &[&str] = &[
     "SEMI_AUTO",
     "FULL_AUTO",
-    "FULL_AUTO_PANORAMA",
     // Add more as needed
 ];
 
@@ -75,6 +75,8 @@ fn instruction_handler(instructions: &Vec<Value>, auto: bool) -> Result<(), Box<
                 event_timed(trimmed)?;
             } else if trimmed.starts_with("factory_init") {
                 factory_init()?;
+            } else if trimmed.starts_with("panorama") {
+                panorama_cli_handler(trimmed)?;
             } else {
                 generic_runner(trimmed)?;
             }
@@ -113,10 +115,6 @@ pub fn auto_command_selector(
                 eprintln!("Error in full-automatic command handler: {}", e);
             }
         }
-        "FULL_AUTO_PANORAMA" => {
-            // TODO: add panorama handler.
-            println!("PANORAMA mode is in development.");
-        }
         _ => {
             println!("No auto commands found in instructions.");
         }
@@ -128,8 +126,18 @@ pub fn auto_command_selector(
 pub fn check_for_auto_commands(line: &str) -> Result<Option<&'static str>, Box<dyn Error>> {
     let trimmed = line.trim();
 
+    let fields = trimmed
+        .split_whitespace()
+        .filter(|&field| !field.is_empty() && field != ("##"))
+        .collect::<Vec<&str>>();
+
+    if fields.is_empty() || fields.len() != 1 {
+        // line doesn't have format `## <command> ##`
+        return Ok(None);
+    }
+
     for &keyword in COMMAND_KEYWORDS {
-        if trimmed.contains(keyword) {
+        if fields[0] == keyword {
             return Ok(Some(keyword));
         }
     }
