@@ -1,4 +1,4 @@
-# VERSION 1.1.4
+# VERSION 1.1.5
 
 import sys
 from pathlib import Path
@@ -16,7 +16,7 @@ EMAIL_FROM_DEFAULT    = "no-reply@example.com"
 EMAIL_TO_DEFAULT      = ["alice@example.com", "bob@example.com"]
 EXCEL_FILE_DEFAULT    = "validation_test_report.xlsx"
 IMAGES_FOLDER_DEFAULT = "images_github_issues/"
-IMAGES_FOLDER_MISC    = "images_misc/"
+EMAIL_ATTACHMENTS_FLDR    = "email_attachments/"
 
 STATUS_COLORS = {
     "Pass":    "#c6efce",
@@ -229,7 +229,7 @@ class EmailBodyBuilder:
                 f"<div><img src='cid:{cid}' style='max-width:600px;'/></div>"
             )
 
-    def email_body_attach_images(self, folder):
+    def email_body_attach_misc_files(self, folder):
         """
         Attach images from a folder as file attachments (not inline).
         """
@@ -293,7 +293,7 @@ def build_email_message(xlsx_path, from_addr, recipients):
     builder.email_body_add_empty_line(2)
 
     # Attach misc images as file attachments
-    builder.email_body_attach_images(IMAGES_FOLDER_MISC)
+    builder.email_body_attach_misc_files(EMAIL_ATTACHMENTS_FLDR)
 
     # Render subtables and secondary table
     builder.email_body_add_table(main_subtables, data_type="subtables")
