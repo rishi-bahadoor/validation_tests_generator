@@ -197,16 +197,16 @@ test_id = "2.1"
 test_group = "2:MAGNOSTEER"
 test_priority = "HIGH"
 test_description = "Check MST frequency at 10Hz"
-pass_condition = "Report pass/fail based on the generated panorama test report"
+pass_condition = "Using the panorama FPS test, ensure the real and target FPS is 10Hz within +/- 0.005Hz"
 instructions = [
-  "## FULL_AUTO_PANORAMA ##",
+  "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0 --force",
   "## Observe the panorama 10Hz test ##",
-  "panorama_cli run -t TestValidationMST10HZ",
+  "panorama TestValidationMST10HZ",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -215,16 +215,16 @@ test_id = "2.2"
 test_group = "2:MAGNOSTEER"
 test_priority = "HIGH"
 test_description = "Check MST frequency at 20Hz"
-pass_condition = "Report pass/fail based on the generated panorama test report"
+pass_condition = "Using the panorama FPS test, ensure the real and target FPS is 20Hz within +/- 0.005Hz"
 instructions = [
-  "## FULL_AUTO_PANORAMA ##",
+  "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0 --force",
   "## Observe the panorama 20Hz test ##",
-  "panorama_cli run -t TestValidationMST20HZ",
+  "panorama TestValidationMST20HZ",
 ]
 test_authors_and_contact_persons = ["TBD"]
 

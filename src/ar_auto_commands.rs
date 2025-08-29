@@ -9,7 +9,6 @@ use crate::misc::{get_key_entry_y, print_thin_separator, wait_s};
 const COMMAND_KEYWORDS: &[&str] = &[
     "SEMI_AUTO",
     "FULL_AUTO",
-    "FULL_AUTO_PANORAMA",
     // Add more as needed
 ];
 
@@ -76,7 +75,7 @@ fn instruction_handler(instructions: &Vec<Value>, auto: bool) -> Result<(), Box<
                 event_timed(trimmed)?;
             } else if trimmed.starts_with("factory_init") {
                 factory_init()?;
-            } else if trimmed.starts_with("panorama_cli") {
+            } else if trimmed.starts_with("panorama") {
                 panorama_cli_handler(trimmed)?;
             } else {
                 generic_runner(trimmed)?;
@@ -114,19 +113,6 @@ pub fn auto_command_selector(
             println!("Automatic instruction runner");
             if let Err(e) = instruction_handler(instructions, true) {
                 eprintln!("Error in full-automatic command handler: {}", e);
-            }
-        }
-        "FULL_AUTO_PANORAMA" => {
-            // TODO: add panorama handler.
-            println!("\nFULL_AUTO_PANORAMA detected.");
-            if get_key_entry_y()? == 0 {
-                println!("Skipping automatic steps.");
-                return Ok(());
-            }
-            print_thin_separator();
-            println!("Automatic panorama instruction runner");
-            if let Err(e) = instruction_handler(instructions, true) {
-                eprintln!("Error in full-automatic panorama command handler: {}", e);
             }
         }
         _ => {

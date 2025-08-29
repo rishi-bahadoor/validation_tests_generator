@@ -4,7 +4,7 @@ const PATH_PANORAMA_CLI_EXE: &str = "./panorama_cli.exe";
 
 fn panorama_cli_runner(line: &str) -> Result<(), Box<dyn Error>> {
     let trimmed = line.trim();
-    let command_line = trimmed.replacen("panorama_cli", PATH_PANORAMA_CLI_EXE, 1);
+    let command_line = trimmed.replacen("panorama", &format!("{PATH_PANORAMA_CLI_EXE} run -t"), 1);
     let mut parts = command_line.split_whitespace();
     let exe = parts.next().unwrap_or(PATH_PANORAMA_CLI_EXE);
     let args: Vec<&str> = parts.collect();
