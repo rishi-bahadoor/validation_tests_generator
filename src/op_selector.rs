@@ -18,12 +18,19 @@ const DEFAULT_INSTRUCTION_FILE: &str = "validation_test_instructions.toml";
 const DEFAULT_CSV_FILE: &str = "validation_test_report.csv";
 const DEFAULT_BASE_TOML: &str = "base_tests_list.toml";
 
-pub fn email_gen(sender_email: &String, recipient_email: &String) -> Result<(), Box<dyn Error>> {
+pub fn email_gen(
+    sender_email: &String,
+    recipient_email: &String,
+    generate: bool,
+) -> Result<(), Box<dyn Error>> {
     // Sanity check the python scripts used for excel sheet operations.
     sanity_check_python_scripts()?;
     sanity_dependencies()?;
 
-    generate_email_attachments()?;
+    if generate {
+        println!("Generating email attachments...");
+        generate_email_attachments()?;
+    }
 
     // Generate the email template.
     let sender = sender_email.as_str();

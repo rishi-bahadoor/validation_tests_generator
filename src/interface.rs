@@ -19,11 +19,13 @@ pub enum Command {
         sender_email: String,
         #[arg(value_name = "RECIPIENT_EMAIL")]
         recipient_email: String,
+        #[arg(short = 'g', long = "generate", help = "Generate email attachments")]
+        generate: bool,
     },
     #[command(
         about = "Run specific test instructions",
         long_about = r#"
-        
+
 Run specific test instructions.
 
 - Option to specify the test Id(s)
@@ -54,7 +56,7 @@ directory as the executable.
     },
     #[command(
         about = "Group tests by label and IDs",
-        long_about = r#"        
+        long_about = r#"
 Group tests by label and IDs.
 - Grouping tests
     - Single
