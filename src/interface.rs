@@ -19,8 +19,12 @@ pub enum Command {
         sender_email: String,
         #[arg(value_name = "RECIPIENT_EMAIL")]
         recipient_email: String,
-        #[arg(short = 'g', long = "generate", help = "Generate email attachments")]
-        generate: bool,
+        #[arg(
+            short = 'b',
+            long = "bypass-generation",
+            help = "Bypass generation of email attachments"
+        )]
+        bypass_generation: bool,
     },
     #[command(
         about = "Run specific test instructions",

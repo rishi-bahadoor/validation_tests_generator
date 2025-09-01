@@ -37,9 +37,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Command::EmailGen {
             sender_email,
             recipient_email,
-            generate,
+            bypass_generation,
         } => {
-            email_gen(&sender_email, &recipient_email, generate)?;
+            email_gen(&sender_email, &recipient_email, bypass_generation)?;
         }
         Command::Test {
             test_ids,

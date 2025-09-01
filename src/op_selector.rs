@@ -21,13 +21,13 @@ const DEFAULT_BASE_TOML: &str = "base_tests_list.toml";
 pub fn email_gen(
     sender_email: &String,
     recipient_email: &String,
-    generate: bool,
+    bypass_generation: bool,
 ) -> Result<(), Box<dyn Error>> {
     // Sanity check the python scripts used for excel sheet operations.
     sanity_check_python_scripts()?;
     sanity_dependencies()?;
 
-    if generate {
+    if !bypass_generation {
         println!("Generating email attachments...");
         generate_email_attachments()?;
     }
