@@ -67,10 +67,10 @@ pub fn ccc_handler(trimmed_line: &str, auto: bool) -> Result<(), Box<dyn Error>>
     Ok(())
 }
 
-pub fn get_ccc_output(arg: &str) -> Result<String, Box<dyn Error>> {
+fn get_ccc_output(args: &str) -> Result<String, Box<dyn Error>> {
     let output = Command::new(PATH_CCC_EXE)
         .arg("get")
-        .arg(arg)
+        .args(args.split_whitespace())
         .output()
         .map_err(|e| Box::new(e) as Box<dyn Error>)?;
 
@@ -86,17 +86,23 @@ pub fn get_ccc_output(arg: &str) -> Result<String, Box<dyn Error>> {
     }
 }
 
+fn get_ccc_output_integer(args: &str) -> Result<i32, Box<dyn Error>> {
+    let output = get_ccc_output(args)?;
+    println!("Output from ccc get {}: `{}`", args, output);
+    output
+        .trim()
+        .split(|c| c == '[' || c == ']')
+        .nth(1)
+        .ok_or("Failed to extract integer from output string")?
+        .trim()
+        .parse::<i32>()
+        .map_err(|e| Box::new(e) as Box<dyn Error>)
+}
+
 pub fn factory_init() -> Result<(), Box<dyn Error>> {
     println!("Running factory_init...");
 
-    let serial_number_output = get_ccc_output("serial_number")?;
-    let serial_number = serial_number_output
-        .split("serial_number:")
-        .nth(1)
-        .ok_or("Failed to extract serial number from output string")?
-        .trim();
-
-    println!("Found serial number: {}", serial_number);
+    let serial_number = get_ccc_output_integer("serial_number")?.to_string();
 
     let line = format!(
         "ccc factory-init --sku 0 --serial-number {} ultra.cepbin",
