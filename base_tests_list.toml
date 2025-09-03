@@ -232,8 +232,8 @@ test_authors_and_contact_persons = ["TBD"]
 test_id = "2.3"
 test_group = "2:MAGNOSTEER"
 test_priority = "LOW"
-test_description = "Check MST frequency does not go above 25Hz"
-pass_condition = "Using the mst gui real time FPS monitor, ensure the real and target FPS is not exceeding 21Hz within +/- 0.005Hz with FPS entries greater than 21Hz"
+test_description = "Check MST frequency does not go above 21Hz"
+pass_condition = "Using the panorama FPS test, ensure the real and target FPS is 21Hz within +/- 0.005Hz"
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
@@ -241,12 +241,8 @@ instructions = [
   "ccc diag --fix",
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0 --force",
-  "## Turn on mst and point enable ##",
-  "ccc set point_enable=1,drive_big_mirror=1 --force",
-  "## Set the mst frequency to 40Hz ##",
-  "ccc set mst_cycle_duration=50000 --force",
-  "## Observe the mst gui Real Time FPS monitor ##",
-  "wait_e",
+  "## Observe the panorama 40Hz cap at 21Hz test ##",
+  "panorama TestValidationMST40HZCapAt21HZ"
 ]
 test_authors_and_contact_persons = ["TBD"]
 
