@@ -8,4 +8,5 @@
 /*.xlsx
 /*.csv
 /*.png
-/*.pcap
+
+*.pcap
