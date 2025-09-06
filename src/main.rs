@@ -10,6 +10,7 @@ mod excel_ops;
 mod interface;
 mod misc;
 mod op_selector;
+mod pcap_ops;
 mod python_env;
 mod sanity;
 mod scripts_find;
