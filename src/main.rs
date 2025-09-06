@@ -1,5 +1,9 @@
 use clap::{CommandFactory, Parser};
 
+// macro_use modules must be declared before modules that use it.
+#[macro_use]
+mod misc;
+
 mod ar_auto_commands;
 mod ar_ccc_commands;
 mod ar_generic_commands;
@@ -8,7 +12,6 @@ mod ar_process_vti;
 mod email_ops;
 mod excel_ops;
 mod interface;
-mod misc;
 mod op_selector;
 mod pcap_ops;
 mod python_env;

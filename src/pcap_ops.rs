@@ -5,18 +5,18 @@ use std::sync::{
     atomic::{AtomicBool, Ordering},
 };
 use std::thread::{self, JoinHandle};
-use std::time::Duration;
 
-use pcap::{ConnectionStatus, Device};
+use pcap::{Capture, ConnectionStatus, Device};
 use std::net::IpAddr;
 
 const HOST_IP: IpAddr = IpAddr::V4(std::net::Ipv4Addr::new(192, 168, 32, 100));
+const PCAP_DIR: &str = "pcaps";
 
 fn connected_ethernet_device() -> Option<Device> {
     let all_devices = match Device::list() {
         Ok(devices) => devices,
         Err(e) => {
-            eprintln!("[WARN] Failed to list devices: {}", e);
+            print_warn_ln!("Failed to list devices: {}", e);
             return None;
         }
     };
@@ -27,9 +27,9 @@ fn connected_ethernet_device() -> Option<Device> {
     {
         Some(d) => d,
         None => {
-            println!("[WARN] No device found with IP {}.", HOST_IP);
-            println!(
-                "[HELPER] Check your system [Network Connections / Adapters] configuration for IP: {}.",
+            print_warn_ln!("No device found with IP {}.", HOST_IP);
+            print_help_ln!(
+                "Check your system [Network Connections / Adapters] configuration for IP: {}.",
                 HOST_IP
             );
             return None;
@@ -37,16 +37,10 @@ fn connected_ethernet_device() -> Option<Device> {
     };
 
     if device.flags.connection_status != ConnectionStatus::Connected {
-        println!("[WARN] Device with IP {} is not connected.", HOST_IP);
-        println!("[HELPER] Check the ethernet hardware connection.");
+        print_warn_ln!("Device with IP {} is not connected.", HOST_IP);
+        print_help_ln!("Check the ethernet hardware connection.");
         return None;
     }
-
-    let desc = device.desc.as_deref().unwrap_or("No description available");
-    println!(
-        "[PCAP] Connected device with IP {}: {} — {}",
-        HOST_IP, device.name, desc
-    );
 
     Some(device)
 }
@@ -60,18 +54,18 @@ pub struct PcapInstance {
 
 impl PcapInstance {
     pub fn new(test_name: &str) -> Self {
-        let dir = PathBuf::from("pcaps");
+        let dir = PathBuf::from(PCAP_DIR);
         let mut skip = false;
 
         if let Err(e) = fs::create_dir_all(&dir) {
-            eprintln!("[WARN] Failed to create pcaps directory: {}", e);
+            print_warn_ln!("Failed to create {} directory: {}", PCAP_DIR, e);
             skip = true;
         }
 
         let pcap_path = dir.join(format!("{}.pcap", test_name));
         if pcap_path.exists() {
             if let Err(e) = fs::remove_file(&pcap_path) {
-                eprintln!("[WARN] Failed to remove existing pcap file. {}", e);
+                print_warn_ln!("Failed to remove existing pcap file. {}", e);
                 skip = true;
             }
         }
@@ -86,25 +80,54 @@ impl PcapInstance {
 
     pub fn start(&mut self) {
         if self.skip {
-            println!("[WARN] Skipping pcap...");
+            print_warn_ln!("Skipping pcap...");
             return;
         }
-        if connected_ethernet_device().is_none() {
-            self.skip = true;
-            println!("[WARN] Skipping pcap...");
-            return;
-        }
+        let main_device = match connected_ethernet_device() {
+            Some(d) => d,
+            None => {
+                self.skip = true;
+                print_warn_ln!(" Skipping pcap...");
+                return;
+            }
+        };
 
-        println!("[PCAP] started for: {}", self.test_name);
-
+        println!("[PCAP] Capture started for: {}", self.test_name);
         let flag = Arc::clone(&self.stop_flag);
         let name = self.test_name.clone();
+        let path = PathBuf::from(PCAP_DIR).join(format!("{}.pcap", name));
+
         let handle = thread::spawn(move || {
+            let mut cap = Capture::from_device(main_device)
+                .unwrap()
+                .promisc(true)
+                .open()
+                .unwrap();
+
+            let mut cap_save_file = match cap.savefile(&path) {
+                Ok(d) => d,
+                Err(e) => {
+                    eprintln!("[ERROR] Failed to create pcap saver: {}", e);
+                    return;
+                }
+            };
+
             while !flag.load(Ordering::Relaxed) {
-                println!("[Thread {}] heartbeat", &name);
-                thread::sleep(Duration::from_secs(5));
+                match cap.next_packet() {
+                    Ok(packet) => {
+                        cap_save_file.write(&packet);
+                    }
+                    Err(_) => {
+                        // TODO: log packet drops.
+                    }
+                }
             }
-            println!("[PCAP] received stop signal for: {}", &name);
+
+            println!("[PCAP] Received stop signal for: {}", &name);
+            println!(
+                "[PCAP] You can find the captured pcap at: {}/{}.pcap",
+                PCAP_DIR, &name
+            )
         });
 
         self.handle = Some(handle);
@@ -112,8 +135,8 @@ impl PcapInstance {
 
     pub fn stop(mut self) {
         if self.skip {
-            println!(
-                "[WARN] Pcap capture was skipped due to some errors in the capture process. This does not affect the testing process or test results."
+            print_warn_ln!(
+                "Pcap capture was skipped due to some errors in the capture process. This does not affect the testing process or test results."
             );
             return;
         }
@@ -121,7 +144,9 @@ impl PcapInstance {
         self.stop_flag.store(true, Ordering::Relaxed);
 
         if let Some(handle) = self.handle.take() {
-            handle.join().expect("[WARN] Failed to join capture thread");
+            if let Err(e) = handle.join() {
+                print_warn_ln!("Failed to join capture thread: {:?}", e);
+            }
         }
     }
 }
