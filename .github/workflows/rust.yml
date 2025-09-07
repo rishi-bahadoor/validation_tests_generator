@@ -23,11 +23,20 @@ jobs:
     - name: Download Npcap SDK
       run: curl -LO https://npcap.com/dist/npcap-sdk.zip
 
-    - name: Extract Npcap SDK
-      shell: pwsh
+    - name: Extract Npcap SDK via Expand-Archive
+      shell: powershell
       run: |
-        New-Item -Path C:\npcap-sdk -ItemType Directory -Force
-        Expand-Archive -LiteralPath npcap-sdk.zip -DestinationPath C:\npcap-sdk
+        $ErrorActionPreference = 'Stop'
+
+        New-Item -Path 'C:\npcap-sdk' -ItemType Directory -Force
+
+        Expand-Archive `
+          -LiteralPath 'npcap-sdk.zip' `
+          -DestinationPath 'C:\npcap-sdk' `
+          -Force `
+        | Out-Null
+
+        Get-ChildItem 'C:\npcap-sdk\Include','C:\npcap-sdk\Lib'
 
     - name: Set NPCAP env vars
       run: |
