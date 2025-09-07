@@ -44,7 +44,7 @@ jobs:
     - name: Set NPCAP env vars
       run: |
         echo "NPCAP_INCLUDE=${{ github.workspace }}\\npcap-sdk\\Include" >> $env:GITHUB_ENV
-        echo "NPCAP_LIB=${{ github.workspace }}\\npcap-sdk\\Lib" >> $env:GITHUB_ENV
+        echo "NPCAP_LIB=${{ github.workspace }}\\npcap-sdk\\Lib\\x64" >> $env:GITHUB_ENV
 
     - name: Build in release mode
       env:
