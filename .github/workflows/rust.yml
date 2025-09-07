@@ -27,7 +27,7 @@ jobs:
       shell: pwsh
       run: |
         Start-Process -FilePath npcap-1.83.exe `
-                      -ArgumentList '/S','/admin_only' `
+                      -ArgumentList '/admin_only' `
                       -Wait -NoNewWindow
 
     - name: Set NPCAP env vars
