@@ -20,13 +20,19 @@ jobs:
         toolchain: stable
         override: true
 
-    - name: Download and extract Npcap SDK
+    - name: Download Npcap SDK
+      run: curl -LO https://npcap.com/dist/npcap-sdk.zip
+
+    - name: Extract Npcap SDK
+      shell: pwsh
       run: |
-        curl -LO https://npcap.com/dist/npcap-sdk.zip
-        mkdir C:\npcap-sdk
-        tar -xf npcap-sdk.zip -C C:\npcap-sdk --strip-components=1
-        echo "NPCAP_INCLUDE=C:\\npcap-sdk\\Include" >> $GITHUB_ENV
-        echo "NPCAP_LIB=C:\\npcap-sdk\\Lib" >> $GITHUB_ENV
+        New-Item -Path C:\npcap-sdk -ItemType Directory -Force
+        Expand-Archive -LiteralPath npcap-sdk.zip -DestinationPath C:\npcap-sdk
+
+    - name: Set NPCAP env vars
+      run: |
+        echo "NPCAP_INCLUDE=C:\\npcap-sdk\\Include" >> $env:GITHUB_ENV
+        echo "NPCAP_LIB=C:\\npcap-sdk\\Lib"     >> $env:GITHUB_ENV
 
     - name: Build in release mode
       env:
