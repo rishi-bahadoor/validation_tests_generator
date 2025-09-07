@@ -20,27 +20,45 @@ jobs:
         toolchain: stable
         override: true
 
-    - name: Download Npcap installer
-      run: curl.exe -L -o npcap-1.83.exe https://npcap.com/dist/npcap-1.83.exe
-
-    - name: Install Npcap
+    - name: Install Chocolatey and 7zip
       shell: pwsh
       run: |
-        Start-Process -FilePath npcap-1.83.exe
+        Set-ExecutionPolicy Bypass -Scope Process -Force
+        [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+        iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+        choco install 7zip -y
+
+    - name: Download Npcap SDK
+      run: curl.exe -L -o npcap-sdk.zip https://npcap.com/dist/npcap-sdk-1.05.zip
+
+    - name: Extract SDK with 7zip
+      run: |
+        mkdir npcap-sdk
+        "C:\Program Files\7-Zip\7z.exe" x npcap-sdk.zip -onpcap-sdk
+
+    - name: Verify wpcap.lib presence
+      shell: pwsh
+      run: |
+        dir "${{ github.workspace }}\\npcap-sdk\\Lib"
+        if (!(Test-Path "${{ github.workspace }}\\npcap-sdk\\Lib\\wpcap.lib")) {
+          Write-Error "wpcap.lib not found in SDK Lib directory"
+        }
 
     - name: Set NPCAP env vars
       run: |
-        echo "NPCAP_INCLUDE=C:\\Program Files\\Npcap\\Include" >> $env:GITHUB_ENV
-        echo "NPCAP_LIB=C:\\Program Files\\Npcap\\Lib"     >> $env:GITHUB_ENV
+        echo "NPCAP_INCLUDE=${{ github.workspace }}\\npcap-sdk\\Include" >> $env:GITHUB_ENV
+        echo "NPCAP_LIB=${{ github.workspace }}\\npcap-sdk\\Lib" >> $env:GITHUB_ENV
 
     - name: Build in release mode
       env:
         LIB: ${{ env.NPCAP_LIB }}
         INCLUDE: ${{ env.NPCAP_INCLUDE }}
+        LIBPCAP_LIBDIR: ${{ env.NPCAP_LIB }}
       run: cargo build --release
 
     - name: Run tests
       env:
         LIB: ${{ env.NPCAP_LIB }}
         INCLUDE: ${{ env.NPCAP_INCLUDE }}
+        LIBPCAP_LIBDIR: ${{ env.NPCAP_LIB }}
       run: cargo test
