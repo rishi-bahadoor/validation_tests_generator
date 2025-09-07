@@ -20,12 +20,9 @@ jobs:
         toolchain: stable
         override: true
 
-    - name: Install Chocolatey and 7zip
+    - name: Install 7zip
       shell: pwsh
       run: |
-        Set-ExecutionPolicy Bypass -Scope Process -Force
-        [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-        iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
         choco install 7zip -y
 
     - name: Download Npcap SDK
