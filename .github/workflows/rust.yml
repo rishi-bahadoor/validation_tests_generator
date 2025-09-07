@@ -31,7 +31,7 @@ jobs:
     - name: Extract SDK with 7zip
       run: |
         mkdir npcap-sdk
-        "C:\Program Files\7-Zip\7z.exe" x npcap-sdk.zip -onpcap-sdk
+        & "C:\Program Files\7-Zip\7z.exe" x npcap-sdk.zip -onpcap-sdk
 
     - name: Verify wpcap.lib presence
       shell: pwsh
