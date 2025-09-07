@@ -20,14 +20,21 @@ jobs:
         toolchain: stable
         override: true
 
-    - name: Install Npcap SDK via Chocolatey
+    - name: Attempt Chocolatey Npcap install
       shell: pwsh
       run: |
-        choco install npcap -y
-        # The SDK lands under Chocolatey’s tools folder, e.g.:
-        $sdkPath = (Get-ChildItem "$env:ChocolateyToolsLocation\npcap\*" -Directory).FullName
-        Write-Host "NPCAP_INCLUDE=$sdkPath\Include" >> $env:GITHUB_ENV
-        Write-Host "NPCAP_LIB=$sdkPath\Lib"     >> $env:GITHUB_ENV
+        choco install npcap --version 0.82 -y -r || {
+          Write-Host "Chocolatey package unavailable or outdated – falling back to direct download"
+          
+          # Download real SDK ZIP
+          curl.exe -L -o npcap-sdk.zip https://nmap.org/npcap/dist/npcap-sdk.zip
+
+          # Ensure target folder and extract
+          New-Item C:\npcap-sdk -ItemType Directory -Force | Out-Null
+          Expand-Archive -LiteralPath npcap-sdk.zip `
+                          -DestinationPath C:\npcap-sdk `
+                          -Force | Out-Null
+        }
 
     - name: Set NPCAP env vars
       run: |
