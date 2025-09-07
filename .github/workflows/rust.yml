@@ -20,8 +20,29 @@ jobs:
         toolchain: stable
         override: true
 
+    - name: Download Npcap installer
+      run: curl.exe -L -o npcap-installer.exe https://nmap.org/npcap/dist/npcap-1.82.exe
+
+    - name: Install Npcap silently
+      shell: pwsh
+      run: |
+        Start-Process -FilePath npcap-installer.exe `
+                      -ArgumentList '/S','/admin_only' `
+                      -Wait -NoNewWindow
+
+    - name: Set NPCAP env vars
+      run: |
+        echo "NPCAP_INCLUDE=C:\\Program Files\\Npcap\\Include" >> $env:GITHUB_ENV
+        echo "NPCAP_LIB=C:\\Program Files\\Npcap\\Lib"     >> $env:GITHUB_ENV
+
     - name: Build in release mode
-      run: cargo build -r
+      env:
+        LIB: ${{ env.NPCAP_LIB }}
+        INCLUDE: ${{ env.NPCAP_INCLUDE }}
+      run: cargo build --release
 
     - name: Run tests
+      env:
+        LIB: ${{ env.NPCAP_LIB }}
+        INCLUDE: ${{ env.NPCAP_INCLUDE }}
       run: cargo test
