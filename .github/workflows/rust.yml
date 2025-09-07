@@ -21,12 +21,12 @@ jobs:
         override: true
 
     - name: Download Npcap installer
-      run: curl.exe -L -o npcap-installer.exe https://nmap.org/npcap/dist/npcap-1.82.exe
+      run: curl.exe -L -o npcap-1.83.exe https://npcap.com/dist/npcap-1.83.exe
 
     - name: Install Npcap silently
       shell: pwsh
       run: |
-        Start-Process -FilePath npcap-installer.exe `
+        Start-Process -FilePath npcap-1.83.exe `
                       -ArgumentList '/S','/admin_only' `
                       -Wait -NoNewWindow
 
