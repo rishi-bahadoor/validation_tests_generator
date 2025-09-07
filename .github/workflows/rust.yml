@@ -20,17 +20,14 @@ jobs:
         toolchain: stable
         override: true
 
-    - name: Download Npcap SDK
-      run: curl -LO https://npcap.com/dist/npcap-sdk.zip
-
-    - name: Install 7-Zip
-      run: choco install 7zip -y
-
-    - name: Extract with 7z
-      run: 7z x npcap-sdk.zip -oC:\npcap-sdk -y
-
-    - name: Verify extraction
-      run: dir C:\npcap-sdk\Include; dir C:\npcap-sdk\Lib
+    - name: Install Npcap SDK via Chocolatey
+      shell: pwsh
+      run: |
+        choco install npcap -y
+        # The SDK lands under Chocolatey’s tools folder, e.g.:
+        $sdkPath = (Get-ChildItem "$env:ChocolateyToolsLocation\npcap\*" -Directory).FullName
+        Write-Host "NPCAP_INCLUDE=$sdkPath\Include" >> $env:GITHUB_ENV
+        Write-Host "NPCAP_LIB=$sdkPath\Lib"     >> $env:GITHUB_ENV
 
     - name: Set NPCAP env vars
       run: |
