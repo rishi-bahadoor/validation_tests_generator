@@ -20,20 +20,18 @@ jobs:
         toolchain: stable
         override: true
 
-    - name: Download Npcap installer
-      run: curl.exe -L -o npcap-1.83.exe https://npcap.com/dist/npcap-1.83.exe
+    - name: Download Npcap SDK
+      run: curl.exe -L -o npcap-sdk.zip https://npcap.com/dist/npcap-sdk.zip
 
-    - name: Install Npcap silently
-      shell: pwsh
+    - name: Extract SDK
       run: |
-        Start-Process -FilePath npcap-1.83.exe `
-                      -ArgumentList '/admin_only' `
-                      -Wait -NoNewWindow
+        mkdir npcap-sdk
+        tar -xf npcap-sdk.zip -C npcap-sdk
 
     - name: Set NPCAP env vars
       run: |
-        echo "NPCAP_INCLUDE=C:\\Program Files\\Npcap\\Include" >> $env:GITHUB_ENV
-        echo "NPCAP_LIB=C:\\Program Files\\Npcap\\Lib"     >> $env:GITHUB_ENV
+        echo "NPCAP_INCLUDE=${{ github.workspace }}\\npcap-sdk\\Include" >> $env:GITHUB_ENV
+        echo "NPCAP_LIB=${{ github.workspace }}\\npcap-sdk\\Lib" >> $env:GITHUB_ENV
 
     - name: Build in release mode
       env:
