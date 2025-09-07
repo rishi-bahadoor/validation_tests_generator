@@ -20,19 +20,6 @@ jobs:
         toolchain: stable
         override: true
 
-    - name: Install 7zip
-      shell: pwsh
-      run: |
-        choco install 7zip -y
-
-    - name: Download Npcap SDK
-      run: curl.exe -L -o npcap-sdk.zip https://npcap.com/dist/npcap-sdk-1.05.zip
-
-    - name: Extract SDK with 7zip
-      run: |
-        mkdir npcap-sdk
-        & "C:\Program Files\7-Zip\7z.exe" x npcap-sdk.zip -onpcap-sdk
-
     - name: Verify wpcap.lib presence
       shell: pwsh
       run: |
