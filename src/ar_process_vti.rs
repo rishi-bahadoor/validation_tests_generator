@@ -3,6 +3,7 @@ use std::fs;
 use toml::Value;
 
 use crate::ar_auto_commands::{auto_command_selector, check_for_auto_commands};
+use crate::pcap_ops::PcapInstance;
 
 pub fn process_fetched_instructions(instructions: &Vec<Value>) -> Result<(), Box<dyn Error>> {
     let mut auto_command: Option<&'static str> = None;
@@ -38,6 +39,8 @@ pub fn ar_process_test_item(file: &str, user_input_test_id: &str) -> Result<(), 
             for test in tests {
                 let test_id = test.get("test_id").and_then(|v| v.as_str()).unwrap_or("");
                 if test_id == user_input_test_id {
+                    let mut pcap_instance = PcapInstance::new(test_id);
+                    pcap_instance.start();
                     println!("Test Group: {}", group_name);
                     println!("Test ID: {}", test_id);
                     let pass_condition = test
@@ -50,6 +53,7 @@ pub fn ar_process_test_item(file: &str, user_input_test_id: &str) -> Result<(), 
                     {
                         process_fetched_instructions(instructions)?;
                     }
+                    pcap_instance.stop();
                     return Ok(());
                 }
             }

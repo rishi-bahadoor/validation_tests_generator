@@ -1,10 +1,14 @@
 ## VALIDATION REPORT GENERATION
 
 ### Features
-- Parse test definitions from a TOML file
-- Filter tests by ID or priority (LOW, MEDIUM, HIGH)
-- Generate a technician-friendly CSV report
-- Includes metadata rows for technician and firmware details
+- Generate grouped sets of tests in TOML format, filter tests by ID or priority (LOW, MEDIUM, HIGH)
+- Protection against script files tampering
+- protection against grouped test toml tampering
+- Generate a technician-friendly Excel report, Includes metadata rows for technician and firmware details
+- Validation test runner
+- Validation email template generator
+- Capture pcap files from test runs
+- Automated sensor system configuration dump
 
 ### Using the tool
 You can run the tool directly using .\vtg.exe.
@@ -143,6 +147,15 @@ Run all in instruction file
 Specify an instruction toml file
 - .\vtg.exe --test -i Path/To/Instruction.toml
 
+### Pcap capturing
+
+This tool can automatically capture pcap files during the test run.
+
+The pcap files are generated into the directory /pcaps.
+
+Rerunning same tests will remove the last pcap file for that test and start a new one.
+
+
 ### Generating the email template
 
 To generate the email template, ensure that a report named `validation_test_report.xlsx` already exists in the source directory. This file is used as input to create a technician-ready HTML email preview.
@@ -156,3 +169,13 @@ The email includes:
 Once ready, run:
 
 - .\vtg.exe --email-gen example.sender@example.com example.recipient@example.com
+
+
+### Automated sensor system configuration dump
+
+This tool can automatically do configuration dump from a powered sensor.
+
+To bypass this functionality in the event of sensor not working, you can run the email
+generator command with the bypass flag.
+
+The sensor configuration dump with output to an email attachment directory.
