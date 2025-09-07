@@ -5,12 +5,18 @@ use std::sync::{
     atomic::{AtomicBool, Ordering},
 };
 use std::thread::{self, JoinHandle};
+use std::time::Duration;
 
 use pcap::{Capture, ConnectionStatus, Device};
 use std::net::IpAddr;
 
 const HOST_IP: IpAddr = IpAddr::V4(std::net::Ipv4Addr::new(192, 168, 32, 100));
 const PCAP_DIR: &str = "pcaps";
+
+// TODO: Implement an interface flag for (TDB)[default],[short],[long] timeout
+// constants and based on the input flag, let the code decide when to stop the
+// pcap capture.
+const MAX_PCAP_CAPTURE_TIME_S: u64 = 600; // 600 seconds (5 mins)
 
 fn connected_ethernet_device() -> Option<Device> {
     let all_devices = match Device::list() {
@@ -48,7 +54,8 @@ fn connected_ethernet_device() -> Option<Device> {
 pub struct PcapInstance {
     test_name: String,
     stop_flag: Arc<AtomicBool>,
-    handle: Option<JoinHandle<()>>,
+    thread_1_handle: Option<JoinHandle<()>>,
+    thread_2_handle: Option<JoinHandle<()>>,
     skip: bool,
 }
 
@@ -73,7 +80,8 @@ impl PcapInstance {
         PcapInstance {
             test_name: test_name.to_string(),
             stop_flag: Arc::new(AtomicBool::new(false)),
-            handle: None,
+            thread_1_handle: None,
+            thread_2_handle: None,
             skip,
         }
     }
@@ -93,11 +101,33 @@ impl PcapInstance {
         };
 
         println!("[PCAP] Capture started for: {}", self.test_name);
-        let flag = Arc::clone(&self.stop_flag);
+
+        // Share the same stop_flag for both threads
+        let timer_flag = Arc::clone(&self.stop_flag);
+        let capture_flag = Arc::clone(&self.stop_flag);
+
+        // 1) Timer thread: waits, then stops the capture
+        let thread_1_handle = thread::spawn(move || {
+            let timeout = Duration::from_secs(MAX_PCAP_CAPTURE_TIME_S);
+            let sleep_chunk = Duration::from_secs(1);
+            let mut elapsed = Duration::ZERO;
+
+            while elapsed < timeout {
+                // If stop() was called, break out immediately
+                if timer_flag.load(Ordering::Acquire) {
+                    return;
+                }
+                thread::sleep(sleep_chunk);
+                elapsed += sleep_chunk;
+            }
+            // Timeout expired—signal the capture thread to stop
+            timer_flag.store(true, Ordering::Release);
+        });
+
+        // 2) Capture thread: runs until stop_flag becomes true
         let name = self.test_name.clone();
         let path = PathBuf::from(PCAP_DIR).join(format!("{}.pcap", name));
-
-        let handle = thread::spawn(move || {
+        let thread_2_handle = thread::spawn(move || {
             let mut cap = Capture::from_device(main_device)
                 .unwrap()
                 .promisc(true)
@@ -112,7 +142,7 @@ impl PcapInstance {
                 }
             };
 
-            while !flag.load(Ordering::Relaxed) {
+            while !capture_flag.load(Ordering::Acquire) {
                 match cap.next_packet() {
                     Ok(packet) => {
                         cap_save_file.write(&packet);
@@ -122,18 +152,14 @@ impl PcapInstance {
                     }
                 }
             }
-
-            println!("[PCAP] Received stop signal for: {}", &name);
-            println!(
-                "[PCAP] You can find the captured pcap at: {}/{}.pcap",
-                PCAP_DIR, &name
-            )
         });
 
-        self.handle = Some(handle);
+        self.thread_1_handle = Some(thread_1_handle);
+        self.thread_2_handle = Some(thread_2_handle);
     }
 
-    pub fn stop(mut self) {
+    // Stops capture, joins both threads, and prints the output location.
+    pub fn stop(&mut self) {
         if self.skip {
             print_warn_ln!(
                 "Pcap capture was skipped due to some errors in the capture process. This does not affect the testing process or test results."
@@ -141,12 +167,26 @@ impl PcapInstance {
             return;
         }
 
-        self.stop_flag.store(true, Ordering::Relaxed);
+        // Signal both threads to stop
+        self.stop_flag.store(true, Ordering::Release);
 
-        if let Some(handle) = self.handle.take() {
+        // Join the timer thread
+        if let Some(handle) = self.thread_1_handle.take() {
+            if let Err(e) = handle.join() {
+                print_warn_ln!("Failed to join timer thread: {:?}", e);
+            }
+        }
+
+        // Join the capture thread
+        if let Some(handle) = self.thread_2_handle.take() {
             if let Err(e) = handle.join() {
                 print_warn_ln!("Failed to join capture thread: {:?}", e);
             }
         }
+
+        println!(
+            "[PCAP] Capture complete. Saved to: {}/{}.pcap",
+            PCAP_DIR, &self.test_name
+        );
     }
 }
