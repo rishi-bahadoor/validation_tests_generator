@@ -10,6 +10,15 @@
 - Automated sensor system configuration dump
 
 ### Using the tool
+From vtg version 2.2 onward, the user machine will be required to have npcap installed.
+
+A default npcap installation executable for windows can be found at /pc_required_installations/npcap-1.83.exe
+
+Or you can use the following internet link to download the appropriate file: https://npcap.com/
+
+If this is not installed on the user machine, an error message for missing wpcap.dll may be displayed when running the executable
+and running the app from a command line will have no results or prints.
+
 You can run the tool directly using .\vtg.exe.
 
 ### Excel Report generation
