@@ -1,10 +1,24 @@
 ## VALIDATION REPORT GENERATION - validator
 
 ### Features
+- Protection against script files tampering
+- protection against grouped test toml tampering
+- Generate a technician-friendly Excel report, Includes metadata rows for technician and firmware details
 - Validation test runner
 - Validation email template generator
+- Capture pcap files from test runs
+- Automated sensor system configuration dump
 
 ### Using the tool
+From vtg version 2.2 onward, the user machine will be required to have npcap installed.
+
+A default npcap installation executable for windows can be found at /pc_required_installations/npcap-1.83.exe
+
+Or you can use the following internet link to download the appropriate file: https://npcap.com/
+
+If this is not installed on the user machine, an error message for missing wpcap.dll may be displayed when running the executable
+and running the app from a command line will have no results or prints.
+
 You can run the tool directly using .\vtg.exe.
 
 ### Excel Report generation
@@ -68,6 +82,14 @@ Run all in instruction file
 Specify an instruction toml file
 - .\vtg.exe --test -i Path/To/Instruction.toml
 
+### Pcap capturing
+
+This tool can automatically capture pcap files during the test run.
+
+The pcap files are generated into the directory /pcaps.
+
+Rerunning same tests will remove the last pcap file for that test and start a new one.
+
 
 ### Generating the email template
 
@@ -82,3 +104,13 @@ The email includes:
 Once ready, run:
 
 - .\vtg.exe --email-gen example.sender@example.com example.recipient@example.com
+
+
+### Automated sensor system configuration dump
+
+This tool can automatically do configuration dump from a powered sensor.
+
+To bypass this functionality in the event of sensor not working, you can run the email
+generator command with the bypass flag.
+
+The sensor configuration dump with output to an email attachment directory.

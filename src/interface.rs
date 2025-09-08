@@ -3,7 +3,7 @@ use clap::{Parser, Subcommand};
 #[derive(Parser, Debug)]
 #[command(
     name = "vtg",
-    version = "2.1",
+    version = "2.2",
     about = "Generates filtered validation test reports"
 )]
 pub struct Cli {
