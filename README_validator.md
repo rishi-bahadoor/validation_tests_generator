@@ -10,11 +10,15 @@
 - Automated sensor system configuration dump
 
 ### Using the tool
-From vtg version 2.2 onward, the user machine will be required to have npcap installed.
+From vtg version 2.2 onward, the user machine will be required to have the npcap-sdk on their system
 
-A default npcap installation executable for windows can be found at /pc_required_installations/npcap-1.83.exe
+A default npcap-sdk executable for windows can be found at /pc_required_installations/npcap-sdk-1.15.zip
 
 Or you can use the following internet link to download the appropriate file: https://npcap.com/
+
+Once the sdk is on the system, the following environment variables must be updated:
+- `{path-to-npcap-sdk}\Include` must be added to the `INCLUDE` environment variable
+- `{path-to-npcap-sdk}\Lib\x64` must be added to the `LIB` environment variable
 
 If this is not installed on the user machine, an error message for missing wpcap.dll may be displayed when running the executable
 and running the app from a command line will have no results or prints.
@@ -34,7 +38,7 @@ example:
 
 ### Instruction types and using the validation test instructions toml
 
-This functionality reads the generated filtered toml list for a specific test 
+This functionality reads the generated filtered toml list for a specific test
 and prints the instructions on the terminal for that test. If the test has some
 form of automation, the user will be prompted to use it. There are various
 types of automation levels:

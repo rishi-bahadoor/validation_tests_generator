@@ -68,9 +68,13 @@ pub fn ccc_handler(trimmed_line: &str, auto: bool) -> Result<(), Box<dyn Error>>
 }
 
 fn get_ccc_output(args: &str) -> Result<String, Box<dyn Error>> {
-    let output = Command::new(PATH_CCC_EXE)
-        .arg("get")
-        .args(args.split_whitespace())
+    let mut command = Command::new(PATH_CCC_EXE);
+    command.arg("get");
+    command.args(args.split_whitespace());
+
+    // println!("Executing command: {:?}", command);
+
+    let output = command
         .output()
         .map_err(|e| Box::new(e) as Box<dyn Error>)?;
 
@@ -88,12 +92,11 @@ fn get_ccc_output(args: &str) -> Result<String, Box<dyn Error>> {
 
 fn get_ccc_output_integer(args: &str) -> Result<i32, Box<dyn Error>> {
     let output = get_ccc_output(args)?;
-    println!("Output from ccc get {}: `{}`", args, output);
     output
         .trim()
         .split(|c| c == '[' || c == ']')
         .nth(1)
-        .ok_or("Failed to extract integer from output string")?
+        .ok_or("Failed to extract integer from square brackets")?
         .trim()
         .parse::<i32>()
         .map_err(|e| Box::new(e) as Box<dyn Error>)
