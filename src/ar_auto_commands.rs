@@ -79,7 +79,7 @@ fn instruction_handler(instructions: &Vec<Value>, auto: bool) -> Result<(), Box<
             } else if trimmed.starts_with("panorama") {
                 panorama_cli_handler(trimmed)?;
             } else if trimmed.starts_with("minimal_dchp_server") {
-                minimal_dhcp_server_runner()?;
+                minimal_dhcp_server_runner(trimmed)?;
             } else {
                 generic_runner(trimmed)?;
             }

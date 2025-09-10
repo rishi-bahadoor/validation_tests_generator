@@ -1,4 +1,5 @@
 import time
+import sys
 from scapy.all import AsyncSniffer, sendp, Ether, IP, UDP, BOOTP, DHCP, get_if_hwaddr, ARP, srp1
 
 # --- Configuration ---
@@ -106,6 +107,7 @@ if __name__ == "__main__":
     server = MinimalDhcpServer()
     try:
         server.start()
-        time.sleep(100)
-    except KeyboardInterrupt:
+        # Self terminate after a set time
+        time.sleep(sys.argv[1])
+    except:
         server.stop()

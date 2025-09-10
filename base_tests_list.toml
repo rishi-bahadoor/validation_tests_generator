@@ -769,9 +769,10 @@ pass_condition = ""
 instructions = [
   "## FULL_AUTO ##",
   "## Set sensor ip to 0.0.0.0 ##",
-  "ccc set src_ip=0.0.0.0 --force",
+  "## ccc set src_ip=0.0.0.0 --force ##",
   "## Start the DHCP server ##",
-  "minimal_dchp_server",
+  "minimal_dchp_server start",
+  "minimal_dchp_server stop",
   "## On DHCP IP assignment, the sensor src ip should be set to the DHCP IP range configured on the router IP ##",
   "## Verify the ip change in wireshark and also test connectivity from ccc tool ##",
 ]
