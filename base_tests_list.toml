@@ -109,7 +109,7 @@ instructions = [
   "## Restore the sensor setting to defaults ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
-  ]
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -129,7 +129,7 @@ instructions = [
   "## Restore the sensor setting to defaults ##",
   "## Ensure the PC is on the cepton network for diag --fix ##",
   "ccc diag --fix",
-  ]
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
@@ -242,7 +242,7 @@ instructions = [
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0 --force",
   "## Observe the panorama 40Hz cap at 21Hz test ##",
-  "panorama TestValidationMST40HZCapAt21HZ"
+  "panorama TestValidationMST40HZCapAt21HZ",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -767,14 +767,12 @@ test_priority = "LOW"
 test_description = "Check DHCP functionality"
 pass_condition = ""
 instructions = [
-  "## SEMI_AUTO ##",
-  "## This is best tested using a router or dedicated DHCP server ##",
-  "## Connect the sensor ethernet port to the router ##",
-  "## Enable the DHCP server on the router (power cycle of the router may be needed to release the IP lease) ##",
+  "## FULL_AUTO ##",
   "## Set sensor ip to 0.0.0.0 ##",
   "ccc set src_ip=0.0.0.0 --force",
+  "## Start the DHCP server ##",
+  "minimal_dchp_server",
   "## On DHCP IP assignment, the sensor src ip should be set to the DHCP IP range configured on the router IP ##",
-  "## Remove static ip assignments from your pc network adapter to also get a DHCP assigned IP in the same subnet as the sensor ##",
   "## Verify the ip change in wireshark and also test connectivity from ccc tool ##",
 ]
 test_authors_and_contact_persons = ["TBD"]

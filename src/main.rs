@@ -6,6 +6,7 @@ mod misc;
 
 mod ar_auto_commands;
 mod ar_ccc_commands;
+mod ar_dhcp_server_commands;
 mod ar_generic_commands;
 mod ar_panorama_commands;
 mod ar_process_vti;
