@@ -3,8 +3,6 @@ use std::sync::Mutex;
 use std::{
     error::Error,
     process::{Child, Command},
-    thread,
-    time::Duration,
 };
 
 use crate::scripts_find::script_path;
@@ -51,7 +49,7 @@ fn start_server() -> Result<(), Box<dyn Error>> {
     let script = script_path("minimal_dhcp_server.py")?;
     let runtime = 3600.to_string(); // Seconds to run server in the even this program crashes and we don't kill it
     let child = Command::new("python").arg(script).arg(runtime).spawn()?;
-
+    println!("Server process ID: {}", child.id());
     *lock = Some(child);
     return Ok(());
 }

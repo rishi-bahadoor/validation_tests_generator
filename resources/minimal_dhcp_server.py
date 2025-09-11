@@ -104,10 +104,17 @@ class MinimalDhcpServer:
 
 # ---------------- Main ----------------
 if __name__ == "__main__":
+    # A runtime argument is expected in the event that the program
+    # that calls this script dies without killing the script.
+    # runtime is in seconds
+    runtime = int(sys.argv[1])
     server = MinimalDhcpServer()
     try:
+        # Is run asynchronously
         server.start()
         # Self terminate after a set time
-        time.sleep(sys.argv[1])
+        time.sleep(runtime)
+        print("Self terminating after requested time")
+        server.stop()
     except:
         server.stop()
