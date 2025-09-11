@@ -1,4 +1,4 @@
-# VERSION 1.1.5
+# VERSION 1.1.6
 
 import sys
 from pathlib import Path
@@ -25,7 +25,7 @@ STATUS_COLORS = {
     "Blocked": "#add8e6",
 }
 
-EMAIL_FILE_NAME = "validation_report_message.eml"
+EMAIL_FILE_NAME = "validation_report_message"
 EMAIL_SUBJECT   = f"UFB Ultra Release Status Track - {date.today().strftime('%d-%m-%Y')}"
 
 # =============================================================================
@@ -309,22 +309,29 @@ def build_email_message(xlsx_path, from_addr, recipients):
 # =============================================================================
 
 def main():
-    if len(sys.argv) == 4:
-        from_addr   = sys.argv[1]
-        to_addr     = sys.argv[2]
-        excel_file  = sys.argv[3]
+    if len(sys.argv) == 5:
+        email_name  = sys.argv[1]
+        from_addr   = sys.argv[2]
+        to_addr     = sys.argv[3]
+        excel_file  = sys.argv[4]
     elif len(sys.argv) == 1:
+        email_name = EMAIL_FILE_NAME
         from_addr = EMAIL_FROM_DEFAULT
         to_addr   = EMAIL_TO_DEFAULT
         excel_file = EXCEL_FILE_DEFAULT
     else:
-        print(f"Usage: {sys.argv[0]} [sender_email recipient_email]")
+        print(f"Usage: {sys.argv[0]} [email_name sender_email recipient_email]")
         sys.exit(1)
+
+    if not email_name.lower().endswith(".eml"):
+        email_name_ext = f"{email_name}.eml"
+    else:
+        email_name_ext = email_name
 
     recipients = to_addr if isinstance(to_addr, list) else [to_addr]
     message    = build_email_message(excel_file, from_addr, recipients)
 
-    with open(EMAIL_FILE_NAME, "w") as f:
+    with open(email_name_ext, "w") as f:
         f.write(message.as_string())
 
 

@@ -15,6 +15,14 @@ pub struct Cli {
 pub enum Command {
     /// Generate email report
     EmailGen {
+        #[arg(
+            short = 'n',
+            long = "name-email",
+            help = "Name for the generated email template file"
+        )]
+        email_name: Option<String>,
+        #[arg(value_name = "input excel file")]
+        input_excel_file: String,
         #[arg(value_name = "SENDER_EMAIL")]
         sender_email: String,
         #[arg(value_name = "RECIPIENT_EMAIL")]
