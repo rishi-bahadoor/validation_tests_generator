@@ -39,11 +39,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match args.command {
         Command::EmailGen {
+            email_name,
+            input_excel_file,
             sender_email,
             recipient_email,
             bypass_generation,
         } => {
-            email_gen(&sender_email, &recipient_email, bypass_generation)?;
+            email_gen(
+                &email_name,
+                &input_excel_file,
+                &sender_email,
+                &recipient_email,
+                bypass_generation,
+            )?;
         }
         Command::Test {
             test_ids,
