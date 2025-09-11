@@ -782,9 +782,9 @@ instructions = [
   "## Stop the DHCP server ##",
   "minimal_dchp_server stop",
   "## On DHCP IP assignment, the sensor src ip should be set to the DHCP IP range configured on the router IP ##",
-  "## Verify the ip change in wireshark and also test connectivity from ccc tool ##",
-  "## Set sensor ip to a static value to prevent auto-ip assignment ##",
-  "## auto-ip assignment with the pc's IP being static will prevent ccc from communication ##",
+  "## Verify the ip change in wireshark ##",
+  "wait_e",
+  "## Set sensor ip to 192.168.32.32 to make it static ##",
   "ccc set src_ip=192.168.32.32 --force",
 ]
 test_authors_and_contact_persons = ["TBD"]
