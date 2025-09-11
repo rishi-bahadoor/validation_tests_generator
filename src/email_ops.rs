@@ -6,6 +6,7 @@ use std::process::Command;
 use crate::scripts_find::script_path;
 
 pub fn generate_email_using_python(
+    email_name: &str,
     sender: &str,
     recipient: &str,
     excel_file: &str,
@@ -20,6 +21,7 @@ pub fn generate_email_using_python(
 
     let status = Command::new("python")
         .arg(script)
+        .arg(email_name)
         .arg(sender)
         .arg(recipient)
         .arg(excel_file)
