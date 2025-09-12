@@ -4,7 +4,6 @@ from scapy.all import AsyncSniffer, sendp, Ether, IP, UDP, BOOTP, DHCP, get_if_h
 
 # --- Configuration ---
 SERVER_IP = "192.168.32.100"
-OFFERED_IP = "192.168.32.102"
 LEASE_TIME = 3600
 INTERFACE = "Ethernet"  # Change to your NIC name
 MAC_LEASE = None        # Tracks current lease (mac)
@@ -108,6 +107,7 @@ if __name__ == "__main__":
     # that calls this script dies without killing the script.
     # runtime is in seconds
     runtime = int(sys.argv[1])
+    OFFERED_IP = sys.argv[2]
     server = MinimalDhcpServer()
     try:
         # Is run asynchronously
