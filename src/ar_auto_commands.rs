@@ -1,7 +1,7 @@
 use std::error::Error;
 use toml::Value;
 
-use crate::ar_ccc_commands::{ccc_handler, factory_init};
+use crate::ar_ccc_commands::{ccc_handler, factory_init, set_power_state};
 use crate::ar_generic_commands::generic_runner;
 use crate::ar_panorama_commands::panorama_cli_handler;
 use crate::misc::{get_key_entry_y, print_thin_separator, wait_s};
@@ -73,6 +73,12 @@ fn instruction_handler(instructions: &Vec<Value>, auto: bool) -> Result<(), Box<
                 ccc_handler(trimmed, auto)?;
             } else if trimmed.starts_with("event_timed") {
                 event_timed(trimmed)?;
+            } else if trimmed.starts_with("power-state") {
+                let parts: Vec<&str> = trimmed.split_whitespace().collect();
+                if parts.len() != 2 {
+                    return Err("Usage: power-state <state>".into());
+                }
+                set_power_state(parts[1].trim())?;
             } else if trimmed.starts_with("factory_init") {
                 factory_init()?;
             } else if trimmed.starts_with("panorama") {

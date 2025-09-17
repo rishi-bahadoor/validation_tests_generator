@@ -99,6 +99,21 @@ fn get_ccc_output_integer(args: &str) -> Result<i32, Box<dyn Error>> {
         .map_err(|e| Box::new(e) as Box<dyn Error>)
 }
 
+pub fn set_power_state(state: &str) -> Result<(), Box<dyn Error>> {
+    match state {
+        "Run" | "Ready" | "StandBy" | "SoftOff" => {}
+        _ => {
+            return Err(Box::new(std::io::Error::new(
+                std::io::ErrorKind::InvalidInput,
+                "Invalid power state. Use 'Run', 'Ready', 'StandBy', or 'SoftOff'.",
+            )));
+        }
+    }
+    let line = format!("ccc power-state {}", state);
+    println!("Running {}", line);
+    ccc_command_runner(&line)
+}
+
 pub fn factory_init() -> Result<(), Box<dyn Error>> {
     println!("Running factory_init...");
 
