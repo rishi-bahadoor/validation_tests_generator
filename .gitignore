@@ -10,3 +10,5 @@
 /*.png
 
 *.pcap
+
+/npcap-sdk

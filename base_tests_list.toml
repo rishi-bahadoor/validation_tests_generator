@@ -515,6 +515,8 @@ test_description = "Validate firmware upload capability via CCC App"
 pass_condition = "Firmware updates successfully and the FW version change is observed when checked"
 instructions = [
   "## FULL_AUTO ##",
+  "## Turn off point_enable ##",
+  "ccc set point_enable=0 --force",
   "## Run the update firmware command on the sensor ##",
   "ccc update-firmware ultra.cepbin --force",
   "## Power cycle the sensor ##",
@@ -532,6 +534,8 @@ test_description = "Validate firmware upload capability via CCC App"
 pass_condition = "Firmware updates successfully and the FW version change is observed when checked"
 instructions = [
   "## FULL_AUTO ##",
+  "## Turn off point_enable ##",
+  "ccc set point_enable=0 --force",
   "## Run the boot server command on the sensor ##",
   "ccc boot-server  ultra.cepbin",
   "## Check that the FW version has been updated ##",
@@ -547,6 +551,8 @@ test_description = "Validate firmware rescue mode via CCC App"
 pass_condition = "Firmware updates successfully and the FW version change is observed when checked"
 instructions = [
   "## FULL_AUTO ##",
+  "## Turn off point_enable ##",
+  "ccc set point_enable=0 --force",
   "## Run the rescue mode command on the sensor ##",
   "ccc update-firmware --rescue-mode ultra.cepbin",
   "## Check that the FW version has been updated ##",
@@ -827,6 +833,8 @@ instructions = [
   "## Ensure the sensor has uninitialized configurations or incorrect but safe values ##",
   "## Noteworthy configurations: ROI's, SPAD's, MST's ##",
   "## REPLACE THIS WITH : a set command that will set some wrong but safe configurations ##",
+  "## Turn off point_enable ##",
+  "ccc set point_enable=0 --force",
   "## Run the factory-init command ##",
   "factory_init",
 ]
