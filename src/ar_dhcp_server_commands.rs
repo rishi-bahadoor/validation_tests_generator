@@ -13,7 +13,7 @@ pub fn minimal_dhcp_server_runner(trimmed_line: &str) -> Result<(), Box<dyn Erro
         );
     }
 
-    // resolve the .py location
+    // Resolve the .py location
     let script = script_path("minimal_dhcp_server.py")?;
     // Give sensor time to carry out the DHCP operation.
     // Also used by the server to terminate in the event we don't

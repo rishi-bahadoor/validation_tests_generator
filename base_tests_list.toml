@@ -771,6 +771,8 @@ instructions = [
   "## Prerequisites: ##",
   "## The PC must have a static IP assigned to the Ethernet Interface ##",
   "## The sensor must have a static IP assigned ##",
+  "## Power cycle the sensor and ensure packets are received from the sensor. ##",
+  "wait_e",
   "## Set sensor IP to 0.0.0.0 ##",
   "ccc set src_ip=0.0.0.0 --force",
   "## Start the DHCP server with a specified offered IP ##",
