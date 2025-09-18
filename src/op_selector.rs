@@ -1,4 +1,5 @@
 use std::error::Error;
+use std::{ffi::OsStr, path::Path};
 
 use crate::ar_process_vti::{ar_print_test_item, ar_process_test_item};
 use crate::email_ops::generate_email_using_python;
@@ -13,12 +14,13 @@ use crate::test_file_ops::{
     export_grouped_csv, export_grouped_toml, extract_test_ids, test_file_filter,
 };
 
-const DEFAULT_EXCEL_FILE: &str = "validation_test_report.xlsx";
 const DEFAULT_INSTRUCTION_FILE: &str = "validation_test_instructions.toml";
 const DEFAULT_CSV_FILE: &str = "validation_test_report.csv";
 const DEFAULT_BASE_TOML: &str = "base_tests_list.toml";
 
 pub fn email_gen(
+    email_name: &Option<String>,
+    input_excel_file: &String,
     sender_email: &String,
     recipient_email: &String,
     bypass_generation: bool,
@@ -32,10 +34,18 @@ pub fn email_gen(
         generate_email_attachments()?;
     }
 
+    let final_email_name = email_name.as_deref().map(str::to_owned).unwrap_or_else(|| {
+        Path::new(input_excel_file)
+            .file_stem()
+            .and_then(OsStr::to_str)
+            .unwrap_or("email")
+            .to_string()
+    });
+
     // Generate the email template.
     let sender = sender_email.as_str();
     let recipient = recipient_email.as_str();
-    let _ = generate_email_using_python(sender, recipient, DEFAULT_EXCEL_FILE)?;
+    let _ = generate_email_using_python(&final_email_name, sender, recipient, input_excel_file)?;
     Ok(())
 }
 
@@ -91,27 +101,25 @@ pub fn test_run(
 }
 
 pub fn excel_gen(input_instruction_file: &Option<String>) -> Result<(), Box<dyn Error>> {
-    // Set flag to skip sanity check if input is a custom file.
-    let is_file_custom = input_instruction_file.is_some();
-
     // Extract &str from Option<String>
     let file_path: &str = input_instruction_file
         .as_deref()
         .unwrap_or(DEFAULT_INSTRUCTION_FILE);
 
-    // Skip this sanity check if the input is a custom file.
-    // We can remove the skip and check all if all scripts are intended to be
-    // non tampering.
-    if !is_file_custom {
-        sanity_check_toml(file_path)?; // Now passes &str
-    }
+    sanity_check_toml(file_path)?; // Now passes &str
 
     // Sanity check the python scripts used for excel sheet operations.
     sanity_check_python_scripts()?;
     sanity_dependencies()?;
 
+    let csv_file_name = Path::new(file_path)
+        .file_stem()
+        .and_then(OsStr::to_str)
+        .map(|stem| format!("{}_report.csv", stem))
+        .unwrap_or_else(|| "report.csv".into());
+
     // Perform the excel generation.
-    let csv_path = export_grouped_csv(file_path, DEFAULT_CSV_FILE)?;
+    let csv_path = export_grouped_csv(file_path, &csv_file_name)?;
     let xlsx_path = convert_csv_to_excel(&csv_path)?;
     format_excel_sheet(&xlsx_path)?;
     Ok(())

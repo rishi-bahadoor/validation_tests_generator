@@ -1,8 +1,10 @@
 use std::error::Error;
+use std::ffi::OsStr;
 use std::fs;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Read};
 use std::path::{Path, PathBuf};
+use toml::Value;
 
 const FNV_OFFSET_BASIS: u32 = 0x56544732; // VTG2
 const FNV_PRIME: u32 = 0x01565447; // 0x01 VTG
@@ -25,8 +27,8 @@ const SCRIPT_CHECKS: &[ScriptCheck] = &[
     },
     ScriptCheck {
         path: "resources/excel_to_email_template.py",
-        expected_version: "1.1.5",
-        expected_hash: 0x39F4D4D5, // Replace with actual hash
+        expected_version: "1.1.6",
+        expected_hash: 0xA06FD7C9, // Replace with actual hash
     },
 ];
 
@@ -181,6 +183,21 @@ pub fn sanity_check_python_scripts() -> Result<(), String> {
 }
 
 pub fn sanity_check_toml(path: &str) -> Result<(), String> {
+    // 1) Quick extension check
+    let p = Path::new(path);
+    match p.extension().and_then(OsStr::to_str) {
+        Some(ext) if ext.eq_ignore_ascii_case("toml") => {}
+        _ => {
+            return Err(format!("Expected a '.toml' file extension, got '{}'", path));
+        }
+    }
+
+    // 2) Parse‐as‐TOML check
+    let contents =
+        fs::read_to_string(p).map_err(|e| format!("Failed to read '{}': {}", path, e))?;
+    toml::from_str::<Value>(&contents)
+        .map_err(|e| format!("Invalid TOML syntax in '{}': {}", path, e))?;
+
     let actual_hash = toml_compute_fnv1a_32(path)?;
     let expected_hash = toml_hash_reader(path)?;
 
