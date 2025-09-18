@@ -1014,7 +1014,6 @@ dependencies = [
  "color-print",
  "csv",
  "indicatif",
- "once_cell",
  "pcap",
  "rust_xlsxwriter",
  "serde",
