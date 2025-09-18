@@ -2,7 +2,7 @@ use std::{error::Error, process::Command};
 
 use crate::scripts_find::script_path;
 
-pub fn minimal_dhcp_server_runner(trimmed_line: &str) -> Result<(), Box<dyn Error>> {
+pub fn dhcp_server_runner(trimmed_line: &str) -> Result<(), Box<dyn Error>> {
     // Split and collect all whitespace-separated tokens
     let args: Vec<&str> = trimmed_line.split_whitespace().collect();
 
@@ -20,7 +20,7 @@ pub fn minimal_dhcp_server_runner(trimmed_line: &str) -> Result<(), Box<dyn Erro
     // 20 seconds was chosen to give sensor time to carry out the DHCP operation.
     // It is also used by the server to self terminate in the event we don't.
     let runtime = 20.to_string();
-    let offered_ip = args[1];
+    let offered_ip = args[0];
     let status = Command::new("python")
         .arg(script)
         .arg(runtime)

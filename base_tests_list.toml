@@ -776,7 +776,7 @@ instructions = [
   "## Set sensor IP to 0.0.0.0 ##",
   "ccc set src_ip=0.0.0.0 --force",
   "## Start the DHCP server with a specified offered IP ##",
-  "minimal_dchp_server 192.168.32.102",
+  "dhcp_server 192.168.32.102",
   "## On DHCP IP assignment, the sensor src IP should be set to 192.168.32.102 ##",
   "## Verify the IP change in wireshark ##",
   "wait_e",

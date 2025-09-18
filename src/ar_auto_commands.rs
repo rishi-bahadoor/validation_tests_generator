@@ -2,7 +2,6 @@ use std::error::Error;
 use toml::Value;
 
 use crate::ar_ccc_commands::{ccc_handler, factory_init};
-use crate::ar_dhcp_server_commands::minimal_dhcp_server_runner;
 use crate::ar_generic_commands::generic_runner;
 use crate::ar_panorama_commands::panorama_cli_handler;
 use crate::misc::{get_key_entry_y, print_thin_separator, wait_s};
@@ -78,8 +77,6 @@ fn instruction_handler(instructions: &Vec<Value>, auto: bool) -> Result<(), Box<
                 factory_init()?;
             } else if trimmed.starts_with("panorama") {
                 panorama_cli_handler(trimmed)?;
-            } else if trimmed.starts_with("minimal_dchp_server") {
-                minimal_dhcp_server_runner(trimmed)?;
             } else {
                 generic_runner(trimmed)?;
             }

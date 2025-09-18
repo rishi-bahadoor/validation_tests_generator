@@ -1,5 +1,6 @@
 use std::error::Error;
 
+use crate::dhcp_server::dhcp_server_runner;
 use crate::misc::{press_enter, wait_s};
 
 pub fn generic_runner(trimmed_line: &str) -> Result<(), Box<dyn Error>> {
@@ -11,7 +12,8 @@ pub fn generic_runner(trimmed_line: &str) -> Result<(), Box<dyn Error>> {
         wait_s(timeout);
     } else if args[0] == "wait_e" {
         press_enter();
+    } else if args[0] == "dhcp_server" {
+        dhcp_server_runner(args[1])?;
     }
-
     Ok(())
 }
