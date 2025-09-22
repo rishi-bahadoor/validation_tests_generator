@@ -1,12 +1,10 @@
 use dhcp4r::{options, packet, server};
 use std::collections::HashMap;
+use std::error::Error;
 use std::net::{IpAddr, Ipv4Addr, UdpSocket};
 use std::ops::Add;
-use std::process;
 use std::thread;
 use std::time::{Duration, Instant};
-
-use std::error::Error;
 
 // Server configuration
 const SERVER_IP: Ipv4Addr = Ipv4Addr::new(192, 168, 32, 100);
@@ -20,21 +18,57 @@ const DNS_IPS: [Ipv4Addr; 2] = [
 const ROUTER_IP: Ipv4Addr = Ipv4Addr::new(192, 168, 32, 100);
 const LEASE_DURATION_SECS: u32 = 7200;
 const LEASE_NUM: u32 = 10; // IP pool size
+const NIC_NAME: &str = "Ethernet"; // NIC where sensor is connected
 
 // Derived constants
 const IP_START_NUM: u32 = bytes_u32!(IP_START);
 
 pub fn dhcp_server_runner() -> Result<(), Box<dyn Error>> {
-    // Run server in another thread
-    thread::spawn(|| {
-        if let Err(e) = start_dhcp_server() {
-            eprintln!("DHCP server failed: {}", e);
-        }
-        eprintln!("Cannot continue without DHCP server. Exiting.");
-        process::exit(1); // Kill entire program
-    });
+    if let Some(ip) = get_ipv4_address(NIC_NAME)? {
+        // If an IP address for the network interface can be found, Run server in another thread
+        thread::spawn(|| start_dhcp_server(ip));
+    } else {
+        return Err(format!(
+            "Network interface '{}' has no active IPv4 address or was not found.",
+            NIC_NAME
+        )
+        .into());
+    }
 
     Ok(())
+}
+
+/// Get the IPv4 address of a network interface by name, only if it's connected.
+/// Returns `Some(ipv4_string)` or `None` if not found / not connected.
+fn get_ipv4_address(interface_name: &str) -> Result<Option<String>, Box<dyn std::error::Error>> {
+    let adapters = ipconfig::get_adapters()?;
+
+    for adapter in adapters {
+        if adapter.friendly_name() == interface_name {
+            // Look for IPv4, regardless of oper_status
+            for ip in adapter.ip_addresses() {
+                if let IpAddr::V4(ipv4) = ip {
+                    return Ok(Some(ipv4.to_string()));
+                }
+            }
+            return Ok(None); // adapter found but no IPv4
+        }
+    }
+
+    Ok(None) // no adapter by that name
+}
+
+fn start_dhcp_server(ip: String) {
+    let socket_str = format!("{}:67", ip);
+    let socket = UdpSocket::bind(socket_str).unwrap();
+    socket.set_broadcast(true).unwrap();
+
+    let ms = MyServer {
+        leases: HashMap::new(),
+        last_lease: 0,
+        lease_duration: Duration::new(LEASE_DURATION_SECS as u64, 0),
+    };
+    server::Server::serve(socket, SERVER_IP, ms);
 }
 
 struct MyServer {
@@ -163,49 +197,4 @@ fn nak(s: &server::Server, req_packet: packet::Packet, message: &str) {
         Ipv4Addr::new(0, 0, 0, 0),
         req_packet,
     );
-}
-
-/// Get the IPv4 address of a network interface by name, only if it's connected.
-/// Returns `Some(ipv4_string)` or `None` if not found / not connected.
-fn get_ipv4_address(interface_name: &str) -> Result<Option<String>, Box<dyn std::error::Error>> {
-    let adapters = ipconfig::get_adapters()?;
-
-    for adapter in adapters {
-        if adapter.friendly_name() == interface_name {
-            // Look for IPv4, regardless of oper_status
-            for ip in adapter.ip_addresses() {
-                if let IpAddr::V4(ipv4) = ip {
-                    return Ok(Some(ipv4.to_string()));
-                }
-            }
-            return Ok(None); // adapter found but no IPv4
-        }
-    }
-
-    Ok(None) // no adapter by that name
-}
-
-fn start_dhcp_server() -> Result<(), Box<dyn std::error::Error>> {
-    let nic_name = "Ethernet"; // NIC where sensor is connected
-
-    if let Some(ip) = get_ipv4_address(nic_name)? {
-        let socket_str = format!("{}:67", ip);
-        let socket = UdpSocket::bind(socket_str).unwrap();
-        socket.set_broadcast(true).unwrap();
-
-        let ms = MyServer {
-            leases: HashMap::new(),
-            last_lease: 0,
-            lease_duration: Duration::new(LEASE_DURATION_SECS as u64, 0),
-        };
-        server::Server::serve(socket, SERVER_IP, ms);
-    } else {
-        return Err(format!(
-            "Network interface '{}' has no active IPv4 address or was not found.",
-            nic_name
-        )
-        .into());
-    }
-
-    Ok(())
 }
