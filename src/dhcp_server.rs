@@ -10,7 +10,7 @@ use std::error::Error;
 
 // Server configuration
 const SERVER_IP: Ipv4Addr = Ipv4Addr::new(192, 168, 32, 100);
-const IP_START: [u8; 4] = [192, 168, 32, 61];
+const IP_START: [u8; 4] = [192, 168, 32, 61]; // IP pool starting IP
 const SUBNET_MASK: Ipv4Addr = Ipv4Addr::new(255, 255, 255, 0);
 const DNS_IPS: [Ipv4Addr; 2] = [
     // Google DNS servers
@@ -19,29 +19,15 @@ const DNS_IPS: [Ipv4Addr; 2] = [
 ];
 const ROUTER_IP: Ipv4Addr = Ipv4Addr::new(192, 168, 32, 100);
 const LEASE_DURATION_SECS: u32 = 7200;
-const LEASE_NUM: u32 = 1;
+const LEASE_NUM: u32 = 1; // IP pool size
 
 // Derived constants
 const IP_START_NUM: u32 = bytes_u32!(IP_START);
 
-pub fn dhcp_server_runner(trimmed_line: &str) -> Result<(), Box<dyn Error>> {
-    // Split and collect all whitespace-separated tokens
-    let args: Vec<&str> = trimmed_line.split_whitespace().collect();
-
-    // Validate we have the token token: [start or stop]
-    if args.is_empty() {
-        return Err(
-            "Incorrect amount of arguments: Usage: minimal_dchp_server <offered_ip>".into(),
-        );
-    }
-
-    let offered_ip = args[0];
-
-    println!("{}", offered_ip);
-
+pub fn dhcp_server_runner() -> Result<(), Box<dyn Error>> {
     // Run server in another thread
     thread::spawn(|| {
-        if let Err(e) = run_dhcp_server() {
+        if let Err(e) = start_dhcp_server() {
             eprintln!("DHCP server failed: {}", e);
         }
         eprintln!("Cannot continue without DHCP server. Exiting.");
@@ -199,8 +185,8 @@ fn get_ipv4_address(interface_name: &str) -> Result<Option<String>, Box<dyn std:
     Ok(None) // no adapter by that name
 }
 
-fn run_dhcp_server() -> Result<(), Box<dyn std::error::Error>> {
-    let nic_name = "Ethernet10"; // NIC where sensor is connected
+fn start_dhcp_server() -> Result<(), Box<dyn std::error::Error>> {
+    let nic_name = "Ethernet"; // NIC where sensor is connected
 
     if let Some(ip) = get_ipv4_address(nic_name)? {
         println!("Successfully found {}'s IPv4 address: {}", nic_name, ip);
@@ -217,7 +203,7 @@ fn run_dhcp_server() -> Result<(), Box<dyn std::error::Error>> {
         server::Server::serve(socket, SERVER_IP, ms);
     } else {
         return Err(format!(
-            "Network interface '{}' has no active IPv4 address",
+            "Network interface '{}' has no active IPv4 address or was not found.",
             nic_name
         )
         .into());

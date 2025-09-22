@@ -13,7 +13,7 @@ pub fn generic_runner(trimmed_line: &str) -> Result<(), Box<dyn Error>> {
     } else if args[0] == "wait_e" {
         press_enter();
     } else if args[0] == "dhcp_server" {
-        dhcp_server_runner(args[1])?;
+        dhcp_server_runner()?;
     }
     Ok(())
 }
