@@ -3,6 +3,8 @@ use clap::{CommandFactory, Parser};
 // macro_use modules must be declared before modules that use it.
 #[macro_use]
 mod misc;
+#[macro_use(bytes_u32)]
+extern crate dhcp4r;
 
 mod ar_auto_commands;
 mod ar_ccc_commands;
