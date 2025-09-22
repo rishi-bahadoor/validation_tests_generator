@@ -10,7 +10,7 @@ use std::error::Error;
 
 // Server configuration
 const SERVER_IP: Ipv4Addr = Ipv4Addr::new(192, 168, 32, 100);
-const IP_START: [u8; 4] = [192, 168, 32, 61]; // IP pool starting IP
+const IP_START: [u8; 4] = [192, 168, 32, 40]; // IP pool starting IP
 const SUBNET_MASK: Ipv4Addr = Ipv4Addr::new(255, 255, 255, 0);
 const DNS_IPS: [Ipv4Addr; 2] = [
     // Google DNS servers
@@ -19,7 +19,7 @@ const DNS_IPS: [Ipv4Addr; 2] = [
 ];
 const ROUTER_IP: Ipv4Addr = Ipv4Addr::new(192, 168, 32, 100);
 const LEASE_DURATION_SECS: u32 = 7200;
-const LEASE_NUM: u32 = 1; // IP pool size
+const LEASE_NUM: u32 = 10; // IP pool size
 
 // Derived constants
 const IP_START_NUM: u32 = bytes_u32!(IP_START);
@@ -189,7 +189,6 @@ fn start_dhcp_server() -> Result<(), Box<dyn std::error::Error>> {
     let nic_name = "Ethernet"; // NIC where sensor is connected
 
     if let Some(ip) = get_ipv4_address(nic_name)? {
-        println!("Successfully found {}'s IPv4 address: {}", nic_name, ip);
         let socket_str = format!("{}:67", ip);
         let socket = UdpSocket::bind(socket_str).unwrap();
         socket.set_broadcast(true).unwrap();
@@ -199,7 +198,6 @@ fn start_dhcp_server() -> Result<(), Box<dyn std::error::Error>> {
             last_lease: 0,
             lease_duration: Duration::new(LEASE_DURATION_SECS as u64, 0),
         };
-        println!("DHCP server is running.");
         server::Server::serve(socket, SERVER_IP, ms);
     } else {
         return Err(format!(
