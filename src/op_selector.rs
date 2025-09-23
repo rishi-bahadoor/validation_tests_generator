@@ -6,7 +6,7 @@ use crate::email_ops::generate_email_using_python;
 use crate::excel_ops::{convert_csv_to_excel, format_excel_sheet};
 use crate::misc::{
     generate_email_attachments, get_key_entry_y, press_enter, print_thick_separator,
-    test_pass_fail_promt,
+    test_pass_fail_prompt,
 };
 use crate::python_env::sanity_dependencies;
 use crate::sanity::prepend_hash_to_toml;
@@ -102,7 +102,7 @@ pub fn test_run(
             eprintln!("Error processing test '{}': {}", test_id, e);
         }
         if is_excel_provided {
-            test_pass_fail_promt(excel_path, &test_id)?;
+            test_pass_fail_prompt(excel_path, &test_id)?;
         }
     }
 

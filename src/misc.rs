@@ -62,7 +62,7 @@ pub fn print_thin_separator() {
     println!("-------------------------------------------------------------------------");
 }
 
-pub fn test_pass_promt() -> Result<u32, Box<dyn Error>> {
+pub fn test_pass_prompt() -> Result<u32, Box<dyn Error>> {
     println!("\nDid the test pass? Press [y] if yes or anything else for no.");
     print!("> ");
     io::stdout().flush()?;
@@ -73,11 +73,11 @@ pub fn test_pass_promt() -> Result<u32, Box<dyn Error>> {
     if trimmed == "y" { Ok(1) } else { Ok(0) }
 }
 
-pub fn test_pass_fail_promt<P: AsRef<std::path::Path>>(
+pub fn test_pass_fail_prompt<P: AsRef<std::path::Path>>(
     xlsx_path: P,
     test_id: &str,
 ) -> Result<(), Box<dyn Error>> {
-    let ret = test_pass_promt()?; // returns 1 for pass, 0 for fail
+    let ret = test_pass_prompt()?; // returns 1 for pass, 0 for fail
 
     if ret == 1 {
         let default_note = "The test passed the expected criteria";
