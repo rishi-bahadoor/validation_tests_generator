@@ -6,6 +6,7 @@ use crate::email_ops::generate_email_using_python;
 use crate::excel_ops::{convert_csv_to_excel, format_excel_sheet};
 use crate::misc::{
     generate_email_attachments, get_key_entry_y, press_enter, print_thick_separator,
+    test_pass_fail_promt,
 };
 use crate::python_env::sanity_dependencies;
 use crate::sanity::prepend_hash_to_toml;
@@ -16,6 +17,7 @@ use crate::test_file_ops::{
 
 const DEFAULT_INSTRUCTION_FILE: &str = "validation_test_instructions.toml";
 const DEFAULT_CSV_FILE: &str = "validation_test_report.csv";
+const DEFAULT_EXCEL_FILE: &str = "validation_test_report.xlsx";
 const DEFAULT_BASE_TOML: &str = "base_tests_list.toml";
 
 pub fn email_gen(
@@ -52,15 +54,20 @@ pub fn email_gen(
 pub fn test_run(
     test_ids: Option<Vec<String>>,
     input_instruction_file: &Option<String>,
+    input_excel_file: &Option<String>,
 ) -> Result<(), Box<dyn Error>> {
     // Determine if the file is custom
     let is_file_custom = input_instruction_file.is_some();
+    let is_excel_provided = input_excel_file.is_some();
     let is_ids_provided = test_ids.is_some();
 
     // Resolve file path
     let file_path: &str = input_instruction_file
         .as_deref()
         .unwrap_or(DEFAULT_INSTRUCTION_FILE);
+
+    // Resolve file path
+    let excel_path: &str = input_excel_file.as_deref().unwrap_or(DEFAULT_EXCEL_FILE);
 
     // Skip this sanity check if the input is a custom file.
     // We can remove the skip and check all if all scripts are intended to be
@@ -93,6 +100,9 @@ pub fn test_run(
         print_thick_separator();
         if let Err(e) = ar_process_test_item(file_path, &test_id) {
             eprintln!("Error processing test '{}': {}", test_id, e);
+        }
+        if is_excel_provided {
+            test_pass_fail_promt(excel_path, &test_id)?;
         }
     }
 

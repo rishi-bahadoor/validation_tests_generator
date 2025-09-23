@@ -60,6 +60,8 @@ directory as the executable.
         test_ids: Option<Vec<String>>,
         #[arg(short = 'i', long = "input-instruction-file")]
         input_instruction_file: Option<String>,
+        #[arg(short = 'x', long = "input-excel-file")]
+        input_excel_file: Option<String>,
     },
     /// Generate Excel report from grouped CSV
     Excel {

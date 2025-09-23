@@ -1,11 +1,17 @@
-# VERSION 1.1.3
+# VERSION 1.1.4
 
 import sys
+import win32com.client
+import time
+
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.formatting.rule import FormulaRule
+
+from pathlib import Path
+
 
 ## Constants ##
 HEADERS = [
@@ -27,6 +33,20 @@ STATUS_COLORS  = {
 }
 
 ## Helpers ##
+def force_close_excel_file(path):
+    excel = win32com.client.Dispatch("Excel.Application")
+    for wb in excel.Workbooks:
+        if wb.FullName.lower() == str(path).lower():
+            wb.Close(SaveChanges=True)
+            break
+    excel.Quit()
+    time.sleep(1)  # Give Excel time to release the lock
+
+def reopen_excel_file(path):
+    excel = win32com.client.Dispatch("Excel.Application")
+    excel.Visible = True
+    excel.Workbooks.Open(str(path))
+
 def find_header_rows(ws, header_names):
     """
     Return a sorted list of all row indices where the first
@@ -131,9 +151,73 @@ def populate_single_cell(ws, title_text):
     ws.column_dimensions["A"].width = 120
     wrap_all_cells(ws)
 
+def update_test_row_by_id(ws, test_id: str, new_status: str, new_notes: str = None):
+    """
+    Update the Status and optionally Notes cell for the row matching the given Test ID.
+    """
+    if new_status not in STATUS_OPTIONS:
+        raise ValueError(f"Invalid status '{new_status}'. Must be one of: {STATUS_OPTIONS}")
+
+    header_names = [h for h, _ in HEADERS]
+    header_rows = find_header_rows(ws, header_names)
+    if not header_rows:
+        raise RuntimeError("No header row matching HEADERS found!")
+
+    test_id_col = find_column_letter_at_row(ws, "Test ID", header_rows[0])
+    status_col  = find_column_letter_at_row(ws, "Status", header_rows[0])
+    notes_col   = find_column_letter_at_row(ws, "Notes", header_rows[0])
+
+    for row in range(header_rows[0] + 1, ws.max_row + 1):
+        cell_value = str(ws[f"{test_id_col}{row}"].value).strip()
+        if cell_value == test_id:
+            ws[f"{status_col}{row}"].value = new_status
+            if new_notes is not None:
+                ws[f"{notes_col}{row}"].value = new_notes
+            return
+
+    raise ValueError(f"Test ID '{test_id}' not found in sheet.")
+
+def safe_update_excel(path, test_id, new_status, new_notes=None):
+    path = Path(path).resolve()
+
+    try:
+        force_close_excel_file(path)
+    except Exception as e:
+        print(f"⚠️ Could not close Excel file: {e}")
+
+    wb = load_workbook(path)
+    ws = wb.active
+    update_test_row_by_id(ws, test_id, new_status, new_notes)
+    wb.save(path)
+
+    try:
+        reopen_excel_file(path)
+    except Exception as e:
+        print(f"⚠️ Could not reopen Excel file: {e}")
+
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python excel_format.py <path_to_excel_file>")
+    if len(sys.argv) < 3:
+        print("Usage:")
+        print("  Format: python excel_format.py format <path_to_excel_file>")
+        print("  Update: python excel_format.py update <path_to_excel_file> <test_id> <new_status> [notes]")
         sys.exit(1)
-    format_excel_sheet(sys.argv[1])
+
+    mode = sys.argv[1].lower()
+    path = sys.argv[2]
+
+    if mode == "format":
+        format_excel_sheet(path)
+
+    elif mode == "update":
+        if len(sys.argv) < 5:
+            print("Usage: python excel_format.py update <path_to_excel_file> <test_id> <new_status> [notes]")
+            sys.exit(1)
+        test_id = sys.argv[3]
+        new_status = sys.argv[4]
+        new_notes = sys.argv[5] if len(sys.argv) >= 6 else None
+        safe_update_excel(path, test_id, new_status, new_notes)
+
+    else:
+        print(f"Unknown mode '{mode}'. Use 'format' or 'update'.")
+        sys.exit(1)

@@ -5,6 +5,7 @@ use std::thread::sleep;
 use std::time::Duration;
 
 use crate::ar_ccc_commands::get_config_dump;
+use crate::excel_ops::{report_sheet_test_id_fail, report_sheet_test_id_pass};
 
 const EMAIL_ATTACHMENTS_FLDR: &str = "./email_attachments/";
 
@@ -59,6 +60,45 @@ pub fn print_thick_separator() {
 
 pub fn print_thin_separator() {
     println!("-------------------------------------------------------------------------");
+}
+
+pub fn test_pass_promt() -> Result<u32, Box<dyn Error>> {
+    println!("\nDid the test pass? Press [y] if yes or anything else for no.");
+    print!("> ");
+    io::stdout().flush()?;
+
+    let mut input = String::new();
+    io::stdin().read_line(&mut input)?;
+    let trimmed = input.trim().to_string();
+    if trimmed == "y" { Ok(1) } else { Ok(0) }
+}
+
+pub fn test_pass_fail_promt<P: AsRef<std::path::Path>>(
+    xlsx_path: P,
+    test_id: &str,
+) -> Result<(), Box<dyn Error>> {
+    let ret = test_pass_promt()?; // returns 1 for pass, 0 for fail
+
+    if ret == 1 {
+        let default_note = "The test passed the expected criteria";
+        report_sheet_test_id_pass(xlsx_path, test_id, Some(default_note))?;
+    } else {
+        print!("Enter optional note (or leave blank for default fail note): ");
+        io::stdout().flush()?;
+        let mut note_input = String::new();
+        io::stdin().read_line(&mut note_input)?;
+        let note = note_input.trim();
+
+        let final_note = if note.is_empty() {
+            "The test did not meet the expected criteria"
+        } else {
+            note
+        };
+
+        report_sheet_test_id_fail(xlsx_path, test_id, Some(final_note))?;
+    }
+
+    Ok(())
 }
 
 #[macro_export]
