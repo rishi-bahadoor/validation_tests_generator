@@ -7,6 +7,7 @@ mod macros;
 extern crate dhcp4r;
 
 mod commands;
+mod files_ops;
 mod interface;
 mod sanity;
 mod supporters;
