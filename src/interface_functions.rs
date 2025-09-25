@@ -1,7 +1,6 @@
 use std::error::Error;
 use std::{ffi::OsStr, path::Path};
 
-use crate::test_ops_process_tests::{ar_print_test_item, ar_process_test_item};
 use crate::email_ops::generate_email_using_python;
 use crate::excel_ops::{convert_csv_to_excel, format_excel_sheet};
 use crate::misc::{
@@ -13,6 +12,7 @@ use crate::sanity::{sanity_check_python_scripts, sanity_check_toml};
 use crate::test_file_ops::{
     export_grouped_csv, export_grouped_toml, extract_test_ids, test_file_filter,
 };
+use crate::test_ops_process_tests::{ar_print_test_item, ar_process_test_item};
 
 const DEFAULT_INSTRUCTION_FILE: &str = "validation_test_instructions.toml";
 const DEFAULT_CSV_FILE: &str = "validation_test_report.csv";
@@ -123,6 +123,11 @@ pub fn excel_gen(input_instruction_file: &Option<String>) -> Result<(), Box<dyn 
     let file_path: &str = input_instruction_file
         .as_deref()
         .unwrap_or(DEFAULT_INSTRUCTION_FILE);
+
+    // Check if instruction file exists
+    if !Path::new(file_path).exists() {
+        return Err(format!("Instruction file not found: {}", file_path).into());
+    }
 
     sanity_check_toml(file_path)?; // Now passes &str
 
