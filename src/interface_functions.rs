@@ -5,8 +5,7 @@ use crate::ar_process_vti::{ar_print_test_item, ar_process_test_item};
 use crate::email_ops::generate_email_using_python;
 use crate::excel_ops::{convert_csv_to_excel, format_excel_sheet};
 use crate::misc::{
-    generate_email_attachments, get_key_entry_y, press_enter, print_thick_separator,
-    test_pass_fail_prompt,
+    generate_email_attachments, get_key_entry_y, print_thick_separator, test_pass_fail_prompt,
 };
 use crate::python_env::sanity_dependencies;
 use crate::sanity::prepend_hash_to_toml;
@@ -116,7 +115,6 @@ pub fn test_run(
         }
     }
 
-    press_enter();
     Ok(())
 }
 

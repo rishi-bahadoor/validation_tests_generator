@@ -5,6 +5,7 @@ use crate::ar_ccc_commands::{ccc_handler, factory_init};
 use crate::ar_generic_commands::generic_runner;
 use crate::ar_panorama_commands::panorama_cli_handler;
 use crate::misc::{get_key_entry_y, print_thin_separator, wait_s};
+use crate::pcap_ops::PcapInstance;
 
 const COMMAND_KEYWORDS: &[&str] = &[
     "SEMI_AUTO",
@@ -62,7 +63,13 @@ fn event_timed(trimmed_line: &str) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-fn instruction_handler(instructions: &Vec<Value>, auto: bool) -> Result<(), Box<dyn Error>> {
+fn instruction_handler(
+    test_id: &str,
+    instructions: &Vec<Value>,
+    auto: bool,
+) -> Result<(), Box<dyn Error>> {
+    let mut pcap_instance = PcapInstance::new(test_id);
+    pcap_instance.start();
     for instr in instructions {
         if let Some(line) = instr.as_str() {
             let trimmed = line.trim();
@@ -82,11 +89,12 @@ fn instruction_handler(instructions: &Vec<Value>, auto: bool) -> Result<(), Box<
             }
         }
     }
-
+    pcap_instance.stop();
     Ok(())
 }
 
 pub fn auto_command_selector(
+    test_id: &str,
     command: &str,
     instructions: &Vec<Value>,
 ) -> Result<(), Box<dyn Error>> {
@@ -99,7 +107,7 @@ pub fn auto_command_selector(
             }
             print_thin_separator();
             println!("Step by step semi automatic instruction runner");
-            if let Err(e) = instruction_handler(instructions, false) {
+            if let Err(e) = instruction_handler(test_id, instructions, false) {
                 eprintln!("Error in semi-automatic command handler: {}", e);
             }
         }
@@ -111,7 +119,7 @@ pub fn auto_command_selector(
             }
             print_thin_separator();
             println!("Automatic instruction runner");
-            if let Err(e) = instruction_handler(instructions, true) {
+            if let Err(e) = instruction_handler(test_id, instructions, true) {
                 eprintln!("Error in full-automatic command handler: {}", e);
             }
         }

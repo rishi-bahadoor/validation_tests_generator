@@ -16,7 +16,7 @@ const PCAP_DIR: &str = "pcaps";
 // TODO: Implement an interface flag for (TDB)[default],[short],[long] timeout
 // constants and based on the input flag, let the code decide when to stop the
 // pcap capture.
-const MAX_PCAP_CAPTURE_TIME_S: u64 = 300; // 300 seconds (5 mins)
+const MAX_PCAP_CAPTURE_TIME_S: u64 = 240; // 240 seconds (4 mins)
 
 fn connected_ethernet_device() -> Option<Device> {
     let all_devices = match Device::list() {

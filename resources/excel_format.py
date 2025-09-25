@@ -1,4 +1,4 @@
-# VERSION 1.1.4
+# VERSION 1.1.5
 
 import sys
 import win32com.client
@@ -40,7 +40,7 @@ def force_close_excel_file(path):
             wb.Close(SaveChanges=True)
             break
     excel.Quit()
-    time.sleep(2)
+    time.sleep(4)
 
 def reopen_excel_file(path):
     excel = win32com.client.Dispatch("Excel.Application")
