@@ -40,11 +40,12 @@ def force_close_excel_file(path):
             wb.Close(SaveChanges=True)
             break
     excel.Quit()
-    time.sleep(1)  # Give Excel time to release the lock
+    time.sleep(2)
 
 def reopen_excel_file(path):
     excel = win32com.client.Dispatch("Excel.Application")
     excel.Visible = True
+    excel.WindowState = -4137
     excel.Workbooks.Open(str(path))
 
 def find_header_rows(ws, header_names):
@@ -194,7 +195,6 @@ def safe_update_excel(path, test_id, new_status, new_notes=None):
         reopen_excel_file(path)
     except Exception as e:
         print(f"⚠️ Could not reopen Excel file: {e}")
-
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
