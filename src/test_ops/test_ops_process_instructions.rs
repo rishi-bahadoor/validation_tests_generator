@@ -5,7 +5,7 @@ use crate::commands::commands_ccc::{ccc_handler, factory_init};
 use crate::commands::commands_generic::generic_runner;
 use crate::commands::commands_panorama::panorama_cli_handler;
 use crate::misc::{get_key_entry_y, print_thin_separator, wait_s};
-use crate::pcap_ops::PcapInstance;
+use crate::supporters::pcap_ops::PcapInstance;
 
 const COMMAND_KEYWORDS: &[&str] = &[
     "SEMI_AUTO",

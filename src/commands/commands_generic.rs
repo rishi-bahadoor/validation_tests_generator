@@ -1,7 +1,7 @@
 use std::error::Error;
 
-use crate::dhcp_server::dhcp_server_runner;
 use crate::misc::{press_enter, wait_s};
+use crate::supporters::dhcp_server::dhcp_server_runner;
 
 pub fn generic_runner(trimmed_line: &str) -> Result<(), Box<dyn Error>> {
     let parts = trimmed_line.split_whitespace();

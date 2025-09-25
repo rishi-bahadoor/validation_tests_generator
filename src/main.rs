@@ -7,14 +7,11 @@ mod misc;
 extern crate dhcp4r;
 
 mod commands;
-mod dhcp_server;
 mod email_ops;
 mod excel_ops;
-mod file_ops;
 mod interface;
-mod pcap_ops;
 mod sanity;
-mod scripts_find;
+mod supporters;
 mod test_ops;
 
 use crate::interface::interface_cli::{Cli, Command};

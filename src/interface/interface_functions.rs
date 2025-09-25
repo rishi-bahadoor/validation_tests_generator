@@ -3,13 +3,13 @@ use std::{ffi::OsStr, path::Path};
 
 use crate::email_ops::generate_email_using_python;
 use crate::excel_ops::{convert_csv_to_excel, format_excel_sheet};
-use crate::file_ops::{
-    export_grouped_csv, export_grouped_toml, extract_test_ids, test_file_filter,
-};
 use crate::misc::{
     generate_email_attachments, get_key_entry_y, print_thick_separator, test_pass_fail_prompt,
 };
 use crate::sanity::sanity_files::{prepend_hash_to_toml, sanity_check_toml};
+use crate::supporters::file_ops::{
+    export_grouped_csv, export_grouped_toml, extract_test_ids, test_file_filter,
+};
 use crate::test_ops::test_ops_process_tests::{ar_print_test_item, ar_process_test_item};
 
 const DEFAULT_INSTRUCTION_FILE: &str = "validation_test_instructions.toml";

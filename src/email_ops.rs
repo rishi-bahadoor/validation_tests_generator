@@ -3,7 +3,7 @@
 use std::error::Error;
 use std::process::Command;
 
-use crate::scripts_find::script_path;
+use crate::supporters::scripts_find::script_path;
 
 pub fn generate_email_using_python(
     email_name: &str,
