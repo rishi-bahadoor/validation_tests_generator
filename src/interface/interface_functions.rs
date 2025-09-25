@@ -3,15 +3,13 @@ use std::{ffi::OsStr, path::Path};
 
 use crate::email_ops::generate_email_using_python;
 use crate::excel_ops::{convert_csv_to_excel, format_excel_sheet};
-use crate::misc::{
-    generate_email_attachments, get_key_entry_y, print_thick_separator, test_pass_fail_prompt,
-};
-use crate::python_env::sanity_dependencies;
-use crate::sanity::prepend_hash_to_toml;
-use crate::sanity::{sanity_check_python_scripts, sanity_check_toml};
 use crate::file_ops::{
     export_grouped_csv, export_grouped_toml, extract_test_ids, test_file_filter,
 };
+use crate::misc::{
+    generate_email_attachments, get_key_entry_y, print_thick_separator, test_pass_fail_prompt,
+};
+use crate::sanity::sanity_files::{prepend_hash_to_toml, sanity_check_toml};
 use crate::test_ops::test_ops_process_tests::{ar_print_test_item, ar_process_test_item};
 
 const DEFAULT_INSTRUCTION_FILE: &str = "validation_test_instructions.toml";
@@ -26,10 +24,6 @@ pub fn email_gen(
     recipient_email: &String,
     bypass_generation: bool,
 ) -> Result<(), Box<dyn Error>> {
-    // Sanity check the python scripts used for excel sheet operations.
-    sanity_check_python_scripts()?;
-    sanity_dependencies()?;
-
     if !bypass_generation {
         println!("Generating email attachments...");
         generate_email_attachments()?;
@@ -131,10 +125,6 @@ pub fn excel_gen(input_instruction_file: &Option<String>) -> Result<(), Box<dyn 
 
     sanity_check_toml(file_path)?; // Now passes &str
 
-    // Sanity check the python scripts used for excel sheet operations.
-    sanity_check_python_scripts()?;
-    sanity_dependencies()?;
-
     let csv_file_name = Path::new(file_path)
         .file_stem()
         .and_then(OsStr::to_str)
@@ -201,8 +191,6 @@ pub fn group_tests_id(
     sanity_check_toml(output_toml_file)?;
 
     // CSV → Excel pipeline
-    sanity_check_python_scripts()?;
-    sanity_dependencies()?;
     let csv_path = export_grouped_csv(output_toml_file, output_csv_file)?;
     let xlsx_path = convert_csv_to_excel(&csv_path)?;
     format_excel_sheet(&xlsx_path)?;
@@ -257,8 +245,6 @@ pub fn group_tests_priority(
     sanity_check_toml(output_toml_file)?;
 
     // CSV → Excel pipeline
-    sanity_check_python_scripts()?;
-    sanity_dependencies()?;
     let csv_path = export_grouped_csv(output_toml_file, output_csv_file)?;
     let xlsx_path = convert_csv_to_excel(&csv_path)?;
     format_excel_sheet(&xlsx_path)?;

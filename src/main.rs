@@ -10,12 +10,11 @@ mod commands;
 mod dhcp_server;
 mod email_ops;
 mod excel_ops;
+mod file_ops;
 mod interface;
 mod pcap_ops;
-mod python_env;
 mod sanity;
 mod scripts_find;
-mod file_ops;
 mod test_ops;
 
 use crate::interface::interface_cli::{Cli, Command};
@@ -23,8 +22,12 @@ use crate::interface::interface_functions::{
     email_gen, excel_gen, group_tests_id, group_tests_priority, test_run,
 };
 use crate::misc::press_enter;
+use crate::sanity::sanity_env::sanity_dependencies;
+use crate::sanity::sanity_files::sanity_check_python_scripts;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    sanity_dependencies()?;
+    sanity_check_python_scripts()?;
     // Show help if no arguments are passed
     if std::env::args().len() == 1 {
         let mut cmd = Cli::command();
