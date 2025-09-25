@@ -66,21 +66,24 @@ on the terminal.
 
 ### Running tests
 
-To run a test from the list of tests generated, use the command: --test
+To run a test from the list of tests generated, use the command: test
 
 example:
 
 Single run-
-- .\vtg.exe --test 1.1
+- .\vtg.exe test 1.1
 
 Multi run-
-- .\vtg.exe --test 1.1 1.2 1.3
+- .\vtg.exe test 1.1 1.2 1.3
 
 Run all in instruction file
-- .\vtg.exe --test
+- .\vtg.exe test
 
 Specify an instruction toml file
-- .\vtg.exe --test -i Path/To/Instruction.toml
+- .\vtg.exe test -i Path/To/Instruction.toml
+
+Specify a custom Excel report file
+- .\vtg.exe test -i Path/To/Instruction.toml -x Path/To/Report.xlsx
 
 ### Pcap capturing
 

@@ -59,8 +59,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Command::Test {
             test_ids,
             input_instruction_file,
+            input_excel_file,
         } => {
-            test_run(test_ids, &input_instruction_file)?;
+            test_run(test_ids, &input_instruction_file, &input_excel_file)?;
         }
         Command::Excel {
             input_instruction_file,

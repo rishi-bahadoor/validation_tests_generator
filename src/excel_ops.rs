@@ -35,17 +35,17 @@ pub fn convert_csv_to_excel<P: AsRef<Path>>(csv_path: P) -> Result<PathBuf, Box<
 
     workbook.close()?;
     fs::remove_file(&csv_path)?;
-    println!("✅ Excel file created: {}", xlsx_path.display());
+    println!("Excel file created: {}", xlsx_path.display());
 
     Ok(xlsx_path)
 }
 
 pub fn format_excel_sheet<P: AsRef<Path>>(xlsx_path: P) -> Result<(), Box<dyn Error>> {
-    // resolve the .py location
     let script = script_path("excel_format.py")?;
 
     let status = Command::new("python")
         .arg(script)
+        .arg("format") // <-- mode argument
         .arg(xlsx_path.as_ref())
         .status()?;
 
@@ -53,6 +53,51 @@ pub fn format_excel_sheet<P: AsRef<Path>>(xlsx_path: P) -> Result<(), Box<dyn Er
         return Err("Python script failed to format Excel sheet".into());
     }
 
-    println!("✅ Excel formatting complete.");
+    println!("Excel formatting complete.");
     Ok(())
+}
+
+pub fn update_test_status<P: AsRef<Path>>(
+    xlsx_path: P,
+    test_id: &str,
+    new_status: &str,
+    notes: Option<&str>,
+) -> Result<(), Box<dyn Error>> {
+    let script = script_path("excel_format.py")?;
+
+    let mut cmd = Command::new("python");
+    cmd.arg(script)
+        .arg("update")
+        .arg(xlsx_path.as_ref())
+        .arg(test_id)
+        .arg(new_status);
+
+    if let Some(n) = notes {
+        cmd.arg(n);
+    }
+
+    let status = cmd.status()?;
+
+    if !status.success() {
+        return Err(format!("Failed to update status for Test ID '{}'", test_id).into());
+    }
+
+    println!("Status updated for Test ID '{}'", test_id);
+    Ok(())
+}
+
+pub fn report_sheet_test_id_pass<P: AsRef<Path>>(
+    xlsx_path: P,
+    test_id: &str,
+    notes: Option<&str>,
+) -> Result<(), Box<dyn Error>> {
+    update_test_status(xlsx_path, test_id, "Pass", notes)
+}
+
+pub fn report_sheet_test_id_fail<P: AsRef<Path>>(
+    xlsx_path: P,
+    test_id: &str,
+    notes: Option<&str>,
+) -> Result<(), Box<dyn Error>> {
+    update_test_status(xlsx_path, test_id, "Fail", notes)
 }

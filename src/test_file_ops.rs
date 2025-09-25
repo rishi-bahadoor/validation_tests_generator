@@ -91,7 +91,7 @@ pub fn export_grouped_toml<P: AsRef<Path>>(
     }
 
     fs::write(&out_path, toml_buf)?;
-    println!("✅ TOML report generated: {}", out_path.as_ref().display());
+    println!("TOML report generated: {}", out_path.as_ref().display());
     Ok(out_path.as_ref().to_path_buf())
 }
 
@@ -171,10 +171,7 @@ pub fn export_grouped_csv<P: AsRef<Path>>(
     // 7. Finalize
     let mut buf = wtr.into_inner()?;
     buf.flush()?;
-    println!(
-        "✅ CSV report generated: {}",
-        output_path.as_ref().display()
-    );
+    println!("CSV report generated: {}", output_path.as_ref().display());
     Ok(output_path.as_ref().to_path_buf())
 }
 

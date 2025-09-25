@@ -140,18 +140,31 @@ fn ensure_python() -> io::Result<&'static str> {
     }
 }
 
-/// Top-level check: Python → openpyxl
+/// Top-level check: Python → openpyxl + pywin32
 pub fn sanity_dependencies() -> io::Result<()> {
     let python = ensure_python()?;
 
+    // Check openpyxl
     if is_module_installed(python, "openpyxl") {
-        return Ok(());
+        println!("✅ `openpyxl` is installed.");
     } else if prompt_yes_no("`openpyxl` not found. Install now?")? {
         install_module(python, "openpyxl")?;
     } else {
         return Err(io::Error::new(
             io::ErrorKind::Other,
             "`openpyxl` is required but not installed",
+        ));
+    }
+
+    // Check pywin32
+    if is_module_installed(python, "win32com.client") {
+        println!("✅ `pywin32` is installed.");
+    } else if prompt_yes_no("`pywin32` not found. Install now?")? {
+        install_module(python, "pywin32")?;
+    } else {
+        return Err(io::Error::new(
+            io::ErrorKind::Other,
+            "`pywin32` is required but not installed",
         ));
     }
 

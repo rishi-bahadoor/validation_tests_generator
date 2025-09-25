@@ -31,6 +31,6 @@ pub fn generate_email_using_python(
         return Err("Python script failed to generate email".into());
     }
 
-    println!("✅ Email `.eml` generated.");
+    println!("Email `.eml` generated.");
     Ok(())
 }
