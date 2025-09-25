@@ -9,10 +9,10 @@ use crate::misc::{
 use crate::python_env::sanity_dependencies;
 use crate::sanity::prepend_hash_to_toml;
 use crate::sanity::{sanity_check_python_scripts, sanity_check_toml};
-use crate::test_file_ops::{
+use crate::file_ops::{
     export_grouped_csv, export_grouped_toml, extract_test_ids, test_file_filter,
 };
-use crate::test_ops_process_tests::{ar_print_test_item, ar_process_test_item};
+use crate::test_ops::test_ops_process_tests::{ar_print_test_item, ar_process_test_item};
 
 const DEFAULT_INSTRUCTION_FILE: &str = "validation_test_instructions.toml";
 const DEFAULT_CSV_FILE: &str = "validation_test_report.csv";

@@ -6,24 +6,20 @@ mod misc;
 #[macro_use(bytes_u32)]
 extern crate dhcp4r;
 
-mod test_ops_process_instructions;
-mod commands_ccc;
-mod commands_generic;
-mod commands_panorama;
-mod test_ops_process_tests;
+mod commands;
 mod dhcp_server;
 mod email_ops;
 mod excel_ops;
-mod interface_cli;
-mod interface_functions;
+mod interface;
 mod pcap_ops;
 mod python_env;
 mod sanity;
 mod scripts_find;
-mod test_file_ops;
+mod file_ops;
+mod test_ops;
 
-use crate::interface_cli::{Cli, Command};
-use crate::interface_functions::{
+use crate::interface::interface_cli::{Cli, Command};
+use crate::interface::interface_functions::{
     email_gen, excel_gen, group_tests_id, group_tests_priority, test_run,
 };
 use crate::misc::press_enter;

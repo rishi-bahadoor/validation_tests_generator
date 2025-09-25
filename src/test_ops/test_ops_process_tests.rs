@@ -2,7 +2,7 @@ use std::error::Error;
 use std::fs;
 use toml::Value;
 
-use crate::test_ops_process_instructions::{get_instruction_type, instructions_runner};
+use crate::test_ops::test_ops_process_instructions::{get_instruction_type, instructions_runner};
 
 pub fn process_fetched_instructions(
     test_id: &str,
