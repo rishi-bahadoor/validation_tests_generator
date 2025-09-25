@@ -14,18 +14,19 @@ mod ar_process_vti;
 mod dhcp_server;
 mod email_ops;
 mod excel_ops;
-mod interface;
-mod op_selector;
+mod interface_cli;
+mod interface_functions;
 mod pcap_ops;
 mod python_env;
 mod sanity;
 mod scripts_find;
 mod test_file_ops;
 
-use crate::interface::Cli;
-use crate::interface::Command;
+use crate::interface_cli::{Cli, Command};
+use crate::interface_functions::{
+    email_gen, excel_gen, group_tests_id, group_tests_priority, test_run,
+};
 use crate::misc::press_enter;
-use crate::op_selector::{email_gen, excel_gen, group_tests_id, group_tests_priority, test_run};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Show help if no arguments are passed
