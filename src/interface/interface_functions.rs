@@ -1,14 +1,14 @@
 use std::error::Error;
 use std::{ffi::OsStr, path::Path};
 
-use crate::email_ops::generate_email_using_python;
-use crate::excel_ops::{convert_csv_to_excel, format_excel_sheet};
-use crate::misc::{
-    generate_email_attachments, get_key_entry_y, print_thick_separator, test_pass_fail_prompt,
-};
 use crate::sanity::sanity_files::{prepend_hash_to_toml, sanity_check_toml};
+use crate::supporters::email_ops::generate_email_using_python;
+use crate::supporters::excel_ops::{convert_csv_to_excel, format_excel_sheet};
 use crate::supporters::file_ops::{
     export_grouped_csv, export_grouped_toml, extract_test_ids, test_file_filter,
+};
+use crate::supporters::misc::{
+    generate_email_attachments, get_key_entry_y, print_thick_separator, test_pass_fail_prompt,
 };
 use crate::test_ops::test_ops_process_tests::{ar_print_test_item, ar_process_test_item};
 

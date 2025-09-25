@@ -5,7 +5,7 @@ use std::thread::sleep;
 use std::time::Duration;
 
 use crate::commands::commands_ccc::get_config_dump;
-use crate::excel_ops::{report_sheet_test_id_fail, report_sheet_test_id_pass};
+use crate::supporters::excel_ops::{report_sheet_test_id_fail, report_sheet_test_id_pass};
 
 const EMAIL_ATTACHMENTS_FLDR: &str = "./email_attachments/";
 
@@ -99,18 +99,4 @@ pub fn test_pass_fail_prompt<P: AsRef<std::path::Path>>(
     }
 
     Ok(())
-}
-
-#[macro_export]
-macro_rules! print_warn_ln {
-    ($($arg:tt)*) => {
-        color_print::cprintln!("<yellow>[WARN]</> {}", format!($($arg)*));
-    };
-}
-
-#[macro_export]
-macro_rules! print_help_ln {
-    ($($arg:tt)*) => {
-        color_print::cprintln!("<blue>[HELPER]</> {}", format!($($arg)*));
-    };
 }

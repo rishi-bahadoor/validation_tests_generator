@@ -2,13 +2,11 @@ use clap::{CommandFactory, Parser};
 
 // macro_use modules must be declared before modules that use it.
 #[macro_use]
-mod misc;
+mod macros;
 #[macro_use(bytes_u32)]
 extern crate dhcp4r;
 
 mod commands;
-mod email_ops;
-mod excel_ops;
 mod interface;
 mod sanity;
 mod supporters;
@@ -18,9 +16,9 @@ use crate::interface::interface_cli::{Cli, Command};
 use crate::interface::interface_functions::{
     email_gen, excel_gen, group_tests_id, group_tests_priority, test_run,
 };
-use crate::misc::press_enter;
 use crate::sanity::sanity_env::sanity_dependencies;
 use crate::sanity::sanity_files::sanity_check_python_scripts;
+use crate::supporters::misc::press_enter;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     sanity_dependencies()?;

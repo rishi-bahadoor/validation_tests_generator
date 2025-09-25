@@ -2,7 +2,7 @@ use std::{error::Error, fs, io, path::Path, process::Command};
 
 use chrono::Local;
 
-use crate::misc::{get_key_entry_y, press_enter_no_message};
+use crate::supporters::misc::{get_key_entry_y, press_enter_no_message};
 
 const PATH_CCC_EXE: &str = "./ccc.exe";
 
