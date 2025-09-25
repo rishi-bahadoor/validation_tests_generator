@@ -6,11 +6,11 @@ mod misc;
 #[macro_use(bytes_u32)]
 extern crate dhcp4r;
 
-mod ar_auto_commands;
-mod ar_ccc_commands;
-mod ar_generic_commands;
-mod ar_panorama_commands;
-mod ar_process_vti;
+mod test_ops_process_instructions;
+mod commands_ccc;
+mod commands_generic;
+mod commands_panorama;
+mod test_ops_process_tests;
 mod dhcp_server;
 mod email_ops;
 mod excel_ops;
