@@ -2,7 +2,7 @@ use std::error::Error;
 use std::fs;
 use toml::Value;
 
-use crate::ar_auto_commands::{auto_command_selector, check_for_auto_commands};
+use crate::test_ops_process_instructions::{get_instruction_type, instructions_runner};
 
 pub fn process_fetched_instructions(
     test_id: &str,
@@ -15,7 +15,7 @@ pub fn process_fetched_instructions(
             println!("  - {}", line);
 
             if auto_command.is_none() {
-                match check_for_auto_commands(line)? {
+                match get_instruction_type(line)? {
                     Some(cmd) => auto_command = Some(cmd),
                     None => {
                         // No auto command found in this line; continue
@@ -26,7 +26,7 @@ pub fn process_fetched_instructions(
     }
 
     if let Some(cmd) = auto_command {
-        auto_command_selector(test_id, cmd, instructions)?;
+        instructions_runner(test_id, cmd, instructions)?;
     }
 
     Ok(())

@@ -1,9 +1,9 @@
 use std::error::Error;
 use toml::Value;
 
-use crate::ar_ccc_commands::{ccc_handler, factory_init};
-use crate::ar_generic_commands::generic_runner;
-use crate::ar_panorama_commands::panorama_cli_handler;
+use crate::commands_ccc::{ccc_handler, factory_init};
+use crate::commands_generic::generic_runner;
+use crate::commands_panorama::panorama_cli_handler;
 use crate::misc::{get_key_entry_y, print_thin_separator, wait_s};
 use crate::pcap_ops::PcapInstance;
 
@@ -93,7 +93,7 @@ fn instruction_handler(
     Ok(())
 }
 
-pub fn auto_command_selector(
+pub fn instructions_runner(
     test_id: &str,
     command: &str,
     instructions: &Vec<Value>,
@@ -131,7 +131,7 @@ pub fn auto_command_selector(
     Ok(())
 }
 
-pub fn check_for_auto_commands(line: &str) -> Result<Option<&'static str>, Box<dyn Error>> {
+pub fn get_instruction_type(line: &str) -> Result<Option<&'static str>, Box<dyn Error>> {
     let trimmed = line.trim();
 
     let fields = trimmed
