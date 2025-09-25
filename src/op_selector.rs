@@ -69,6 +69,16 @@ pub fn test_run(
     // Resolve file path
     let excel_path: &str = input_excel_file.as_deref().unwrap_or(DEFAULT_EXCEL_FILE);
 
+    // Check if instruction file exists
+    if !Path::new(file_path).exists() {
+        return Err(format!("Instruction file not found: {}", file_path).into());
+    }
+
+    // Check if Excel file exists if provided
+    if is_excel_provided && !Path::new(excel_path).exists() {
+        return Err(format!("Excel file not found: {}", excel_path).into());
+    }
+
     // Skip this sanity check if the input is a custom file.
     // We can remove the skip and check all if all scripts are intended to be
     // non tampering.
