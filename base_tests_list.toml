@@ -329,26 +329,53 @@ test_id = "2.7"
 test_group = "2:MAGNOSTEER"
 test_priority = "LOW"
 test_description = "Check MST ROI with defaults"
-pass_condition = ""
-instructions = []
-test_authors_and_contact_persons = ["TBD"]
+pass_condition = "Run the panorama test for the STDV ROI, ensure that the ROI Range is 30.0 degrees +/- 0.5, and ROI Start Angle is -15.0 +/- 0.5, ROI End Angle 15.0 +/- 0.5"
+instructions = [
+  "## FULL_AUTO ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
+  "## Observe the panorama STDV ROI test ##",
+  "panorama TestSTDVFOVROI"
+]
+test_authors_and_contact_persons = [
+  "TBD",
+]
 
 [[test]]
 test_id = "2.8"
 test_group = "2:MAGNOSTEER"
 test_priority = "LOW"
 test_description = "Check MST ROI widening/shortening"
-pass_condition = ""
-instructions = []
-test_authors_and_contact_persons = ["TBD"]
+pass_condition = "Run the panorama test for the STDV Narrow ROI, ensure that the ROI Range is 15.0 degrees +/- 0.5, and ROI Start Angle is -7.5 +/- 0.5, ROI End Angle 7.5 +/- 0.5"
+instructions = [
+  "## FULL_AUTO ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
+  "## Observe the panorama STDV ROI test ##",
+  "panorama TestSTDVFOVNarrowROI"
+]
+test_authors_and_contact_persons = [
+  "TBD",
+]
 
 [[test]]
 test_id = "2.9"
 test_group = "2:MAGNOSTEER"
 test_priority = "LOW"
-test_description = "Check MST ROI with position (left center right)"
-pass_condition = ""
-instructions = []
+test_description = "Check MST ROI with position (left/right)"
+pass_condition = "Run the panorama test for STDV Left/Right ROI"
+instructions = [
+  "## FULL_AUTO ##",
+  "## Ensure the sensor has default configurations ##",
+  "## Ensure the PC is on the cepton network for diag --fix ##",
+  "ccc diag --fix",
+  "## Observe the panorama STDV Left Narrow ROI test ##",
+  "panorama TestSTDVLeftROIOffset",
+  "## Observe the panorama STDV Right Narrow ROI test ##",
+  "panorama TestSTDVRightROIOffset",
+]
 test_authors_and_contact_persons = ["TBD"]
 
 [[test]]
