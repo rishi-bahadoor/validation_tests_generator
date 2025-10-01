@@ -57,7 +57,13 @@ fn event_timed(trimmed_line: &str) -> Result<(), Box<dyn Error>> {
     while cycle_cntr > 0 {
         wait_s(do_period);
         cycle_cntr -= 1;
-        ccc_handler(&command_line, true)?;
+        match ccc_handler(&command_line, true) {
+            Ok(_) => {}
+            Err(e) => {
+                print_warn_ln!("Failed at {} seconds", (cycle_cntr * do_period));
+                return Err(e);
+            }
+        };
     }
 
     Ok(())

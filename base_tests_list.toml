@@ -12,7 +12,7 @@ instructions = [
   "## Set pixel format to STDV (0) ##",
   "ccc set pixel_format=0 --force",
   "## Turn on point enable and MST ##",
-  "ccc set point_enable=1,drive_big_mirror=1 --force",
+  "ccc set point_enable=1 --force",
   "## Observe display for 2 minutes ##",
   "wait_s 120",
 ]
@@ -101,6 +101,7 @@ pass_condition = "Ensure that the missing or bad left and right vertical image s
 instructions = [
   "## FULL_AUTO ##",
   "## Set these specific fields below ##",
+  "ccc set-all lskslk"
   "ccc set horiz_fov_left=-2185698,horiz_fov_right=2185698,horiz_firing_period=5916,horiz_fov_left_roi=-699050,horiz_fov_right_roi=699050,horiz_firing_period_roi=2548,nr_slot=2103,roi_enable=1,mst_cycle_duration=200000,pixel_format=0 --force",
   "## Turn on point enable and MST ##",
   "ccc set point_enable=1,drive_big_mirror=1 --force",
@@ -845,6 +846,7 @@ instructions = [
   "## Ensure the mst and points are enabled ##",
   "ccc set point_enable=1,drive_big_mirror=1 --force",
   "## Observe the sensor activity and connectivity for 1 hour using viewer and doing list sensors commands ##",
+  "sniff 3600 30",
   "event_timed 3600 60 ccc list-sensors",
 ]
 test_authors_and_contact_persons = ["TBD"]
