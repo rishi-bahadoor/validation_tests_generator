@@ -54,6 +54,24 @@ pub fn wait_s(seconds: u32) {
     pb.finish_with_message("Done");
 }
 
+pub fn human_readable_time(seconds: u32) -> String {
+    if seconds >= 86400 {
+        return format!("{}d", seconds / 86400);
+    }
+
+    let hours = seconds / 3600;
+    let minutes = (seconds % 3600) / 60;
+    let secs = seconds % 60;
+
+    if hours > 0 {
+        format!("{}h {}m {}s", hours, minutes, secs)
+    } else if minutes > 0 {
+        format!("{}m {}s", minutes, secs)
+    } else {
+        format!("{}s", secs)
+    }
+}
+
 pub fn print_thick_separator() {
     println!("=========================================================================");
 }

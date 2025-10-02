@@ -4,7 +4,7 @@ use toml::Value;
 use crate::commands::commands_ccc::{ccc_handler, factory_init};
 use crate::commands::commands_generic::generic_runner;
 use crate::commands::commands_panorama::panorama_cli_handler;
-use crate::supporters::misc::{get_key_entry_y, print_thin_separator, wait_s};
+use crate::supporters::misc::{get_key_entry_y, human_readable_time, print_thin_separator, wait_s};
 use crate::supporters::pcap_ops::PcapInstance;
 
 const COMMAND_KEYWORDS: &[&str] = &[
@@ -57,7 +57,13 @@ fn event_timed(trimmed_line: &str) -> Result<(), Box<dyn Error>> {
     while cycle_cntr > 0 {
         wait_s(do_period);
         cycle_cntr -= 1;
-        ccc_handler(&command_line, true)?;
+        match ccc_handler(&command_line, true) {
+            Ok(_) => {}
+            Err(e) => {
+                print_warn_ln!("Failed in {}", human_readable_time(cycle_cntr * do_period));
+                return Err(e);
+            }
+        };
     }
 
     Ok(())

@@ -12,7 +12,7 @@ instructions = [
   "## Set pixel format to STDV (0) ##",
   "ccc set pixel_format=0 --force",
   "## Turn on point enable and MST ##",
-  "ccc set point_enable=1,drive_big_mirror=1 --force",
+  "ccc set point_enable=1 --force",
   "## Observe display for 2 minutes ##",
   "wait_s 120",
 ]
