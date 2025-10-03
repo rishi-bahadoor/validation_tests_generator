@@ -7,8 +7,6 @@ pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Set pixel format to STDV (0) ##",
   "ccc set pixel_format=0 --force",
   "## Turn on point enable and MST ##",
@@ -27,8 +25,6 @@ pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Set pixel format to HRAD (2) ##",
   "ccc set pixel_format=2 --force",
   "## Turn on point enable and MST ##",
@@ -47,8 +43,6 @@ pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Set pixel format to HLZ4 (3) ##",
   "ccc set pixel_format=3 --force",
   "## Turn on point enable and MST ##",
@@ -67,8 +61,6 @@ pass_condition = "No flickering on the display of the point cloud"
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configuration ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Set pixel format to STDV (0) ##",
   "ccc set pixel_format=0 --force",
   "## Turn on point enable and MST ##",
@@ -107,8 +99,6 @@ instructions = [
   "## Observe the image display ##",
   "wait_e",
   "## Restore the sensor setting to defaults ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -127,8 +117,6 @@ instructions = [
   "## Observe the image display ##",
   "wait_e",
   "## Restore the sensor setting to defaults ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
@@ -141,8 +129,6 @@ pass_condition = "Accurate image representation of what the sensor is viewing"
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Set pixel format to STDV (0) ##",
   "ccc set pixel_format=0 --force",
   "## Turn on point enable and MST ##",
@@ -161,8 +147,6 @@ pass_condition = ""
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Set pixel format to HRAD (2) ##",
   "ccc set pixel_format=2 --force",
   "## Turn on point enable and MST ##",
@@ -181,8 +165,6 @@ pass_condition = ""
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Set pixel format to HLZ4 (3) ##",
   "ccc set pixel_format=3 --force",
   "## Turn on point enable and MST ##",
@@ -201,8 +183,6 @@ pass_condition = "Using the panorama FPS test, ensure the real and target FPS is
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0 --force",
   "## Observe the panorama 10Hz test ##",
@@ -219,8 +199,6 @@ pass_condition = "Using the panorama FPS test, ensure the real and target FPS is
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0 --force",
   "## Observe the panorama 20Hz test ##",
@@ -237,8 +215,6 @@ pass_condition = "Using the panorama FPS test, ensure the real and target FPS is
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0 --force",
   "## Observe the panorama 40Hz cap at 21Hz test ##",
@@ -255,8 +231,6 @@ pass_condition = "Using the mst gui real time FPS monitor, ensure the real and t
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0 --force",
   "## Turn on mst and point enable ##",
@@ -285,8 +259,6 @@ pass_condition = "Using the mst gui real time FPS monitor, ensure the real and t
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0 --force",
   "## Turn on mst and point enable ##",
@@ -311,8 +283,6 @@ pass_condition = "Using the mst gui real time FPS monitor, ensure the real and t
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Set the pixel format to STDV (0) ##",
   "ccc set pixel_format=0 --force",
   "## Turn on mst and point enable ##",
@@ -333,8 +303,6 @@ pass_condition = "Run the panorama test for the STDV ROI, ensure that the ROI Ra
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Observe the panorama STDV ROI test ##",
   "panorama TestSTDVFOVROI"
 ]
@@ -351,8 +319,6 @@ pass_condition = "Run the panorama test for the STDV Narrow ROI, ensure that the
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Observe the panorama STDV ROI test ##",
   "panorama TestSTDVFOVNarrowROI"
 ]
@@ -369,8 +335,6 @@ pass_condition = "Run the panorama test for STDV Left/Right ROI"
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Observe the panorama STDV Left Narrow ROI test ##",
   "panorama TestSTDVLeftROIOffset",
   "## Observe the panorama STDV Right Narrow ROI test ##",
@@ -387,8 +351,6 @@ pass_condition = "The blooming effect around the retro target in view of the sen
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Place the retro target at 10m from the sensor at a height of 6 feet ##",
   "## Ensure the sensor has default configurations ##",
   "## Set the pixel format to STDV (0) ##",
@@ -413,8 +375,6 @@ pass_condition = "The blooming effect around the retro target in view of the sen
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Place the retro target at 10m from the sensor at a height of 6 feet ##",
   "## Ensure the sensor has default configurations ##",
   "## Set the pixel format to HRAD (2) ##",
@@ -439,8 +399,6 @@ pass_condition = "The blooming effect around the retro target in view of the sen
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Place the retro target at 10m from the sensor at a height of 6 feet ##",
   "## Ensure the sensor has default configurations ##",
   "## Set the pixel format to HLZ4 (3) ##",
@@ -465,8 +423,6 @@ pass_condition = "The blooming effect around the retro target in view of the sen
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Place the retro target at 50m from the sensor at a height of 6 feet ##",
   "## Ensure the sensor has default configurations ##",
   "## Set the pixel format to STDV (0) ##",
@@ -491,8 +447,6 @@ pass_condition = "The blooming effect around the retro target in view of the sen
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Place the retro target at 50m from the sensor at a height of 6 feet ##",
   "## Ensure the sensor has default configurations ##",
   "## Set the pixel format to HRAD (2) ##",
@@ -517,8 +471,6 @@ pass_condition = "The blooming effect around the retro target in view of the sen
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Place the retro target at 50m from the sensor at a height of 6 feet ##",
   "## Ensure the sensor has default configurations ##",
   "## Set the pixel format to HLZ4 (3) ##",
@@ -590,8 +542,6 @@ pass_condition = "The time between sensor power on and connection to Cepton View
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Ensure that the sensor is set to display points when power cycled ##",
   "ccc set point_enable=1,drive_big_mirror=1 --force",
   "## Power off the sensors ##",
@@ -609,8 +559,6 @@ pass_condition = "STDV points data packets have the updated source IP"
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Ensure the sensor source IP is set to a common reference value ##",
   "ccc set src_ip=192.168.32.32 --force",
   "## Set the pixel format to STDV (0) ##",
@@ -637,8 +585,6 @@ pass_condition = "INFZ data packets have the updated source IP"
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Ensure the sensor source IP is set to a common reference value ##",
   "ccc set src_ip=192.168.32.32 --force",
   "## Set the pixel format to STDV (0) ##",
@@ -665,8 +611,6 @@ pass_condition = "HRAD points data packets have the updated source IP"
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Ensure the sensor source IP is set to a common reference value ##",
   "ccc set src_ip=192.168.32.32 --force",
   "## Set the pixel format to HRAD (2) ##",
@@ -693,8 +637,6 @@ pass_condition = "INFZ data packets have the updated source IP"
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Ensure the sensor source IP is set to a common reference value ##",
   "ccc set src_ip=192.168.32.32 --force",
   "## Set the pixel format to HRAD (2) ##",
@@ -721,8 +663,6 @@ pass_condition = "HLZ4 points data packets have the updated source IP"
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Ensure the sensor source IP is set to a common reference value ##",
   "ccc set src_ip=192.168.32.32 --force",
   "## Set the pixel format to HLZ4 (3) ##",
@@ -749,8 +689,6 @@ pass_condition = "INFZ data packets have the updated source IP"
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Ensure the sensor source IP is set to a common reference value ##",
   "ccc set src_ip=192.168.32.32 --force",
   "## Set the pixel format to HLZ4 (3) ##",
@@ -822,8 +760,6 @@ pass_condition = "User exposed configuration fields are accessible without using
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Ensure the PC is on the Cepton network ##",
   "## Do a get all command using the ccc tool with no -d option ##",
   "ccc get-all",
@@ -840,12 +776,10 @@ pass_condition = "Sensor communication is still functional after one hour"
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
-  "## Ensure the PC is on the cepton network for diag --fix ##",
-  "ccc diag --fix",
   "## Ensure the mst and points are enabled ##",
   "ccc set point_enable=1,drive_big_mirror=1 --force",
-  "## Observe the sensor activity and connectivity for 1 hour using viewer and doing list sensors commands ##",
-  "event_timed 3600 60 ccc list-sensors",
+  "## Observe the sensor activity and connectivity for 1 hour using viewer and doing get serial_number ##",
+  "event_timed 3600 60 ccc get serial_number",
 ]
 test_authors_and_contact_persons = ["TBD"]
 
