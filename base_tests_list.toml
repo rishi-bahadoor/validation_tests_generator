@@ -93,7 +93,7 @@ pass_condition = "Ensure that the missing or bad left and right vertical image s
 instructions = [
   "## FULL_AUTO ##",
   "## Set these specific fields below ##",
-  "ccc set horiz_fov_left=-2185698,horiz_fov_right=2185698,horiz_firing_period=5916,horiz_fov_left_roi=-699050,horiz_fov_right_roi=699050,horiz_firing_period_roi=2548,nr_slot=2103,roi_enable=1,mst_cycle_duration=200000,pixel_format=0 --force",
+  "ccc set horiz_fov_left=-2185698,horiz_fov_right=2185698,horiz_firing_period=5916,horiz_fov_left_roi=-699050,horiz_fov_right_roi=699050,horiz_firing_period_roi=2548,nr_slot=9600,roi_enable=1,mst_cycle_duration=200000,pixel_format=0,mst_horiz_left_roi=-851149,mst_horiz_right_roi=851149 --force",
   "## Turn on point enable and MST ##",
   "ccc set point_enable=1,drive_big_mirror=1 --force",
   "## Observe the image display ##",
@@ -303,8 +303,12 @@ pass_condition = "Run the panorama test for the STDV ROI, ensure that the ROI Ra
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
+  "## To save configs from before test",
+  "ccc get-all -o config.txt",
   "## Observe the panorama STDV ROI test ##",
-  "panorama TestSTDVFOVROI"
+  "panorama TestSTDVFOVROI",
+  "## Set configs back to before the test was run",
+  "ccc set-all config.txt"
 ]
 test_authors_and_contact_persons = [
   "TBD",
@@ -319,8 +323,12 @@ pass_condition = "Run the panorama test for the STDV Narrow ROI, ensure that the
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
+  "## To save configs from before test",
+  "ccc get-all -o config.txt",
   "## Observe the panorama STDV ROI test ##",
-  "panorama TestSTDVFOVNarrowROI"
+  "panorama TestSTDVFOVNarrowROI",
+  "## Set configs back to before the test was run",
+  "ccc set-all config.txt"
 ]
 test_authors_and_contact_persons = [
   "TBD",
@@ -335,10 +343,14 @@ pass_condition = "Run the panorama test for STDV Left/Right ROI"
 instructions = [
   "## FULL_AUTO ##",
   "## Ensure the sensor has default configurations ##",
+  "## To save configs from before test",
+  "ccc get-all -o config.txt",
   "## Observe the panorama STDV Left Narrow ROI test ##",
   "panorama TestSTDVLeftROIOffset",
   "## Observe the panorama STDV Right Narrow ROI test ##",
   "panorama TestSTDVRightROIOffset",
+  "## Set configs back to before the test was run",
+  "ccc set-all config.txt"
 ]
 test_authors_and_contact_persons = ["TBD"]
 
